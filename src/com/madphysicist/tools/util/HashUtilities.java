@@ -184,7 +184,7 @@ public class HashUtilities
      * as the seed for further hash computations.
      *
      * @param c a char value.
-     * @return the hash of {@codecb}.
+     * @return the hash of {@code c}.
      * @since 1.0.0.0
      */
     public static int hashCode(char c)

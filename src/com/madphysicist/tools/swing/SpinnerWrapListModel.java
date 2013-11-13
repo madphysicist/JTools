@@ -102,7 +102,7 @@ public class SpinnerWrapListModel extends SpinnerListModel
      *
      * @return the next legal value of the underlying sequence, or the first
      * element of the sequence if the current value is already the last element.
-     * @version 1.0.0.0
+     * @since 1.0.0.0
      */
     @Override public Object getNextValue()
     {
@@ -124,7 +124,7 @@ public class SpinnerWrapListModel extends SpinnerListModel
      * @return the previous legal value of the underlying sequence, or the last
      * element of the sequence if the current value is already the first
      * element.
-     * @version 1.0.0.0
+     * @since 1.0.0.0
      */
     @Override public Object getPreviousValue()
     {

@@ -76,7 +76,16 @@ public class JColorButton extends JButton
     private static final int DEFAULT_WIDTH = 32;
     private static final int DEFAULT_HEIGHT = 32;
 
+    /**
+     * @serial
+     * @since 1.0.0.0
+     */
     private ColorIcon icon;
+
+    /**
+     * @serial
+     * @since 1.0.0.0
+     */
     private JColorChooser chooser;
 
     public JColorButton()

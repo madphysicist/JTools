@@ -176,7 +176,7 @@ public class SwingUtilities
      * be displayed in a combo box with the default renderer.
      *
      * @see #lookAndFeelSelector(Component)
-     * @see UIManager.LookAndFeelInfo
+     * @see UIManager#LookAndFeelInfo
      * @author Joseph Fox-Rabinovitz
      * @version 1.0.0.0, 13 June 2013
      * @since 1.0.0.0

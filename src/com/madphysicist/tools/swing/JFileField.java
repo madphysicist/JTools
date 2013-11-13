@@ -63,10 +63,34 @@ public class JFileField extends JPanel
 
     public static final String EDITABLE_PROPERTY = "editable";
 
+    /**
+     * @serial
+     * @since 1.0.0.0
+     */
     private JTextField textField;
+
+    /**
+     * @serial
+     * @since 1.0.0.0
+     */
     private JButton button;
+
+    /**
+     * @serial
+     * @since 1.0.0.0
+     */
     private JFileChooser fileChooser;
+
+    /**
+     * @serial
+     * @since 1.0.0.0
+     */
     private GridBagConstraints buttonConstraints;
+
+    /**
+     * @serial
+     * @since 1.0.0.0
+     */
     private GridBagConstraints textFieldConstraints;
 
     public JFileField()

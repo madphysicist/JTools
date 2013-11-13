@@ -60,8 +60,9 @@ public class ColorUtilities
 
     /**
      * A map containins the names of the HTML colors for parsing. The contents
-     * of this map were obtained from {@link
-     * http://www.w3schools.com/html/html_colornames.asp}.
+     * of this map were obtained from <a
+     * href="http://www.w3schools.com/html/html_colornames.asp">
+     * http://www.w3schools.com/html/html_colornames.asp</a>.
      *
      * @since 1.0.0
      */

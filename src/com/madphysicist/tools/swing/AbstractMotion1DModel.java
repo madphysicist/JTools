@@ -70,6 +70,7 @@ public abstract class AbstractMotion1DModel implements Motion1DModel, Serializab
      * way, when a {@code PropertyChangeEvent} is fired, a given listener will
      * only be invoked once.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private Map<String, Set<PropertyChangeListener>> namedPropertyListeners;
@@ -80,6 +81,7 @@ public abstract class AbstractMotion1DModel implements Motion1DModel, Serializab
      * further references will not be added by {@link
      * #addPropertyChangeListener(String, PropertyChangeListener)}.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private Set<PropertyChangeListener> globalPropertyListeners;
@@ -88,6 +90,7 @@ public abstract class AbstractMotion1DModel implements Motion1DModel, Serializab
      * A set of interested {@code ChangeListeners} that will be updated when
      * the model's state changes.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private Set<ChangeListener> changeListeners;
@@ -99,6 +102,7 @@ public abstract class AbstractMotion1DModel implements Motion1DModel, Serializab
      * safely shared.
      *
      * @see #fireStateChange()
+     * @serial
      * @since 1.0.0.0
      */
     private ChangeEvent changeEvent;

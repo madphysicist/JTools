@@ -38,7 +38,7 @@ import org.testng.Assert;
  * pattern such as "plug in the input parameters and compare the results". This
  * class allows multiple such methods to be tested with a single data provider.
  * Note that when passing {@code Method} objects with a TestNG data provider,
- * the corresponding test argument must be annotated with {@code NoInjection}.
+ * the corresponding test argument must be annotated with {@code @NoInjection}.
  * <p>
  * This class can not be instantiated.
  *
@@ -73,9 +73,9 @@ public class ParametrizedTests
      * an "is a" relationship, use {@code testMethodExactException()}.
      * @param args the arguments to invoke the method with. If the arguments are
      * of incorrect type, the test will fail.
-     * @see #testMethodExactException(java.lang.Object,
+     * @see #testMethodExactException(java.lang.String, java.lang.Object,
      * java.lang.reflect.Method,java.lang.Class, java.lang.Object[])
-     * testMethodExactException(Object, Method, Class, Object...)
+     * testMethodExactException(String, Object, Method, Class, Object...)
      * @since 1.0.0.0
      */
     public static void testMethodException(String label, Object obj, Method method, Class<? extends Throwable> cls, Object... args)
@@ -114,9 +114,9 @@ public class ParametrizedTests
      * testMethodException()}.
      * @param args the arguments to invoke the method with. If the arguments are
      * of incorrect type, the test will fail.
-     * @see #testMethodException(java.lang.Object,
+     * @see #testMethodException(java.lang.String, java.lang.Object,
      * java.lang.reflect.Method,java.lang.Class, java.lang.Object[])
-     * testMethodException(Object, Method, Class, Object...)
+     * testMethodException(String, Object, Method, Class, Object...)
      * @since 1.0.0.0
      */
     public static void testMethodExactException(String label, Object obj, Method method, Class<? extends Throwable> cls, Object... args)

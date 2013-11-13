@@ -198,7 +198,7 @@ public class CasinoSpinner extends JPanel
      *
      * @since 1.0.0.0
      */
-    private static Color DEFAULT_SHADE_COLOR = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+    private static final Color DEFAULT_SHADE_COLOR = new Color(0.0f, 0.0f, 0.0f, 1.0f);
 
     /**
      * The default number of padding pixels between objects shown on the screen.
@@ -221,6 +221,7 @@ public class CasinoSpinner extends JPanel
      * changes. If the model's data is set to {@code null}, this array is set to
      * {@code null}.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private StringBounds[] dataBounds;
@@ -232,6 +233,7 @@ public class CasinoSpinner extends JPanel
      * Changes to this field are reported through {@code PropertyChangeEvents}s
      * to listeners on the property named by {@link #SHADE_COLOR_PROPERTY}.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private Color shadeDark;
@@ -242,6 +244,7 @@ public class CasinoSpinner extends JPanel
      * zero. This ensures that the shades are drawn with a consistent color
      * gradient.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private Color shadeLight;
@@ -252,6 +255,7 @@ public class CasinoSpinner extends JPanel
      * #shadeLight} at the bottom of the shade. The paint is recomputed any time
      * the bounds of the component change or the color of the paint changes.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private final PaintedShape shadeTop;
@@ -262,6 +266,7 @@ public class CasinoSpinner extends JPanel
      * #shadeDark} at the bottom of the shade. The paint is recomputed any time
      * the bounds of the component change or the color of the paint changes.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private final PaintedShape shadeBottom;
@@ -271,6 +276,7 @@ public class CasinoSpinner extends JPanel
      * field are reported through {@code PropertyChangeEvents}s to listeners on
      * the property named by {@link #VERTICAL_PADDING_PROPERTY}.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private int verticalPadding;
@@ -281,6 +287,7 @@ public class CasinoSpinner extends JPanel
      * spinner. This is recomputed as necessary as a byproduct of the optimal
      * display size calculation.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private float objectHeight;
@@ -290,6 +297,7 @@ public class CasinoSpinner extends JPanel
      * size in the spinner. This is recomputed as necessary as a byproduct of
      * the optimal display size calculation.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private float objectWidth;
@@ -299,6 +307,7 @@ public class CasinoSpinner extends JPanel
      * scrolling up and down in the spinner, while horizontal orientation means
      * values scrolling left and right.
      *
+     * @serial
      * @since 1.0.0.1
      */
     private boolean orientation;
@@ -309,6 +318,7 @@ public class CasinoSpinner extends JPanel
      * component is resized so that extra calls to {@code getSize()} do not have
      * to be made.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private final Dimension sizeBuffer;
@@ -319,6 +329,7 @@ public class CasinoSpinner extends JPanel
      * the component's border changes so that extra calls to {@code getInsets()}
      * do not have to be made.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private final Insets insetsBuffer;
@@ -329,6 +340,7 @@ public class CasinoSpinner extends JPanel
      * the component's size or border properties change. This way, superfluous
      * calls to {@code getSize} and {@code getInsets()} do not need to be made.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private final Rectangle boundsBuffer;
@@ -344,6 +356,7 @@ public class CasinoSpinner extends JPanel
      * displayed by this component.
      *
      * @see #modelListener
+     * @serial
      * @since 1.0.0.0
      */
     private CasinoSpinnerModel model;
@@ -356,6 +369,7 @@ public class CasinoSpinner extends JPanel
      * changes and a recomputation of the data bounds and view dimensions
      * whenever the model's data changes.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private final ModelListener modelListener;
@@ -365,6 +379,7 @@ public class CasinoSpinner extends JPanel
      * this component. The listener triggers a spin on this component if it is
      * not already spinning.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private final ActionListener buttonListener;
@@ -375,6 +390,7 @@ public class CasinoSpinner extends JPanel
      * border is drawn to highlight an area around the current selection of the
      * spinner.
      * 
+     * @serial
      * @since 1.0.0.0
      */
     private final JComponent selectionWindow;
@@ -386,6 +402,7 @@ public class CasinoSpinner extends JPanel
      * construction since the type of the border does not change, only the
      * component's size.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private final Insets selectionWindowInsets;
@@ -557,10 +574,10 @@ public class CasinoSpinner extends JPanel
      * Sets the model of the current spinner. This method is responsible for the
      * internal workings of the model set up without triggering property change
      * events or repainting the component. It is used both in the constructor
-     * and in {@link #setModel()}. The {@link #modelListener} is unregistered
-     * from the previous model if it was not {@code null}, and registered to the
-     * new model if it is not {@code null}. The data of the spinner is reset
-     * with {@link #createData()} to reflect the new model.
+     * and in {@link #setModel(CasinoSpinnerModel)}. The {@link #modelListener}
+     * is unregistered from the previous model if it was not {@code null}, and
+     * registered to the new model if it is not {@code null}. The data of the
+     * spinner is reset with {@link #createData()} to reflect the new model.
      *
      * @param model the new model to set. This reference may be {@code null}.
      * @return the previous model. This is used to construct {@code
@@ -648,7 +665,7 @@ public class CasinoSpinner extends JPanel
      * method is responsible for the internal workings of the vertical padding
      * setup without recomputing the layout, triggering property change events
      * or repainting the component. It is used both in the constructor via
-     * {@link #setDefaults()} and in {@link #setVerticalPadding()}.
+     * {@link #setDefaults()} and in {@link #setVerticalPadding(int)}.
      *
      * @param verticalPadding the vertical padding to set.
      * @return the previous vertical padding. This is used to construct {@code
@@ -701,7 +718,7 @@ public class CasinoSpinner extends JPanel
      * method is responsible for the internal workings of the shade color setup
      * without recomputing the shades themselves, triggering property change
      * events or repainting the component. It is used both in the constructor
-     * via {@link #setDefaults()} and in {@link #setShadeColor()}.
+     * via {@link #setDefaults()} and in {@link #setShadeColor(Color)}.
      *
      * @param shadeColor the new shade color to set. May be {@code null}.
      * @return the previous shade color. This is used to construct {@code
@@ -785,8 +802,8 @@ public class CasinoSpinner extends JPanel
     /**
      * Adds an action listener that will trigger this spinner to the specified
      * button. The action listener can be removed using {@link
-     * #removeFromButton()}. All spinners sharing a model with this one will be
-     * triggered simultaneously by actions on the button.
+     * #removeFromButton(AbstractButton)}. All spinners sharing a model with
+     * this one will be triggered simultaneously by actions on the button.
      *
      * @param button a button that will trigger this spinner.
      * @since 1.0.0.0
@@ -799,7 +816,7 @@ public class CasinoSpinner extends JPanel
     /**
      * Removes the action listener that triggers this spinner from the specified
      * button. This method is a no-op if the action listener was not first
-     * registered using {@link #addToButton()}.
+     * registered using {@link #addToButton(AbstractButton)}.
      *
      * @param button the button to remove this spinner's listener from.
      * @since 1.0.0.0
@@ -915,10 +932,11 @@ public class CasinoSpinner extends JPanel
      * Recreates the {@link #dataBounds} array when either the model is changed
      * or the current model's data property changes. The array is set to {@code
      * null} if the model or its data are set to {@code null}. This method is
-     * triggered by {@link #setModelInternal()} as well as {@link
-     * ModelListener#propertyChange()}. The bounds of the component and the data
-     * are set based on the model and the current set of properties via {@link
-     * #setOptimalSize()} once the array has been recomputed.
+     * triggered by {@link #setModelInternal(CasinoSpinnerModel)} as well as
+     * {@link ModelListener#propertyChange(PropertyChangeEvent)}. The bounds of
+     * the component and the data are set based on the model and the current set
+     * of properties via {@link #setOptimalSize()} once the array has been
+     * recomputed.
      *
      * @since 1.0.0.0
      */
@@ -1287,7 +1305,7 @@ public class CasinoSpinner extends JPanel
          * Constructs a bounds object for the specified string. The width,
          * height and base line fields are not set by the constructor. They must
          * be computed for a specific font and context using {@link
-         * #setBounds()}.
+         * #setBounds(Font, FontRenderContext)}.
          *
          * @param str the string for which the bounds are to be computed.
          * @since 1.0.0.0

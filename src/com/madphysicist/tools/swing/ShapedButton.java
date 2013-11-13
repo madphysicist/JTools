@@ -76,6 +76,7 @@ public class ShapedButton extends JButton
      * place it at the button's actual location. Its bounding box will be used
      * as the button's size.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private Shape shape;

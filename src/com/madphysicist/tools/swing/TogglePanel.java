@@ -71,7 +71,16 @@ public class TogglePanel extends JPanel
      */
     private static final long serialVersionUID = 1000L;
 
+    /**
+     * @serial
+     * @since 1.0.0.0
+     */
     private JPanel panel;
+
+    /**
+     * @serial
+     * @since 1.0.0.0
+     */
     private JCheckBox checkBox;
 
     public TogglePanel()

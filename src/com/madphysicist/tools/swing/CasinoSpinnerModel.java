@@ -278,6 +278,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * zero whenever a new non-{@code null} and non-empty data list is set. It
      * is set to {@code Double.NaN} if the data is {@code null} or empty.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private double position;
@@ -291,6 +292,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @see #spin(int)
      * @see #spin()
+     * @serial
      * @since 1.0.0.0
      */
     private boolean spinning;
@@ -307,6 +309,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @see #DATA_PROPERTY
      * @see Collections#unmodifiableList(List)
+     * @serial
      * @since 1.0.0.0
      */
     private List<String> data;
@@ -317,6 +320,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * need for a repeated cast when the model is spinning. If the data is set
      * to {@code null}, this field is set to {@code Double.NaN}.
      *
+     * @serial
      * @since 1.0.0.0
      */
     private double dataSize;
@@ -332,6 +336,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * is {@value #DEFAULT_SPIN_RATE} objects per second.
      *
      * @see #SPIN_RATE_PROPERTY
+     * @serial
      * @since 1.0.0.0
      */
     private double spinRate;
@@ -342,6 +347,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * default acceleration is {@value #DEFAULT_ACCELERATION}.
      *
      * @see #ACCELERATION_PROPERTY
+     * @serial
      * @since 1.0.0.0
      */
     private double acceleration;
@@ -356,6 +362,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @see #refreshTime
      * @see #REFRESH_PROPERTY
+     * @serial
      * @since 1.0.0.0
      */
     private int refreshRate;
@@ -368,6 +375,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @see #refreshRate
      * @see #REFRESH_PROPERTY
+     * @serial
      * @since 1.0.0.0
      */
     private long refreshTime;
@@ -380,6 +388,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * {@value #DEFAULT_SPIN_SIGMA}.
      *
      * @see #SPIN_SIGMA_PROPERTY
+     * @serial
      * @since 1.0.0.0
      */
     private double spinSigma;
@@ -390,6 +399,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * #SPIN_NEGATIVE} or {@link #SPIN_BOTH}. The default value is {@code
      * SPIN_BOTH}.
      *
+     * @serial
      * @since 1.0.0.1
      */
     private int spinDirection;
@@ -404,7 +414,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @since 1.0.0.0
      */
-    private final Object spinLock;
+    private final transient Object spinLock;
 
     /**
      * Constructs an empty model with {@code null} data and all other properties
@@ -1439,6 +1449,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * once. If this flag is {@code true}, {@code t0} will be a valid value.
          * Otherwise, the task has been created but not yet been initialized.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private boolean started;
@@ -1449,6 +1460,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * by the first iteration of the task. This value should only be
          * considered valid if the {@link #started} flag is {@code true}.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private double t0;
@@ -1463,6 +1475,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * to zero for a cruising stretch. This value is precomputed as soon as
          * the final position is known.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private final double tA;
@@ -1475,6 +1488,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * maximum configured speed, this time will be equal to {@link #tA}.
          * This value is precomputed as soon as the final position is known.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private final double tB;
@@ -1486,6 +1500,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * exactly the desired amount, and the task will cancel itself. This
          * value is precomputed as soon as the final position is known.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private final double tF;
@@ -1495,6 +1510,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * objects. This is exactly {@link #position} at the beginning of the
          * spin.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private final double x0;
@@ -1509,6 +1525,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * zero for a cruising stretch. This value is precomputed as soon as the
          * final position is known.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private final double xA;
@@ -1521,6 +1538,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * position will be equal to {@link #xA}. This value is precomputed as
          * soon as the final position is known.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private final double xB;
@@ -1528,9 +1546,10 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
         /**
          * The final position of the spinner when it comes to a stop, in units
          * of objects. This number is an integer indicating the index of the
-         * object at the end of the spin. The index is just {@link x0} offset by
-         * the desired increment.
+         * object at the end of the spin. The index is just {@link #x0} offset
+         * by the desired increment.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private final double xF;
@@ -1546,6 +1565,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * turning off for a time to allow the spinner to cruise. This value
          * includes both a direction and a magnitude.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private final double vMax;
@@ -1559,6 +1579,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * cruise, and slow-down phases of the spin. This value includes both a
          * direction and a magnitude.
          *
+         * @serial
          * @since 1.0.0.0
          */
         private final double aMax;
