@@ -76,6 +76,7 @@ public class CombinedIterator<T> implements Iterator<T>
      * skipped without throwing an exception.
      * @since 1.0.0.0
      */
+    @SuppressWarnings("unchecked")
     public CombinedIterator(Iterable<T>... list)
     {
         this.list = list;
