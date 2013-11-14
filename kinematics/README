@@ -1,0 +1,16 @@
+This directory contains a brief explanation of the kinematics of
+com.madphysicist.tools.swing.CasinoSpinner. The follwing files are present:
+
+CasinoSpinnerEquations.odf
+CasinoSpinnerEquations.png
+    A LibreOffice Math file and its PNG equivalent listing the equations used to
+    compute the model for long and short spins.
+
+CasinoSpinnerKinematics.m
+CasinoSpinnerKinematics.fig
+CasinoSpinnerKinematics.png
+    A MATLAB figure, the MATLAB script used to generated, and the PNG export of
+    the figure, which depict the effect of the equations of motion graphically.
+
+README
+    This file.
