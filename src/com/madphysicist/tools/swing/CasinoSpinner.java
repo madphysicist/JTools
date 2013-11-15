@@ -471,8 +471,8 @@ public class CasinoSpinner extends JPanel
      */
     private void setDefaults()
     {
-        setOrientation(DEFAULT_ORIENTATION);
         setShadeColorInternal(DEFAULT_SHADE_COLOR);
+        setOrientation(DEFAULT_ORIENTATION);
         setVerticalPaddingInternal(DEFAULT_VERTICAL_PADDING);
     }
 
