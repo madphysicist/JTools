@@ -161,8 +161,8 @@ public class SwingUtilities
                     javax.swing.SwingUtilities.updateComponentTreeUI(base);
                     Window window = windowForComponent(base);
                     if(window != null) window.pack();
-                } catch(ReflectiveOperationException ex) {
-                } catch(UnsupportedLookAndFeelException ex) {
+                } catch(ReflectiveOperationException | UnsupportedLookAndFeelException ex) {
+                    // Silent ignore: do nothing in case of an error
                 }
             }
         });
