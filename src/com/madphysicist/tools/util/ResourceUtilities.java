@@ -35,15 +35,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /**
  * A utility class for manipulating resources found inside and outside of JAR
  * files. This class can not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 13 Feb 2013
- * @version 1.0.0.1, 04 June 2013
- * @since 1.0.0.0
+ * @version 1.0.0, 13 Feb 2013 - J. Fox-Rabinovitz - Created
+ * @version 1.0.1, 04 Jun 2013 - J. Fox-Rabinovitz - Added copyResourceToFile()
+ * @version 1.0.2, 16 Nov 2013 - J. Fox-Rabinovitz - Added loadLibrary() and loadIcon()
+ * @since 1.0.0.
  */
 public class ResourceUtilities
 {
@@ -53,14 +56,14 @@ public class ResourceUtilities
      * advisable to compute this constant for each device being copied to if
      * such a method should become readily available.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final int DISK_BLOCK = 8192;
 
     /**
      * A private constructor to prevent instantiation.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private ResourceUtilities() {}
 
@@ -78,7 +81,7 @@ public class ResourceUtilities
      * resource.
      * @throws IOException if the temporary file can not be created or the
      * resource can not be copied into it.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static File getResourceAsFile(String resourceName, boolean deleteOnExit) throws IOException
     {
@@ -96,6 +99,26 @@ public class ResourceUtilities
     }
 
     /**
+     * Extracts a native dynamically linked library from a resource and loads it
+     * into memory. This method is particularly useful for loading .so and .dll
+     * modules stored within a JAR file.
+     *
+     * @param parent the root path of the resource, minus the file name.
+     * @param baseName the base name of the library. Any extensions will be
+     * interpreted by the loacl platform as necessary.
+     * @throws IOException if the library can not be extracted for any reason.
+     * @throws UnsatisfiedLinkError if the library can not be linked after it is
+     * extracted.
+     * @see System#mapLibraryName(java.lang.String)
+     * @since 1.0.2
+     */
+    public static void loadLibrary(String parent, String baseName) throws IOException, UnsatisfiedLinkError
+    {
+        File lib = getResourceAsFile(baseName + File.separator + System.mapLibraryName(baseName), true);
+        System.load(lib.getCanonicalPath());
+    }
+
+    /**
      * Copies a resource to the specified file on the file system. This method
      * can be useful for the initial setup of a program, when defaults must be
      * copied to the home directory.
@@ -105,7 +128,7 @@ public class ResourceUtilities
      * existing file, it will be overwritten.
      * @throws IOException if the file can not be created or the resource can
      * not be copied into it.
-     * @since 1.0.0.1
+     * @since 1.0.1
      */
     @SuppressWarnings("NestedAssignment")
     public static void copyResourceToFile(String resourceName, File file) throws IOException
@@ -120,8 +143,8 @@ public class ResourceUtilities
     }
 
     /**
-     * Loads an image from a resource. To construct an {@code Icon} from the
-     * image, use the {@code ImageIcon} class.
+     * Loads an image from a resource. To load the image as an {@code Icon}, use
+     * the {@link #loadIcon(java.lang.String) loadIcon()} method.
      *
      * @param resourceName the name of the resource to load.
      * @return the image named by the specified resource, or {@code null} if the
@@ -135,5 +158,24 @@ public class ResourceUtilities
         try(InputStream input = ClassLoader.getSystemResourceAsStream(resourceName)) {
             return (input == null) ? null : ImageIO.read(input);
         }
+    }
+
+    /**
+     * Loads an icon from a resource. This method wraps an image returned by
+     * {@link #loadImage(java.lang.String) loadImage()} into an {@code Icon}.
+     *
+     * @param resourceName the name of the resource to load.
+     * @return the icon named by the specified resource, or {@code null} if the
+     * resource could not be found.
+     * @throws IOException if an error occurs while opening or reading the
+     * resource stream.
+     * @since 1.0.2
+     */
+    public static Icon loadIcon(String resourceName) throws IOException
+    {
+        Image image = loadImage(resourceName);
+        if(image == null)
+            return null;
+        return new ImageIcon(image);
     }
 }
