@@ -149,19 +149,19 @@ public class ResourceUtilities
     /**
      * Loads an icon from a resource. This method wraps an image returned by
      * {@link #loadImage(java.lang.String) loadImage()} into an {@code Icon}.
+     * It also returns {@code null} instead of throwing an exception.
      *
      * @param resourceName the name of the resource to load.
      * @return the icon named by the specified resource, or {@code null} if the
-     * resource could not be found.
-     * @throws IOException if an error occurs while opening or reading the
-     * resource stream.
+     * resource could not be found or loaded.
      * @since 1.0.2
      */
-    public static Icon loadIcon(String resourceName) throws IOException
+    public static Icon loadIcon(String resourceName)
     {
-        Image image = loadImage(resourceName);
-        if(image == null)
+        try {
+            return new ImageIcon(loadImage(resourceName));
+        } catch(IOException ioe) {
             return null;
-        return new ImageIcon(image);
+        }
     }
 }
