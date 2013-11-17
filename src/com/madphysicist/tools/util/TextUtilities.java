@@ -627,33 +627,6 @@ public class TextUtilities
 
     /**
      * <p>
-     * Prints a representation of the current date and time to the specified
-     * print writer. The string is formatted as
-     * <pre>
-     *      YYYY-MM-DD hh:mm:ss.lll
-     * </pre>
-     * where {@code YYYY} is a four-digit year, {@code MM} is a two digit month
-     * number, {@code DD} is the two-digit day of the month, {@code hh} is the
-     * two-digit hour of the day, {@code mm} is the two digit minute of the hour,
-     * {@code ss} is the two digit second and {@code lll} is the fractional part
-     * of the second in milliseconds.
-     * </p>
-     * <p>
-     * This method is equivalent to {@link #timeString(java.io.PrintWriter,
-     * java.util.Calendar) timeString(writer, new GregorianCalendar())}.
-     * </p>
-     *
-     * @param writer the writer to print the formatted result to.
-     * @see GregorianCalendar#GregorianCalendar()
-     * @since 1.0.0.0
-     */
-    public static void nowString(PrintWriter writer)
-    {
-        timeString(writer, new GregorianCalendar());
-    }
-
-    /**
-     * <p>
      * Returns a string representation of the current date and time. The string
      * is formatted as
      * <pre>
@@ -677,33 +650,6 @@ public class TextUtilities
     public static String nowString()
     {
         return timeString(new GregorianCalendar());
-    }
-
-    /**
-     * <p>
-     * Prints a simplified representation of the current date and time to the
-     * specified print writer. The string is formatted as
-     * <pre>
-     *      YYYYMMDD hhmmss.lll
-     * </pre>
-     * where {@code YYYY} is a four-digit year, {@code MM} is a two digit month
-     * number, {@code DD} is the two-digit day of the month, {@code hh} is the
-     * two-digit hour of the day, {@code mm} is the two digit minute of the hour,
-     * {@code ss} is the two digit second and {@code lll} is the fractional part
-     * of the second in milliseconds.
-     * </p>
-     * <p>
-     * This method is equivalent to {@link #simpleTimeString(java.io.PrintWriter,
-     * java.util.Calendar) simpleTimeString(writer, new GregorianCalendar())}.
-     * </p>
-     *
-     * @param writer the writer to print the formatted result to.
-     * @see GregorianCalendar#GregorianCalendar()
-     * @since 1.0.0.0
-     */
-    public static void simpleNowString(PrintWriter writer)
-    {
-        simpleTimeString(writer, new GregorianCalendar());
     }
 
     /**
@@ -734,34 +680,6 @@ public class TextUtilities
     }
 
     /**
-     * Prints a representation of the selected date and time to the specified
-     * print writer. The string is formatted as
-     * <pre>
-     *      YYYY-MM-DD hh:mm:ss.lll
-     * </pre>
-     * where {@code YYYY} is a four-digit year, {@code MM} is a two digit month
-     * number, {@code DD} is the two-digit day of the month, {@code hh} is the
-     * two-digit hour of the day, {@code mm} is the two digit minute of the hour,
-     * {@code ss} is the two digit second and {@code lll} is the fractional part
-     * of the second in milliseconds.
-     *
-     * @param writer the writer to print the formatted result to.
-     * @param cal a calendar representing the date and time.
-     * @since 1.0.0.0
-     */
-    public static void timeString(PrintWriter writer, Calendar cal)
-    {
-        writer.printf("%02d-%02d-%02d %02d:%02d:%02d.%03d",
-                      cal.get(Calendar.YEAR),
-                      cal.get(Calendar.MONTH) + 1,
-                      cal.get(Calendar.DAY_OF_MONTH),
-                      cal.get(Calendar.HOUR_OF_DAY),
-                      cal.get(Calendar.MINUTE),
-                      cal.get(Calendar.SECOND),
-                      cal.get(Calendar.MILLISECOND));
-    }
-
-    /**
      * Returns a string representation of the selected date and time. The string
      * is formatted as
      * <pre>
@@ -787,34 +705,6 @@ public class TextUtilities
                              cal.get(Calendar.MINUTE),
                              cal.get(Calendar.SECOND),
                              cal.get(Calendar.MILLISECOND));
-    }
-
-    /**
-     * Prints a simplified representation of the selected date and time to the
-     * specified print writer. The string is formatted as
-     * <pre>
-     *      YYYYMMDD hhmmss.lll
-     * </pre>
-     * where {@code YYYY} is a four-digit year, {@code MM} is a two digit month
-     * number, {@code DD} is the two-digit day of the month, {@code hh} is the
-     * two-digit hour of the day, {@code mm} is the two digit minute of the hour,
-     * {@code ss} is the two digit second and {@code lll} is the fractional part
-     * of the second in milliseconds.
-     *
-     * @param writer the writer to print the formatted result to.
-     * @param cal a calendar representing the date and time.
-     * @since 1.0.0.0
-     */
-    public static void simpleTimeString(PrintWriter writer, Calendar cal)
-    {
-        writer.printf("%02d%02d%02d %02d%02d%02d.%03d",
-                      cal.get(Calendar.YEAR),
-                      cal.get(Calendar.MONTH) + 1,
-                      cal.get(Calendar.DAY_OF_MONTH),
-                      cal.get(Calendar.HOUR_OF_DAY),
-                      cal.get(Calendar.MINUTE),
-                      cal.get(Calendar.SECOND),
-                      cal.get(Calendar.MILLISECOND));
     }
 
     /**

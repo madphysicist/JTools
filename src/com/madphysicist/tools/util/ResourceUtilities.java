@@ -1,5 +1,5 @@
 /*
- * Resources.java
+ * ResourceUtilities.java
  *
  * Mad Physicist JTools Project (General Purpose Utilities)
  *
@@ -50,16 +50,6 @@ import javax.swing.ImageIcon;
  */
 public class ResourceUtilities
 {
-    /**
-     * The approximate size of a disk block in bytes. This number is intended to
-     * be nearly optimal for copying files across multiple platforms. It may be
-     * advisable to compute this constant for each device being copied to if
-     * such a method should become readily available.
-     *
-     * @since 1.0.0
-     */
-    private static final int DISK_BLOCK = 8192;
-
     /**
      * A private constructor to prevent instantiation.
      *
@@ -133,12 +123,8 @@ public class ResourceUtilities
     @SuppressWarnings("NestedAssignment")
     public static void copyResourceToFile(String resourceName, File file) throws IOException
     {
-        byte[] buffer = new byte[DISK_BLOCK];
-        try (InputStream input = ClassLoader.getSystemResourceAsStream(resourceName);
-             OutputStream output = new FileOutputStream(file)) {
-            int nRead;
-            while((nRead = input.read(buffer)) != -1)
-                output.write(buffer, 0, nRead);
+        try (InputStream input = ClassLoader.getSystemResourceAsStream(resourceName)) {
+            FileUtilities.copyStreamToFile(input, file);
         }
     }
 
