@@ -158,10 +158,13 @@ public class ResourceUtilities
      */
     public static Icon loadIcon(String resourceName)
     {
+        Image image = null;
         try {
-            return new ImageIcon(loadImage(resourceName));
-        } catch(IOException ioe) {
-            return null;
+            image = loadImage(resourceName);
+        } catch(IOException ioe) {}
+        if(image != null) {
+            return new ImageIcon(image);
         }
+        return null;
     }
 }
