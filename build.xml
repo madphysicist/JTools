@@ -70,7 +70,7 @@
                destdir="${lib.classes.dir}"
                excludes="**/package-info.java"
                includeantruntime="false"
-               debug="${debug}">
+               debug="${DEBUG}">
             <compilerarg value="-Xlint:all" />
         </javac>
         <copy todir="${lib.classes.dir}">
@@ -148,10 +148,18 @@
               classpathref="run-lib" />
     </target>
 
-    <target name="run-loginpanel" depends="jar,run-init"
+    <target name="run-loginpanel-frame" depends="jar,run-init"
             description="runs the demo application for LoginPanel">
         <java fork="true" classname="${swing.loginpanel.class}"
               classpathref="run-lib" />
+    </target>
+
+    <target name="run-loginpanel-dialog" depends="jar,run-init"
+            description="runs the demo application for LoginPanel">
+        <java fork="true" classname="${swing.loginpanel.class}"
+              classpathref="run-lib">
+            <arg value="Dialog" />
+        </java>
     </target>
 
     <target name="run-swingutilities" depends="jar,run-init"

@@ -29,6 +29,8 @@
 package com.madphysicist.tools.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dialog.ModalityType;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -41,9 +43,11 @@ import java.util.Collection;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
@@ -75,6 +79,22 @@ public class LoginPanel extends JPanel
      * @since 1.0.0
      */
     private static final long serialVersionUID = 1000L;
+
+    /**
+     * A code indicating that the user clicked the "OK" button. The button
+     * appears in the dialog presented by the {@link #showDialog()} method.
+     *
+     * @since 1.0.0
+     */
+    public static final int APPROVE_OPTION = 0;
+
+    /**
+     * A code indicating that the user clicked the "Cancel" button. The button
+     * appears in the dialog presented by the {@link #showDialog()} method.
+     *
+     * @since 1.0.0
+     */
+    public static final int REJECT_OPTION = 1;
 
     /**
      * The default text of {@link #userNameLabel}.
@@ -357,7 +377,7 @@ public class LoginPanel extends JPanel
         if(userNameField != null) {
             return userNameField.getText();
         } else if(userNameCombo != null) {
-            return userNameCombo.getSelectedItem().toString();
+            return userNameCombo.getEditor().getItem().toString();
         } else {
             return null;
         }
@@ -432,6 +452,25 @@ public class LoginPanel extends JPanel
     public JLabel getDomainLabel()
     {
         return domainLabel;
+    }
+
+    /**
+     * Shows this panel on an appliation modal dialog and blocks until the
+     * dialog closes. The dialog will have "OK" and "Cancel" buttons. The
+     * selected button is noted by the return value. If the return value is
+     * {@link #APPROVE_OPTION}, the {@link #getUserName()}, {@link
+     * #getPassword()} and possibly {@link #getDomain()} methods may be used to
+     * obtain the login information.
+     *
+     * @return either {@link #APPROVE_OPTION} or {@link #REJECT_OPTION}
+     * depending on whether the user clicks on the "OK" or "Cancel" button.
+     * @since 1.0.0
+     */
+    public int showDialog()
+    {
+        LoginDialog dialog = new LoginDialog();
+        dialog.setVisible(true);
+        return dialog.getReturnValue();
     }
 
     private void setUserNameCombo(Collection<String> userNames)
@@ -561,6 +600,90 @@ public class LoginPanel extends JPanel
     }
 
     /**
+     * The dialog displayed by {@link #showDialog()}. This class records the
+     * user's selection.
+     *
+     * @author Joseph Fox-Rabinovitz
+     * @version 1.0.0 19 Nov 2013 - J. Fox-Rabinovitz - Created
+     * @since 1.0.0
+     */
+    private class LoginDialog extends JDialog
+    {
+        /**
+         * The version ID for serialization.
+         *
+         * @serial Increment the least significant three digits when
+         * compatibility is not compromised by a structural change (e.g. adding
+         * a new field with a sensible default value), and the upper digits when
+         * the change makes serialized versions of of the class incompatible
+         * with previous releases.
+         * @since 1.0.0
+         */
+        private static final long serialVersionUID = 1000L;
+
+        private static final String RETURN_PROPERTY = "returnValue";
+
+        private int returnValue;
+        private Container previousParent;
+
+        public LoginDialog()
+        {
+            super(null, "Login Credentials", ModalityType.APPLICATION_MODAL);
+            this.returnValue = REJECT_OPTION;
+            this.previousParent = LoginPanel.this.getParent();
+
+            ActionListener listener = new ActionListener() {
+                private static final long serialVersionUID = 1000L;
+                @Override public void actionPerformed(ActionEvent e) {
+                    JComponent source = (JComponent)e.getSource();
+                    Integer value = (Integer)source.getClientProperty(RETURN_PROPERTY);
+                    destroyDialog(value.intValue());
+                }
+            };
+
+            JButton approveButton = new JButton("OK");
+            approveButton.putClientProperty(RETURN_PROPERTY, APPROVE_OPTION);
+            approveButton.addActionListener(listener);
+
+            JButton cancelButton = new JButton("Cancel");
+            cancelButton.putClientProperty(RETURN_PROPERTY, REJECT_OPTION);
+            cancelButton.addActionListener(listener);
+
+            setLayout(new GridBagLayout());
+            add(LoginPanel.this, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                    GridBagConstants.FILL_HORIZONTAL_NORTH, 0, 0));
+            add(cancelButton, new GridBagConstraints(0, 1, 1, 1, 1.0, 0.0,
+                    GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
+                    GridBagConstants.SOUTH, 0, 0));
+            add(approveButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
+                    GridBagConstants.SOUTHEAST, 0, 0));
+
+            pack();
+            setResizable(false);
+        }
+
+        public int getReturnValue()
+        {
+            return returnValue;
+        }
+
+        public void destroyDialog(int returnValue)
+        {
+            this.returnValue = returnValue;
+            setVisible(false);
+
+            remove(LoginPanel.this);
+            if(previousParent != null) {
+                previousParent.add(LoginPanel.this);
+            }
+
+            dispose();
+        }
+    }
+
+    /**
      * A panel that displays a {@link JTextField}, a {@link JList}, and two
      * {@link JButton}s to add and remove entries from either the user or domain
      * lists on a {@link LoginPanel}.
@@ -597,6 +720,7 @@ public class LoginPanel extends JPanel
             this.type = type;
 
             ActionListener addActionListener = new ActionListener() {
+                @SuppressWarnings({"UseSpecificCatch", "CallToThreadDumpStack"})
                 @Override public void actionPerformed(ActionEvent e) {
                     String entry = text.getText();
                     if(entry != null && !entry.isEmpty()) {
@@ -615,6 +739,7 @@ public class LoginPanel extends JPanel
                 }
             };
             ActionListener removeActionListener = new ActionListener() {
+                @SuppressWarnings({"UseSpecificCatch", "CallToThreadDumpStack"})
                 @Override public void actionPerformed(ActionEvent e) {
                     int[] indices = list.getSelectedIndices();
                     // list is in ascending order
@@ -673,23 +798,41 @@ public class LoginPanel extends JPanel
      */
     public static void main(String[] args)
     {
-        LoginPanel loginPanel = new LoginPanel();
-        loginPanel.setBorder(new TitledBorder("Login Panel"));
+        if(args.length > 0 && args[0].equalsIgnoreCase("Dialog")) {
+            LoginPanel loginPanel = new LoginPanel(
+                    Arrays.asList("user", "admin", "guest"),
+                    Arrays.asList("WORKGROUP", "NET_DOMAIN"));
 
-        JPanel sidePanel = new JPanel(new GridLayout(2, 1));
-        sidePanel.setBorder(new TitledBorder("Edit Properties"));
-        sidePanel.add(loginPanel.new DemoPanel("User"));
-        sidePanel.add(loginPanel.new DemoPanel("Domain"));
+            if(loginPanel.showDialog() == APPROVE_OPTION) {
+                JOptionPane.showMessageDialog(null, "<html>" +
+                        "UserName: " + loginPanel.getUserName() + "<br/>" +
+                        "Password: " + new String(loginPanel.getPassword()) + "<br/>" +
+                        "Domain: " + loginPanel.getDomain() + "</html>",
+                        "Credentials Approved", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "You chose to cancel your selection.",
+                        "Credentials Rejected", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            LoginPanel loginPanel = new LoginPanel();
+            loginPanel.setBorder(new TitledBorder("Login Panel"));
 
-        JFrame frame = new JFrame("LoginPanel Demo v1.0.0");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JPanel sidePanel = new JPanel(new GridLayout(2, 1));
+            sidePanel.setBorder(new TitledBorder("Edit Properties"));
+            sidePanel.add(loginPanel.new DemoPanel("User"));
+            sidePanel.add(loginPanel.new DemoPanel("Domain"));
 
-        frame.setLayout(new BorderLayout());
-        frame.add(loginPanel, BorderLayout.CENTER);
-        frame.add(sidePanel, BorderLayout.EAST);
-        frame.add(SwingUtilities.lookAndFeelSelector(frame), BorderLayout.SOUTH);
+            JFrame frame = new JFrame("LoginPanel Demo v1.0.0");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.pack();
-        frame.setVisible(true);
+            frame.setLayout(new BorderLayout());
+            frame.add(loginPanel, BorderLayout.CENTER);
+            frame.add(sidePanel, BorderLayout.EAST);
+            frame.add(SwingUtilities.lookAndFeelSelector(frame), BorderLayout.SOUTH);
+
+            frame.pack();
+            frame.setVisible(true);
+        }
     }
 }

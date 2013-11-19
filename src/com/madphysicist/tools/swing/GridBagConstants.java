@@ -64,7 +64,7 @@ public interface GridBagConstants
      *
      * @since 1.0.0
      */
-    public int NORTH_INSET = 2;
+    public int NORTH_INSET = 5;
 
     /**
      * Size to use for the bottom inset of a component on the south edge of the
