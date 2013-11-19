@@ -583,7 +583,7 @@ public class JColorButton extends JButton
             }
         });
 
-        JFrame frame = new JFrame("Demo of JColorButton v1.0");
+        JFrame frame = new JFrame("Demo of JColorButton v1.0.1");
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridBagLayout());

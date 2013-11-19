@@ -56,16 +56,16 @@ import javax.swing.UnsupportedLookAndFeelException;
  * javax.swing} packages.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 25 Feb 2013
- * @version 1.0.0.1, 13 June 2013: Added {@code setEnabled()} method.
- * @since 1.0.0.0
+ * @version 1.0.0, 25 Feb 2013
+ * @version 1.0.1, 13 June 2013: Added {@code setEnabled()} method.
+ * @since 1.0.0
  */
 public class SwingUtilities
 {
     /**
      * Private constructor to prevent instantiation.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private SwingUtilities() {}
 
@@ -75,7 +75,7 @@ public class SwingUtilities
      *
      * @param comp the component to enable or disable.
      * @param b the enabled state to set for {@code comp} and possible children.
-     * @since 1.0.0.1
+     * @since 1.0.1
      */
     public static void setEnabled(Component comp, boolean b)
     {
@@ -93,7 +93,7 @@ public class SwingUtilities
      * @param comp the component to check.
      * @return the window for the selected component, or {@code null} if it has
      * not been added to a window.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static Window windowForComponent(Component comp)
     {
@@ -114,7 +114,7 @@ public class SwingUtilities
      * displayed instead.
      * @param address the address to open. Must be parseable as a valid URI.
      * @return a clickable JLabel that behaves like a hyperlink.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static JLabel createHyperlinkLabel(final String text, final String address)
     {
@@ -143,7 +143,7 @@ public class SwingUtilities
      * box.
      * @return a combo box listing all of the currently registered
      * look-and-feels.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static JComboBox<?> lookAndFeelSelector(final Component base)
     {
@@ -178,8 +178,8 @@ public class SwingUtilities
      * @see #lookAndFeelSelector(Component)
      * @see javax.swing.UIManager.LookAndFeelInfo
      * @author Joseph Fox-Rabinovitz
-     * @version 1.0.0.0, 13 June 2013
-     * @since 1.0.0.0
+     * @version 1.0.0, 13 June 2013
+     * @since 1.0.0
      */
     private static class LAFNode implements Serializable
     {
@@ -229,7 +229,7 @@ public class SwingUtilities
 
     public static void main(String[] args)
     {
-        final JFrame frame = new JFrame("Demo of HyperlinkLabel & LAFSelector v1.0");
+        final JFrame frame = new JFrame("Demo of HyperlinkLabel & LAFSelector v1.0.1");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridBagLayout());
 

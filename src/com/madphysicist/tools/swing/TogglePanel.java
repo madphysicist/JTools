@@ -224,7 +224,7 @@ public class TogglePanel extends JPanel
         panel.addContent(new JButton("Demo Button"), new GridBagConstraints(1, 2, 1, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(2, 5, 5, 8), 0, 0));
 
-        JFrame frame = new JFrame("TogglePanel Demo v1.0");
+        JFrame frame = new JFrame("TogglePanel Demo v1.0.0");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setLayout(new BorderLayout(10, 10));

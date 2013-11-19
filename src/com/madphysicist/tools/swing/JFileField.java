@@ -45,7 +45,7 @@ import javax.swing.filechooser.FileFilter;
  * JFileChooser} triggred by a {@code JButton}.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 28 May 2013
+ * @version 1.0.0, 28 May 2013 - J. Fox-Rabinovitz - Created
  * @since 1.0.0
  */
 public class JFileField extends JPanel
@@ -300,9 +300,19 @@ public class JFileField extends JPanel
         button.setEnabled(b);
     }
 
+    /**
+     * Runs a demo of {@code JFileField}. The user is presented with an editable
+     * {@code JFileField}, a button to toggle the relative positions of the file
+     * field's text field and browse buttons, as well as a look-and-feel
+     * selector that allows the components to be viewed with any of the
+     * installed LAFs.
+     *
+     * @param args the command line arguments are always ignored.
+     * @since 1.0.0
+     */
     public static void main(String[] args)
     {
-        final JFrame frame = new JFrame("Demo of JFileField v1.0");
+        final JFrame frame = new JFrame("Demo of JFileField v1.0.0");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridBagLayout());
 

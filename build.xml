@@ -133,31 +133,37 @@
     <target name="run-casinospinner" depends="jar,run-init"
             description="runs the demo application for CasinoSpinner">
         <java fork="true" classname="${swing.casinospinner.class}"
-              classpathref="run-path" />
+              classpathref="run-lib" />
     </target>
 
     <target name="run-jcolorbutton" depends="jar,run-init"
             description="runs the demo application for JColorButton">
         <java fork="true" classname="${swing.jcolorbutton.class}"
-              classpathref="run-path" />
+              classpathref="run-lib" />
     </target>
 
     <target name="run-jfilefield" depends="jar,run-init"
             description="runs the demo application for JFileField">
         <java fork="true" classname="${swing.jfilefield.class}"
-              classpathref="run-path" />
+              classpathref="run-lib" />
     </target>
 
-    <target name="run-swingutilities" depends="jar"
+    <target name="run-loginpanel" depends="jar,run-init"
+            description="runs the demo application for LoginPanel">
+        <java fork="true" classname="${swing.loginpanel.class}"
+              classpathref="run-lib" />
+    </target>
+
+    <target name="run-swingutilities" depends="jar,run-init"
             description="runs the demo application for the components created in SwingUtilities">
         <java fork="true" classname="${swing.swingutilities.class}"
-              classpathref="run-path" />
+              classpathref="run-lib" />
     </target>
 
-    <target name="run-togglepanel" depends="jar"
+    <target name="run-togglepanel" depends="jar,run-init"
             description="runs the demo application for TogglePanel">
         <java fork="true" classname="${swing.togglepanel.class}"
-              classpathref="run-path" />
+              classpathref="run-lib" />
     </target>
 
     <!-- Test Build Targets -->
