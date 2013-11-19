@@ -36,12 +36,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 import javax.swing.AbstractListModel;
+import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.MutableComboBoxModel;
 
 /**
- * Provides a model for {@link JList}s and {@code JComboBox}es that sorts items
- * and only allows one instance of each item. This model does not allow {@code
- * null} items in the list.
+ * Provides a model for {@link JList}s and {@link JComboBox}es that sorts items
+ * and only allows one instance of each item. This model is mutable. It does not
+ * allow {@code null} items in the list.
  *
  * @param <E> The type of data stored in the list or combo box.
  * @author Joseph Fox-Rabinovitz
@@ -66,26 +69,54 @@ public class SetListModel<E extends Comparable<? super E>>
     /**
      * The data of the combo box or list. Data is maintained in a sorted list
      * rather than a set because Java {@link SortedSet}s do not provide
-     * index-based access.
+     * index-based access. This field is never {@code null} after the
+     * constructor completes successfully, although it may be empty.
      *
      * @serial
      * @since 1.0.0
      */
     private List<E> data;
 
+    /**
+     * Maintains the currently selected index for the methods of the {@link
+     * ComboBoxModel} interface.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private int selectedIndex;
 
+    /**
+     * Creates an empty model. Elements may be added later.
+     *
+     * @since 1.0.0
+     */
     public SetListModel()
     {
-        this((Collection)null);
+        this((Collection<E>)null);
     }
 
-    public SetListModel(E[] data) throws NullPointerException
+    /**
+     * Creates a model with the specified list of elements.
+     *
+     * @param data the elements to initialize the model with.
+     * @since 1.0.0
+     */
+    public SetListModel(E[] data)
     {
         this(Arrays.asList(data));
     }
 
-    public SetListModel(Collection<? extends E> data) throws NullPointerException
+    /**
+     * Creates a model with the specified collection of elements.
+     *
+     * @param data the elements to initialize the model with. May be {@code
+     * null}, but may not contain {@code null} elements.
+     * @throws NullPointerException if any of the data elements are {@code
+     * null}. Note that the collection itself may be {@code null}.
+     * @since 1.0.0
+     */
+    public SetListModel(Collection<? extends E> data)
     {
         this.data = new ArrayList<>();
 
@@ -103,11 +134,24 @@ public class SetListModel<E extends Comparable<? super E>>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override public int getSize()
     {
         return data.size();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@inheritDoc}. Returns {@code null} if the specified zero-based
+     * index is not within the bounds of the data.
+     * @since 1.0.0
+     */
     @Override public E getElementAt(int index)
     {
         if(index < 0 || index >= data.size()) {
@@ -116,10 +160,21 @@ public class SetListModel<E extends Comparable<? super E>>
         return data.get(index);
     }
 
-    public int getIndexOf(E element)
+    /**
+     * Finds the location of the specified element with the dataset.
+     *
+     * @param obj the element to find.
+     * @return the zero-based index of the element within the data, or {@code
+     * -1} if the element could not be found.
+     * @throws ClassCastException if obj is not {@code Comparable} and
+     * compatible with the type of the model.
+     * @since 1.0.0
+     */
+    @SuppressWarnings("unchecked")
+    public int getIndexOf(Object obj) throws ClassCastException
     {
-        if(element != null) {
-            int index = Collections.binarySearch(data, element);
+        if(obj != null && obj instanceof Comparable) {
+            int index = Collections.binarySearch(data, (E)obj);
             if(index >= 0) {
                 return index;
             }
@@ -127,6 +182,17 @@ public class SetListModel<E extends Comparable<? super E>>
         return -1;
     }
 
+    /**
+     * Places the specified element within the dataset. Since the dataset is
+     * always sorted, this method is the only way to put data into the dataset.
+     * There is no way to insert data into a specific location. This method does
+     * not allow duplicate elements to be inserted.
+     *
+     * @param element the element to add.
+     * @return {@code true} if the element was added to the dataset
+     * successfully, {@code false} if it was already contained.
+     * @since 1.0.0
+     */
     public boolean putElement(E element)
     {
         int index = Collections.binarySearch(data, element);
@@ -139,31 +205,72 @@ public class SetListModel<E extends Comparable<? super E>>
         return true;
     }
 
+    /**
+     * {@inheritDoc}. In actuality, this method is an alias for {@link
+     * #putElement(Comparable)}. The item is not added to the end, but rather
+     * into whatever location is specified by the sorting. The element is not
+     * added at all if it is a duplicate.
+     *
+     * @param element {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override public void addElement(E element)
     {
         putElement(element);
     }
 
+    /**
+     * {@inheritDoc}. In actuality, this method is an alias for {@link
+     * #putElement(Comparable)}. The item is not inserted at the specified
+     * index, but rather into whatever location is specified by the sorting. The
+     * element is not added at all if it is a duplicate.
+     *
+     * @param element {@inheritDoc}
+     * @param index {@inheritDoc}. This parameter is ignored.
+     * @since 1.0.0
+     */
     @Override public void insertElementAt(E element, int index)
     {
         putElement(element);
     }
 
-    @Override public void removeElement(Object obj)
+    /**
+     * {@inheritDoc}.
+     *
+     * @param obj {@inheritDoc}
+     * @throws ClassCastException if obj is not {@code Comparable} and
+     * compatible with the type of the model.
+     * @since 1.0.0
+     */
+    @SuppressWarnings("unchecked")
+    @Override public void removeElement(Object obj) throws ClassCastException
     {
-        int index = Collections.binarySearch(data, (E)obj);
-        if(index >= 0) {
-            data.remove(index);
-            fireIntervalRemoved(this, index, index);
+        if(obj instanceof Comparable) {
+            int index = Collections.binarySearch(data, (E)obj);
+            if(index >= 0) {
+                data.remove(index);
+                fireIntervalRemoved(this, index, index);
+            }
         }
     }
 
+    /**
+     * {@inheritDoc}.
+     *
+     * @param index {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override public void removeElementAt(int index)
     {
         data.remove(index);
         fireIntervalRemoved(this, index, index);
     }
 
+    /**
+     * Clears all of the elements in this model.
+     *
+     * @since 1.0.0
+     */
     public void removeAllElements()
     {
         if(!data.isEmpty()) {
@@ -173,11 +280,22 @@ public class SetListModel<E extends Comparable<? super E>>
         }
     }
 
-    @Override public void setSelectedItem(Object obj) throws ClassCastException
+    /**
+     * {@inheritDoc}
+     *
+     * @param obj {@inheritDoc}
+     * @since 1.0.0
+     */
+    @Override public void setSelectedItem(Object obj)
     {
-        this.selectedIndex = getIndexOf((E)obj);
+        this.selectedIndex = getIndexOf(obj);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @since 1.0.0
+     */
     @Override public Object getSelectedItem()
     {
         if(selectedIndex >= 0 && selectedIndex < data.size()) {
@@ -186,6 +304,14 @@ public class SetListModel<E extends Comparable<? super E>>
         return null;
     }
 
+    /**
+     * Checks if this model's dataset contains the specified element.
+     *
+     * @param element the element to check for.
+     * @return {@code true} if the requested element is contained in the
+     * dataset, {@code false} otherwise.
+     * @since 1.0.0
+     */
     public boolean contains(E element)
     {
         if(element != null) {
@@ -195,6 +321,13 @@ public class SetListModel<E extends Comparable<? super E>>
         return false;
     }
 
+    /**
+     * Checks if this model's dataset is empty or not.
+     *
+     * @return {@code true} if the dataset is empty, {@code false} if it has a
+     * non-zero number of elements.
+     * @since 1.0.0
+     */
     public boolean isEmpty()
     {
         return data.isEmpty();

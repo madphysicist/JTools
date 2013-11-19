@@ -46,13 +46,18 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 /**
  * A panel in which the user can enter their user name and password. The user
- * name can optionally be selected from an editable dropdown combo box. This
- * class also provides a method for displaying a modal dialog for logging in.
+ * name can optionally be selected from an editable dropdown combo box. If the
+ * panel is not initialized with any user names, the user name input is a text
+ * field. If a list of domains is specified, a domain may also be selected from
+ * a dropdown combo box. This combo box is not visible if there are no domains
+ * to choose from. This class also has a method for displaying a modal dialog
+ * for logging in.
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0 17 Nov 2013 - J. Fox-Rabinovitz - Created
@@ -71,33 +76,188 @@ public class LoginPanel extends JPanel
      */
     private static final long serialVersionUID = 1000L;
 
+    /**
+     * The default text of {@link #userNameLabel}.
+     *
+     * @since 1.0.0
+     */
     private static final String USER_NAME_STRING = "User Name:";
+
+    /**
+     * The default text of {@link #passwordLabel}.
+     *
+     * @since 1.0.0
+     */
     private static final String PASSWORD_STRING = "Password:";
+
+    /**
+     * The default text of {@link #domainLabel}.
+     *
+     * @since 1.0.0
+     */
     private static final String DOMAIN_STRING = "Domain:";
 
+    /**
+     * The editable combo-box used to display and edit user names. The model of
+     * this combo box is always set to a {@link SetListModel}, and used to store
+     * the preconfigured user names. If there are no preconfigured user names,
+     * this reference is {@code null}, and the user name is entered through
+     * {@link #userNameField} instead.
+     *
+     * @see #userNameModel
+     * @serial
+     * @since 1.0.0
+     */
     private JComboBox<String> userNameCombo;
+
+    /**
+     * A reference to the model of {@link #userNameCombo}. This field is {@code
+     * null} if {@code userNameCombo} is {@code null}. This reference is
+     * maintained to avoid constant casting whenever access to the model is
+     * required.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private SetListModel<String> userNameModel;
+
+    /**
+     * The text field used to display and edit user names. If there are
+     * preconfigured user names, they are displayed and edited by {@link
+     * #userNameCombo} and this reference is set to {@code null}.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private JTextField userNameField;
+
+    /**
+     * The text field used to display and edit the password. The password is
+     * never displayed as plain text. This reference is never {@code null} past
+     * the constructor.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private JPasswordField passwordField;
+
+    /**
+     * The combo box used to display and select the domain. The model of this
+     * combo box is always set to a {@link SetListModel}, and used to store the
+     * preconfigured domains. If there are no preconfigured domains, this
+     * reference is set to {@code null}.
+     *
+     * @see #domainModel
+     * @serial
+     * @since 1.0.0
+     */
     private JComboBox<String> domainCombo;
+
+    /**
+     * A reference to the model of {@link #domainCombo}. This field is {@code
+     * null} if {@code domainCombo} is {@code null}. This reference is
+     * maintained to avoid constant casting whenever access to the model is
+     * required.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private SetListModel<String> domainModel;
 
+    /**
+     * The label for the user name editor. The text of the label is configurable
+     * via the {@link #setUserNameLabelText(String)}. If additional
+     * configuration is required, the label itself may be retrieved using the
+     * {@link #getUserNameLabel()} method. This reference is never {@code null}
+     * past the constructor, although the component that it is a label for may
+     * change.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private JLabel userNameLabel;
+
+    /**
+     * The label for the password text field. The text of the label is
+     * configurable via the {@link #setPasswordLabelText(String)}. If additional
+     * configuration is required, the label itself may be retrieved using the
+     * {@link #getPasswordLabel()} method. This reference is never {@code null}
+     * past the constructor.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private JLabel passwordLabel;
+
+    /**
+     * The label for the domain editor. The text of the label is configurable
+     * via the {@link #setDomainLabelText(String)}. The text may be configured
+     * even if this reference is {@code null} using {@link #domainLabelText}. If
+     * additional configuration is required, the label itself may be retrieved
+     * using the {@link #getDomainLabel()} method. This reference is {@code
+     * null} if {@link #domainCombo} is {@code null}.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private JLabel domainLabel;
 
+    /**
+     * The text of the domain label. This field is used to record configured
+     * text even when {@link #domainLabel} is {@code null}. It can be configured
+     * with the {@link #setDomainLabelText(String)} method. This field also
+     * records the last version of the domain label's text before it is
+     * destroyed and reinstates it when it is recreated.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private String domainLabelText;
 
+    /**
+     * Constructs a panel with no preconfigured user names or domain names. This
+     * will display a simple text field for the user name and a password field.
+     * There will be no way to edit the domain name.
+     *
+     * @since 1.0.0
+     */
     public LoginPanel()
     {
         this(null);
     }
 
+    /**
+     * Constructs a panel with no preconfigured domain names. This will display
+     * an editable combo box to select user names if there are preconfigured
+     * values. The password will be entered through a password field. There will
+     * be no way to edit the domain name.
+     *
+     * @param userNames the preconfigured user names. The user names will be
+     * displayed in a sorted editable combo box. If the collection is {@code
+     * null} or empty, the user name input will revert to a text field.
+     * @since 1.0.0
+     */
     public LoginPanel(Collection<String> userNames)
     {
         this(userNames, null);
     }
 
+    /**
+     * Constructs a panel with preconfigured user names and domain names. This
+     * will display an editable combo box to select user names if there are
+     * preconfigured values. The password will be entered through a password
+     * field. There will be a non-editable combo box to select the domain name,
+     * if there are preconfigured values.
+     *
+     * @param userNames the preconfigured user names. The user names will be
+     * displayed in a sorted editable combo box. If the collection is {@code
+     * null} or empty, the user name input will revert to a text field.
+     * @param domains the preconfigured domain names. The domain names will be
+     * displayed in a sorted, non-editable combo box. If the collection is
+     * {@code null} or empty, the domain name input will not be displayed at
+     * all.
+     * @since 1.0.0
+     */
     public LoginPanel(Collection<String> userNames, Collection<String> domains)
     {
         super(new GridBagLayout());
@@ -105,6 +265,21 @@ public class LoginPanel extends JPanel
         initComponents(userNames, domains);
     }
 
+    /**
+     * Initializes the sub-components of this panel. The user name is editor is
+     * either a text field or a combo box. The password is manipulated through a
+     * password field. The domain name is optionally selected from a
+     * non-editable combo box.
+     *
+     * @param userNames the user names to configure this panel with. If this
+     * collection contains values, the user name will be displayed and edited
+     * through an editable combo box. Otherwise it will be in a text field.
+     * @param domains the domain names to configure this panel with. If this
+     * collection contains values, the domain name will be displayed and
+     * selected through a non-editable combo box. Otherwise, the combo box will
+     * not be displayed at all.
+     * @since 1.0.0
+     */
     private void initComponents(Collection<String> userNames, Collection<String> domains)
     {
         passwordField = new JPasswordField(20);
@@ -317,6 +492,9 @@ public class LoginPanel extends JPanel
             remove(domainLabel);
         }
 
+        if(domainLabel != null) {
+            domainLabelText = domainLabel.getText();
+        }
         domainModel = null;
         domainCombo = null;
         domainLabel = null;
@@ -324,6 +502,21 @@ public class LoginPanel extends JPanel
         replacePasswordInsets(GridBagConstants.SOUTHEAST, GridBagConstants.SOUTHWEST, validate);
     }
 
+    /**
+     * Replaces the {@code Inset}s used to display the password label and field
+     * with the specified values. This should be done whenever a component is
+     * added or subtracted from below the fields so that they move towards the
+     * edge or move away from the edge.
+     *
+     * @param editorInsets the insets of the editor field, which appears to the
+     * right.
+     * @param labelInsets the insets of the label, which appears to the left.
+     * @param validate {@code true} if the component needs to be validated and
+     * repainted after the insets are changed. The only time the component
+     * should not be validated is when this method is called within the
+     * constructor.
+     * @since 1.0.0
+     */
     private void replacePasswordInsets(Insets editorInsets, Insets labelInsets, boolean validate)
     {
         if(validate) {
@@ -343,6 +536,12 @@ public class LoginPanel extends JPanel
         }
     }
 
+    /**
+     * Calls {@link #validate()} and {@link #repaint()} on this component. This
+     * method is provided purely for convenience.
+     *
+     * @since 1.0.0
+     */
     private void valipaint()
     {
         validate();
@@ -431,9 +630,11 @@ public class LoginPanel extends JPanel
 
             model = new SetListModel<>();
             list = new JList<>(model);
-            add(list, new GridBagConstraints(0, 1, 1, 2, 1.0, 1.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    GridBagConstants.SOUTHWEST, 0, 0));
+            add(new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                                      JScrollPane.HORIZONTAL_SCROLLBAR_NEVER),
+                    new GridBagConstraints(0, 1, 1, 2, 1.0, 1.0,
+                        GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                        GridBagConstants.SOUTHWEST, 0, 0));
 
             add = new JButton("Add");
             add.addActionListener(addActionListener);
