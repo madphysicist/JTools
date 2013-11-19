@@ -47,8 +47,8 @@ import javax.swing.border.Border;
  * So far, this is just a sandbox.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 11 Dec 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 11 Dec 2012
+ * @since 1.0.0
  */
 public class ShapedButton extends JButton
 {
@@ -59,7 +59,7 @@ public class ShapedButton extends JButton
      * is not compromised by a structural change (e.g. adding a new field with
      * a sensible default value), and the upper digits when the change makes
      * serialized versions of of the class incompatible with previous releases.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final long serialVersionUID = 1000L;
 
@@ -67,7 +67,7 @@ public class ShapedButton extends JButton
      * The class ID that maps to the UI class for this component type. The ID is
      * {@value}, according to Swing convention.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final String UI_CLASS_ID = "ShapedButtonUI";
 
@@ -77,7 +77,7 @@ public class ShapedButton extends JButton
      * as the button's size.
      *
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private Shape shape;
 
