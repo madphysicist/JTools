@@ -468,6 +468,18 @@ public class LoginPanel extends JPanel
         }
     }
 
+    /**
+     * Creates and adds the domain name combo box when the first domain name is
+     * configured. The domain is specified as a collection so that the
+     * constructor can add many domains simultaneously.
+     *
+     * @param domains the domains to show in the combo box.
+     * @param validate {@code true} if this panel needs to be validated and
+     * repainted, {@code false} otherwise. The only time a validation is not
+     * required is when this method is called from the constructor.
+     * @see #valipaint()
+     * @since 1.0.0
+     */
     private void createDomainCombo(Collection<String> domains, boolean validate)
     {
         domainModel = new SetListModel<>(domains);
