@@ -623,6 +623,25 @@ public class LoginPanel extends JPanel
     }
 
     /**
+     * A convenience method for showing a dialog without explicitly
+     * instantiating this class. This method is an alias for
+     * <pre>showDialog(userNames, null)</pre>
+     * The panel in the dialog will not display a domain selector.
+     *
+     * @param userNames the user names to show in the editable combo box where
+     * the user enters their user name. If this reference is {@code null} or
+     * empty, the user name will be entered through a simple text field.
+     * @return the credentials set by the user in the dialog if the user clicks
+     * "OK", or {@code null} if the user clicks "Cancel".
+     * @see #showDialog()
+     * @since 1.0.0
+     */
+    public static Credentials showDialog(Collection<String> userNames)
+    {
+        return showDialog(userNames, null);
+    }
+
+    /**
      * Sets the user name editor to a combo box containing the specified values.
      * The values are assumed to be a non-empty collection. The model of {@link
      * #userNameCombo} is set to a {@link SetListModel}, referenced by {@link
