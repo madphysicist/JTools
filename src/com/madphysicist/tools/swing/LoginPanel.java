@@ -884,6 +884,7 @@ public class LoginPanel extends JPanel
                     GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                     GridBagConstants.SOUTHEAST, 0, 0));
 
+            getRootPane().setDefaultButton(approveButton);
             pack();
             setResizable(false);
         }
