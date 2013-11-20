@@ -28,8 +28,8 @@
 
 package com.madphysicist.tools.swing;
 
+import com.madphysicist.tools.util.Credentials;
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Dialog.ModalityType;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -40,6 +40,7 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -62,6 +63,9 @@ import javax.swing.border.TitledBorder;
  * a dropdown combo box. This combo box is not visible if there are no domains
  * to choose from. This class also has a method for displaying a modal dialog
  * for logging in.
+ * <p>
+ * This class is basically a configurable GUI editor for the {@link
+ * com.madphysicist.tools.util.Credentials} class.
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0 17 Nov 2013 - J. Fox-Rabinovitz - Created
@@ -79,22 +83,6 @@ public class LoginPanel extends JPanel
      * @since 1.0.0
      */
     private static final long serialVersionUID = 1000L;
-
-    /**
-     * A code indicating that the user clicked the "OK" button. The button
-     * appears in the dialog presented by the {@link #showDialog()} method.
-     *
-     * @since 1.0.0
-     */
-    public static final int APPROVE_OPTION = 0;
-
-    /**
-     * A code indicating that the user clicked the "Cancel" button. The button
-     * appears in the dialog presented by the {@link #showDialog()} method.
-     *
-     * @since 1.0.0
-     */
-    public static final int REJECT_OPTION = 1;
 
     /**
      * The default text of {@link #userNameLabel}.
@@ -128,7 +116,7 @@ public class LoginPanel extends JPanel
      * @serial
      * @since 1.0.0
      */
-    private JComboBox<String> userNameCombo;
+    private JComboBox<String> userNameCombo = null;
 
     /**
      * A reference to the model of {@link #userNameCombo}. This field is {@code
@@ -139,7 +127,7 @@ public class LoginPanel extends JPanel
      * @serial
      * @since 1.0.0
      */
-    private SetListModel<String> userNameModel;
+    private SetListModel<String> userNameModel = null;
 
     /**
      * The text field used to display and edit user names. If there are
@@ -149,7 +137,7 @@ public class LoginPanel extends JPanel
      * @serial
      * @since 1.0.0
      */
-    private JTextField userNameField;
+    private JTextField userNameField = null;
 
     /**
      * The text field used to display and edit the password. The password is
@@ -159,7 +147,7 @@ public class LoginPanel extends JPanel
      * @serial
      * @since 1.0.0
      */
-    private JPasswordField passwordField;
+    private JPasswordField passwordField = null;
 
     /**
      * The combo box used to display and select the domain. The model of this
@@ -171,7 +159,7 @@ public class LoginPanel extends JPanel
      * @serial
      * @since 1.0.0
      */
-    private JComboBox<String> domainCombo;
+    private JComboBox<String> domainCombo = null;
 
     /**
      * A reference to the model of {@link #domainCombo}. This field is {@code
@@ -182,7 +170,7 @@ public class LoginPanel extends JPanel
      * @serial
      * @since 1.0.0
      */
-    private SetListModel<String> domainModel;
+    private SetListModel<String> domainModel = null;
 
     /**
      * The label for the user name editor. The text of the label is configurable
@@ -195,7 +183,7 @@ public class LoginPanel extends JPanel
      * @serial
      * @since 1.0.0
      */
-    private JLabel userNameLabel;
+    private JLabel userNameLabel = null;
 
     /**
      * The label for the password text field. The text of the label is
@@ -207,32 +195,19 @@ public class LoginPanel extends JPanel
      * @serial
      * @since 1.0.0
      */
-    private JLabel passwordLabel;
+    private JLabel passwordLabel = null;
 
     /**
      * The label for the domain editor. The text of the label is configurable
-     * via the {@link #setDomainLabelText(String)}. The text may be configured
-     * even if this reference is {@code null} using {@link #domainLabelText}. If
-     * additional configuration is required, the label itself may be retrieved
-     * using the {@link #getDomainLabel()} method. This reference is {@code
-     * null} if {@link #domainCombo} is {@code null}.
+     * via the {@link #setDomainLabelText(String)}. If additional configuration
+     * is required, the label itself may be retrieved using the {@link
+     * #getDomainLabel()} method. This reference is never {@code null} past the
+     * constuctor, even if {@link #domainCombo} is set to {@code null}.
      *
      * @serial
      * @since 1.0.0
      */
-    private JLabel domainLabel;
-
-    /**
-     * The text of the domain label. This field is used to record configured
-     * text even when {@link #domainLabel} is {@code null}. It can be configured
-     * with the {@link #setDomainLabelText(String)} method. This field also
-     * records the last version of the domain label's text before it is
-     * destroyed and reinstates it when it is recreated.
-     *
-     * @serial
-     * @since 1.0.0
-     */
-    private String domainLabelText;
+    private JLabel domainLabel = null;
 
     /**
      * Constructs a panel with no preconfigured user names or domain names. This
@@ -281,7 +256,6 @@ public class LoginPanel extends JPanel
     public LoginPanel(Collection<String> userNames, Collection<String> domains)
     {
         super(new GridBagLayout());
-        this.domainLabelText = DOMAIN_STRING;
         initComponents(userNames, domains);
     }
 
@@ -302,10 +276,11 @@ public class LoginPanel extends JPanel
      */
     private void initComponents(Collection<String> userNames, Collection<String> domains)
     {
-        passwordField = new JPasswordField(20);
-
         userNameLabel = new JLabel(USER_NAME_STRING);
         passwordLabel = new JLabel(PASSWORD_STRING);
+        domainLabel = new JLabel(DOMAIN_STRING);
+
+        passwordField = new JPasswordField(20);
         passwordLabel.setLabelFor(passwordField);
 
         if(userNames == null || userNames.isEmpty()) {
@@ -324,17 +299,45 @@ public class LoginPanel extends JPanel
         }
     }
 
+    /**
+     * Checks if the configured list of user names contains the specified value.
+     *
+     * @param userName the user name to check for.
+     * @return {@code false} if there are no configured user names or if the
+     * list does not contain the specified value, {@code true} otherwise.
+     * @since 1.0.0
+     */
     public boolean containsUserName(String userName)
     {
         return (userNameModel != null) && userNameModel.contains(userName);
     }
 
+    /**
+     * Checks if the configured list of domains contains the specified value.
+     *
+     * @param domain the domain to check for.
+     * @return {@code false} if there are no configured domains or if the list
+     * does not contain the specified value, {@code true} otherwise.
+     * @since 1.0.0
+     */
     public boolean containsDomain(String domain)
     {
         return (domainModel != null) && domainModel.contains(domain);
     }
 
-    public boolean addUser(String userName)
+    /**
+     * Adds the specified user name to the configured list. If this is the first
+     * user name to be configured, the text box editor will be converted to an
+     * editable combo box to display the configured user name. Otherwise the
+     * name will be added to the dropdown list of the existing combo box in
+     * alphabetical order. Duplicate user names are ignored.
+     *
+     * @param userName the user name to add to the list of configured names.
+     * @return {@code true} if the name was added to the list of preconfigured
+     * user names, {@code false} if it was already in the list.
+     * @since 1.0.0
+     */
+    public boolean addUserName(String userName)
     {
         if(userNameCombo == null) {
             setUserNameCombo(Arrays.asList(new String[] {userName}));
@@ -343,6 +346,18 @@ public class LoginPanel extends JPanel
         return userNameModel.putElement(userName);
     }
 
+    /**
+     * Adds the specified domain to the configured list. If this is the first
+     * domain to be configured, a non-editable combo box will be added to
+     * display the configured domain. Otherwise the domain will be added to the
+     * dropdown list of the existing combo box in alphabetical order. Duplicate
+     * domains are ignored.
+     *
+     * @param domain the domain to add to the list of configured domains.
+     * @return {@code true} if the domain was added to the list of preconfigured
+     * domains, {@code false} if it was already in the list.
+     * @since 1.0.0
+     */
     public boolean addDomain(String domain)
     {
         if(domainCombo == null) {
@@ -352,26 +367,94 @@ public class LoginPanel extends JPanel
         return domainModel.putElement(domain);
     }
 
-    public void removeUser(String userName)
+    /**
+     * Removes the specified user name from the list of preconfigured list. If
+     * the last user name in the list is removed, the editor is converted from a
+     * combo box into a text field.
+     *
+     * @param userName the user name to remove.
+     * @return {@code true} if the specified user name was removed from the
+     * list, {@code false} if the list is empty or the user name was not found
+     * in it.
+     * @since 1.0.0
+     */
+    public boolean removeUserName(String userName)
     {
         if(userNameModel != null) {
+            int size = userNameModel.getSize();
+
             userNameModel.removeElement(userName);
             if(userNameModel.isEmpty()) {
                 setUserNameField();
+                return true;
             }
+
+            return (size != userNameModel.getSize());
         }
+        return false;
     }
 
-    public void removeDomain(String domain)
+    /**
+     * Removes the specified domain from the list of preconfigured list. If the
+     * last domain in the list is removed, the combo box displaying the list is
+     * removed entirely from the panel.
+     *
+     * @param domain the domain to remove.
+     * @return {@code true} if the specified domain was removed from the list,
+     * {@code false} if the list is empty or the domain was not found in it.
+     * @since 1.0.0
+     */
+    public boolean removeDomain(String domain)
     {
         if(domainModel != null) {
+            int size = domainModel.getSize();
+
             domainModel.removeElement(domain);
             if(domainModel.isEmpty()) {
                 destroyDomainCombo(true);
+                return true;
             }
+
+            return (size != domainModel.getSize());
+        }
+        return false;
+    }
+
+    /**
+     * Removes all preconfigured user names. The user name editor is converted
+     * from a combo box to a text field.
+     *
+     * @since 1.0.0
+     */
+    public void clearUserNames()
+    {
+        if(userNameModel != null) {
+            userNameModel.removeAllElements();
+            setUserNameField();
         }
     }
 
+    /**
+     * Removes all preconfigured domains. The domain combo box is removed
+     * entirely from this panel.
+     *
+     * @since 1.0.0
+     */
+    public void clearDomains()
+    {
+        if(domainModel != null) {
+            domainModel.removeAllElements();
+            destroyDomainCombo(true);
+        }
+    }
+
+    /**
+     * Retrieves the user name currently entered in the text field or combo box
+     * of this panel.
+     *
+     * @return the current user name. May be an empty string.
+     * @since 1.0.0
+     */
     public String getUserName()
     {
         if(userNameField != null) {
@@ -379,19 +462,34 @@ public class LoginPanel extends JPanel
         } else if(userNameCombo != null) {
             return userNameCombo.getEditor().getItem().toString();
         } else {
-            return null;
+            throw new IllegalStateException("UserName editor not initialized");
         }
     }
 
+    /**
+     * Returns the password currently entered int eh password field. This value
+     * should be zeroed out once it is no longer needed.
+     *
+     * @return the current password. May be an empty array.
+     * @since 1.0.0
+     */
     public char[] getPassword()
     {
         if(passwordField != null) {
             return passwordField.getPassword();
         } else {
-            return null;
+            throw new IllegalStateException("Password editor not initialized");
         }
     }
 
+    /**
+     * Returns the domain currently selected from the combo box on this panel.
+     * Returns {@code null} if there are no preconfigured domains to display.
+     *
+     * @return the current domain. If the domain combo box is not displayed,
+     * the return value is always {@code null}.
+     * @since 1.0.0
+     */
     public String getDomain()
     {
         if(domainCombo != null) {
@@ -399,6 +497,19 @@ public class LoginPanel extends JPanel
         } else {
             return null;
         }
+    }
+
+    /**
+     * Returns the user name, domain and password currently entered into the
+     * form. The user name and password may be empty and the domain name may be
+     * {@code null}.
+     *
+     * @return the current credentials.
+     * @since 1.0.0
+     */
+    public Credentials getCredentials()
+    {
+        return new Credentials(getUserName(), getDomain(), getPassword());
     }
 
     /**
@@ -424,31 +535,50 @@ public class LoginPanel extends JPanel
     }
 
     /**
-     * Sets the label text of the domain selector. If the domain is not present,
-     * this method records the new text for future use. The specified label will
-     * show up later if domains are added to the selector.
+     * Sets the label text of the domain selector. If the domain selector is not
+     * shown, this method records the new text for future use. The specified
+     * label will show up later if domains are added to the selector.
      *
      * @param newLabel the new label text to set.
      * @since 1.0.0
      */
     public void setDomainLabelText(String newLabel)
     {
-        this.domainLabelText = newLabel;
-        if(domainLabel != null) {
-            domainLabel.setText(newLabel);
-        }
+        domainLabel.setText(newLabel);
     }
 
+    /**
+     * Retrieves the label of the user name editor in case additional
+     * customization is required.
+     *
+     * @return the label for the user name editor.
+     * @since 1.0.0
+     */
     public JLabel getUserNameLabel()
     {
         return userNameLabel;
     }
 
+    /**
+     * Retrieves the label of the password field in case additional
+     * customization is required.
+     *
+     * @return the label for the password field.
+     * @since 1.0.0
+     */
     public JLabel getPasswordLabel()
     {
         return passwordLabel;
     }
 
+    /**
+     * Retrieves the label of the domain selector in case additional
+     * customization is required. Note that this reference will exist even if
+     * the domain selector is not displayed.
+     *
+     * @return the label for the domain combo box.
+     * @since 1.0.0
+     */
     public JLabel getDomainLabel()
     {
         return domainLabel;
@@ -456,23 +586,58 @@ public class LoginPanel extends JPanel
 
     /**
      * Shows this panel on an appliation modal dialog and blocks until the
-     * dialog closes. The dialog will have "OK" and "Cancel" buttons. The
-     * selected button is noted by the return value. If the return value is
-     * {@link #APPROVE_OPTION}, the {@link #getUserName()}, {@link
-     * #getPassword()} and possibly {@link #getDomain()} methods may be used to
-     * obtain the login information.
+     * dialog closes. The dialog will have "OK" and "Cancel" buttons. If the
+     * user clicks "OK", the entered credentials are returned. If the user
+     * clicks "Cancel", the return value is {@code null}.
      *
-     * @return either {@link #APPROVE_OPTION} or {@link #REJECT_OPTION}
-     * depending on whether the user clicks on the "OK" or "Cancel" button.
+     * @return either the entered credentials if the user clicks "OK", or {@code
+     * null} if the user clicks "Cancel".
      * @since 1.0.0
      */
-    public int showDialog()
+    public Credentials showDialog()
     {
         LoginDialog dialog = new LoginDialog();
         dialog.setVisible(true);
-        return dialog.getReturnValue();
+        return dialog.getCredentials();
     }
 
+    /**
+     * A convenience method for showing a dialog without explicitly
+     * instantiating this class. This method is an alias for
+     * <pre>new LoginPanel(userNames, domains).showDialog()</pre>
+     * 
+     * @param userNames the user names to show in the editable combo box where
+     * the user enters their user name. If this reference is {@code null} or
+     * empty, the user name will be entered through a simple text field.
+     * @param domains the domains to show in the non-editable combo box from
+     * which the user selects their domain. If this reference is {@code null} or
+     * empty, the domain combo box will not be shown at all.
+     * @return the credentials set by the user in the dialog if the user clicks
+     * "OK", or {@code null} if the user clicks "Cancel".
+     * @see #showDialog()
+     * @since 1.0.0
+     */
+    public static Credentials showDialog(Collection<String> userNames, Collection<String> domains)
+    {
+        return new LoginPanel(userNames, domains).showDialog();
+    }
+
+    /**
+     * Sets the user name editor to a combo box containing the specified values.
+     * The values are assumed to be a non-empty collection. The model of {@link
+     * #userNameCombo} is set to a {@link SetListModel}, referenced by {@link
+     * #userNameModel}. {@link #userNameField} is set to {@code null} after
+     * being removed from the pabel. The combo box is added in its place. {@link
+     * #userNameLabel} is set as the label for the combo box.
+     * <p>
+     * The panel will be validated and repainted if the previous editor was a
+     * text field. If the previous editor was {@code null}, we are still in the
+     * constructor and should not validate yet.
+     *
+     * @param userNames the user names to add to the new combo box.
+     * @see #addUserNameEditor(JComponent, JComponent)
+     * @since 1.0.0
+     */
     private void setUserNameCombo(Collection<String> userNames)
     {
         userNameModel = new SetListModel<>(userNames);
@@ -482,6 +647,19 @@ public class LoginPanel extends JPanel
         userNameField = null;
     }
 
+    /**
+     * Sets the user name editor to a text field. {@link #userNameCombo} and
+     * {@link #userNameModel} are set to {@code null}, after being removed from
+     * the panel. {@link #userNameField} is created and added in as the new
+     * editor. {@link #userNameLabel} is set as the label for the text field.
+     * <p>
+     * The panel will be validated and repainted if the previous editor was a
+     * combo box . If the previous editor was {@code null}, we are still in the
+     * constructor and should not validate yet.
+     *
+     * @see #addUserNameEditor(JComponent, JComponent)
+     * @since 1.0.0
+     */
     private void setUserNameField()
     {
         userNameField = new JTextField();
@@ -490,6 +668,24 @@ public class LoginPanel extends JPanel
         userNameModel = null;
     }
 
+    /**
+     * Adds the newly created component as an editor for user names in place of
+     * the previous comonent. The new component may be a text field or editable
+     * combo box, depending on whether there are preconfigured user names or
+     * not. If the previous editor is {@code null}, the panel is not validated
+     * or repainted because we are still in the constructor. The new editor is
+     * added to the layout with the proper {@code GridBagConstraints} to
+     * maintain the layout from {@link #initComponents(Collection, Collection)}.
+     *
+     * @param userNameEditor the new editor.
+     * @param previousEditor either the previous editor component or {@code
+     * null} if this method is invoked from the constructor. If it is not {@code
+     * null}, the previous component is explicitly removed from this panel
+     * before the new one is added, and the panel is validated and repainted
+     * afterwards.
+     * @see #valipaint()
+     * @since 1.0.0
+     */
     private void addUserNameEditor(JComponent userNameEditor, JComponent previousEditor)
     {
         boolean validateNeeded = (previousEditor != null);
@@ -510,20 +706,24 @@ public class LoginPanel extends JPanel
     /**
      * Creates and adds the domain name combo box when the first domain name is
      * configured. The domain is specified as a collection so that the
-     * constructor can add many domains simultaneously.
+     * constructor can add many domains simultaneously. The new combo box is
+     * added to the layout with the proper {@code GridBagConstraints} to
+     * maintain the layout from {@link #initComponents(Collection, Collection)}.
+     * The insets of the components above it, the password field and label, are
+     * also adjusted.
      *
-     * @param domains the domains to show in the combo box.
+     * @param domains the domains to show in the combo box. This collection is
+     * assumed to be non-empty.
      * @param validate {@code true} if this panel needs to be validated and
      * repainted, {@code false} otherwise. The only time a validation is not
      * required is when this method is called from the constructor.
-     * @see #valipaint()
+     * @see #replacePasswordInsets(Insets, Insets, boolean)
      * @since 1.0.0
      */
     private void createDomainCombo(Collection<String> domains, boolean validate)
     {
         domainModel = new SetListModel<>(domains);
         domainCombo = new JComboBox<>(domainModel);
-        domainLabel = new JLabel(domainLabelText);
         domainLabel.setLabelFor(domainCombo);
 
         add(domainCombo, new GridBagConstraints(1, 2, 1, 1, 1.0, 0.0,
@@ -536,6 +736,19 @@ public class LoginPanel extends JPanel
         replacePasswordInsets(GridBagConstants.EAST, GridBagConstants.WEST, validate);
     }
 
+    /**
+     * Removes the domain name combo box when the last domain name is removed
+     * from the configured list. To preserve the layout format from {@link
+     * #initComponents(Collection, Collection)}, the insets of the components
+     * above the combo box, the password field and label, are adjusted to
+     * reflect that they are now at the bottom of the panel.
+     *
+     * @param validate {@code true} if this panel needs to be validated and
+     * repainted, {@code false} otherwise. The only time a validation is not
+     * required is when this method is called from the constructor.
+     * @see #replacePasswordInsets(Insets, Insets, boolean)
+     * @since 1.0.0
+     */
     private void destroyDomainCombo(boolean validate)
     {
         if(validate) {
@@ -543,12 +756,8 @@ public class LoginPanel extends JPanel
             remove(domainLabel);
         }
 
-        if(domainLabel != null) {
-            domainLabelText = domainLabel.getText();
-        }
         domainModel = null;
         domainCombo = null;
-        domainLabel = null;
 
         replacePasswordInsets(GridBagConstants.SOUTHEAST, GridBagConstants.SOUTHWEST, validate);
     }
@@ -556,8 +765,8 @@ public class LoginPanel extends JPanel
     /**
      * Replaces the {@code Inset}s used to display the password label and field
      * with the specified values. This should be done whenever a component is
-     * added or subtracted from below the fields so that they move towards the
-     * edge or move away from the edge.
+     * added or subtracted from below the fields so that they move towards or
+     * away from the bottom edge.
      *
      * @param editorInsets the insets of the editor field, which appears to the
      * right.
@@ -565,7 +774,11 @@ public class LoginPanel extends JPanel
      * @param validate {@code true} if the component needs to be validated and
      * repainted after the insets are changed. The only time the component
      * should not be validated is when this method is called within the
-     * constructor.
+     * constructor. If this parameter is {@code true}, the password field and
+     * label will first be removed from the panel before being added back.
+     * Otherwise, this method is being executed in the constructor and there is
+     * nothing to remove.
+     * @see #valipaint()
      * @since 1.0.0
      */
     private void replacePasswordInsets(Insets editorInsets, Insets labelInsets, boolean validate)
@@ -588,8 +801,8 @@ public class LoginPanel extends JPanel
     }
 
     /**
-     * Calls {@link #validate()} and {@link #repaint()} on this component. This
-     * method is provided purely for convenience.
+     * Calls {@link #validate()} and {@link #repaint()} on this component, in
+     * that order. This method is provided purely for convenience.
      *
      * @since 1.0.0
      */
@@ -601,7 +814,7 @@ public class LoginPanel extends JPanel
 
     /**
      * The dialog displayed by {@link #showDialog()}. This class records the
-     * user's selection.
+     * user's selection when one is made.
      *
      * @author Joseph Fox-Rabinovitz
      * @version 1.0.0 19 Nov 2013 - J. Fox-Rabinovitz - Created
@@ -621,33 +834,25 @@ public class LoginPanel extends JPanel
          */
         private static final long serialVersionUID = 1000L;
 
-        private static final String RETURN_PROPERTY = "returnValue";
-
-        private int returnValue;
-        private Container previousParent;
+        private Credentials credentials;
 
         public LoginDialog()
         {
             super(null, "Login Credentials", ModalityType.APPLICATION_MODAL);
-            this.returnValue = REJECT_OPTION;
-            this.previousParent = LoginPanel.this.getParent();
+            this.credentials = null;
 
-            ActionListener listener = new ActionListener() {
+            JButton approveButton = new JButton(new AbstractAction("OK") {
                 private static final long serialVersionUID = 1000L;
                 @Override public void actionPerformed(ActionEvent e) {
-                    JComponent source = (JComponent)e.getSource();
-                    Integer value = (Integer)source.getClientProperty(RETURN_PROPERTY);
-                    destroyDialog(value.intValue());
+                    destroyDialog(LoginPanel.this.getCredentials());
                 }
-            };
-
-            JButton approveButton = new JButton("OK");
-            approveButton.putClientProperty(RETURN_PROPERTY, APPROVE_OPTION);
-            approveButton.addActionListener(listener);
-
-            JButton cancelButton = new JButton("Cancel");
-            cancelButton.putClientProperty(RETURN_PROPERTY, REJECT_OPTION);
-            cancelButton.addActionListener(listener);
+            });
+            JButton cancelButton = new JButton(new AbstractAction("Cancel") {
+                private static final long serialVersionUID = 1000L;
+                @Override public void actionPerformed(ActionEvent e) {
+                    destroyDialog(null);
+                }
+            });
 
             setLayout(new GridBagLayout());
             add(LoginPanel.this, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0,
@@ -664,21 +869,16 @@ public class LoginPanel extends JPanel
             setResizable(false);
         }
 
-        public int getReturnValue()
+        public Credentials getCredentials()
         {
-            return returnValue;
+            return credentials;
         }
 
-        public void destroyDialog(int returnValue)
+        private void destroyDialog(Credentials credentials)
         {
-            this.returnValue = returnValue;
+            this.credentials = credentials;
             setVisible(false);
-
             remove(LoginPanel.this);
-            if(previousParent != null) {
-                previousParent.add(LoginPanel.this);
-            }
-
             dispose();
         }
     }
@@ -799,16 +999,17 @@ public class LoginPanel extends JPanel
     public static void main(String[] args)
     {
         if(args.length > 0 && args[0].equalsIgnoreCase("Dialog")) {
-            LoginPanel loginPanel = new LoginPanel(
+            Credentials credentials = showDialog(
                     Arrays.asList("user", "admin", "guest"),
                     Arrays.asList("WORKGROUP", "NET_DOMAIN"));
 
-            if(loginPanel.showDialog() == APPROVE_OPTION) {
+            if(credentials != null) {
                 JOptionPane.showMessageDialog(null, "<html>" +
-                        "UserName: " + loginPanel.getUserName() + "<br/>" +
-                        "Password: " + new String(loginPanel.getPassword()) + "<br/>" +
-                        "Domain: " + loginPanel.getDomain() + "</html>",
+                        "UserName: " + credentials.getUserName() + "<br/>" +
+                        "Password: " + new String(credentials.getPassword()) + "<br/>" +
+                        "Domain: " + credentials.getDomain() + "</html>",
                         "Credentials Approved", JOptionPane.INFORMATION_MESSAGE);
+                credentials.clearPassword();
             } else {
                 JOptionPane.showMessageDialog(null,
                         "You chose to cancel your selection.",
