@@ -253,6 +253,7 @@ public class SwingUtilities
                   new Insets(2, 8, 5, 8), 0, 0));
 
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }

@@ -160,6 +160,7 @@ public class ShapedButton extends JButton
         frame.add(shapedButton);
 
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }

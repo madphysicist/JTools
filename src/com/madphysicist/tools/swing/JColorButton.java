@@ -609,6 +609,7 @@ public class JColorButton extends JButton
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 5, 5, 8), 0, 0));
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }

@@ -136,6 +136,12 @@
               classpathref="run-lib" />
     </target>
 
+    <target name="run-exceptionpanel" depends="jar,run-init"
+            description="runs the demo application for ExceptionPanel">
+        <java fork="true" classname="${swing.exceptionpanel.class}"
+              classpathref="run-lib" />
+    </target>
+
     <target name="run-jcolorbutton" depends="jar,run-init"
             description="runs the demo application for JColorButton">
         <java fork="true" classname="${swing.jcolorbutton.class}"

@@ -231,6 +231,7 @@ public class TogglePanel extends JPanel
         frame.add(panel, BorderLayout.CENTER);
         frame.add(SwingUtilities.lookAndFeelSelector(frame), BorderLayout.SOUTH);
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }

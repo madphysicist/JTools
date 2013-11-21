@@ -38,9 +38,12 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -54,6 +57,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -595,9 +599,9 @@ public class LoginPanel extends JPanel
      * null} if the user clicks "Cancel".
      * @since 1.0.0
      */
-    public Credentials showDialog()
+    public Credentials displayDialog()
     {
-        return showDialog((Image)null);
+        return displayDialog(null);
     }
 
     /**
@@ -606,14 +610,14 @@ public class LoginPanel extends JPanel
      * user clicks "OK", the entered credentials are returned. If the user
      * clicks "Cancel", the return value is {@code null}.
      *
-     * @param icon an icon to set for the displayed dialog;
+     * @param icons an icon set to use for the displayed dialog;
      * @return either the entered credentials if the user clicks "OK", or {@code
      * null} if the user clicks "Cancel".
      * @since 1.0.0
      */
-    public Credentials showDialog(Image icon)
+    public Credentials displayDialog(List<? extends Image> icons)
     {
-        LoginDialog dialog = new LoginDialog(icon);
+        LoginDialog dialog = new LoginDialog(icons);
         dialog.setVisible(true);
         return dialog.getCredentials();
     }
@@ -629,18 +633,18 @@ public class LoginPanel extends JPanel
      * empty, the user name will be entered through a simple text field.
      * @return the credentials set by the user in the dialog if the user clicks
      * "OK", or {@code null} if the user clicks "Cancel".
-     * @see #showDialog()
+     * @see #showDialog(Collection, Collection, List)
      * @since 1.0.0
      */
     public static Credentials showDialog(Collection<String> userNames)
     {
-        return showDialog(userNames, null);
+        return showDialog(userNames, null, null);
     }
 
     /**
      * A convenience method for showing a dialog without explicitly
      * instantiating this class. This method is an alias for
-     * <pre>new LoginPanel(userNames, domains, null).showDialog()</pre>
+     * <pre>new LoginPanel(userNames, domains).displayDialog()</pre>
      * 
      * @param userNames the user names to show in the editable combo box where
      * the user enters their user name. If this reference is {@code null} or
@@ -650,18 +654,18 @@ public class LoginPanel extends JPanel
      * empty, the domain combo box will not be shown at all.
      * @return the credentials set by the user in the dialog if the user clicks
      * "OK", or {@code null} if the user clicks "Cancel".
-     * @see #showDialog()
+     * @see #displayDialog()
      * @since 1.0.0
      */
     public static Credentials showDialog(Collection<String> userNames, Collection<String> domains)
     {
-        return new LoginPanel(userNames, domains).showDialog();
+        return new LoginPanel(userNames, domains).displayDialog();
     }
 
     /**
      * A convenience method for showing a dialog without explicitly
      * instantiating this class. This method is an alias for
-     * <pre>new LoginPanel(userNames, domains, icon).showDialog()</pre>
+     * <pre>new LoginPanel(userNames, domains).displayDialog(icons)</pre>
      * 
      * @param userNames the user names to show in the editable combo box where
      * the user enters their user name. If this reference is {@code null} or
@@ -669,16 +673,18 @@ public class LoginPanel extends JPanel
      * @param domains the domains to show in the non-editable combo box from
      * which the user selects their domain. If this reference is {@code null} or
      * empty, the domain combo box will not be shown at all.
-     * @param icon the icon that will be displayed on the dialog. This may be
+     * @param icons the icon that will be displayed on the dialog. This may be
      * {@code null}.
      * @return the credentials set by the user in the dialog if the user clicks
      * "OK", or {@code null} if the user clicks "Cancel".
-     * @see #showDialog(Image)
+     * @see #displayDialog(List)
      * @since 1.0.0
      */
-    public static Credentials showDialog(Collection<String> userNames, Collection<String> domains, Image icon)
+    public static Credentials showDialog(Collection<String> userNames,
+                                         Collection<String> domains,
+                                         List<? extends Image> icons)
     {
-        return new LoginPanel(userNames, domains).showDialog(icon);
+        return new LoginPanel(userNames, domains).displayDialog(icons);
     }
 
     /**
@@ -872,8 +878,9 @@ public class LoginPanel extends JPanel
     }
 
     /**
-     * The dialog displayed by {@link #showDialog()}. This class records the
-     * user's selection when one is made.
+     * The dialog displayed by the {@code displayDialog()} and static {@code
+     * showDialog()} methods of the parent class. This class records the user's
+     * selection when one is made.
      *
      * @author Joseph Fox-Rabinovitz
      * @version 1.0.0 19 Nov 2013 - J. Fox-Rabinovitz - Created
@@ -894,16 +901,16 @@ public class LoginPanel extends JPanel
         private static final long serialVersionUID = 1000L;
 
         /**
-         * The current credentials. This reference is always {@code null} except
-         * immediately after the user presses the OK button, when the latest
-         * state of the panel is retrieved.
+         * The current credentials. This reference is always {@code null} until
+         * the user presses the OK button, when the state of the panel at that
+         * time is retrieved.
          *
          * @serial
          * @since 1.0.0
          */
         private Credentials credentials;
 
-        public LoginDialog(Image icon)
+        public LoginDialog(List<? extends Image> icons)
         {
             super(null, "Login Credentials", ModalityType.APPLICATION_MODAL);
             this.credentials = null;
@@ -911,14 +918,12 @@ public class LoginPanel extends JPanel
             JButton approveButton = new JButton(new AbstractAction("OK") {
                 private static final long serialVersionUID = 1000L;
                 @Override public void actionPerformed(ActionEvent e) {
-                    destroyDialog(LoginPanel.this.getCredentials());
+                    destroy(LoginPanel.this.getCredentials());
                 }
             });
             JButton cancelButton = new JButton(new AbstractAction("Cancel") {
                 private static final long serialVersionUID = 1000L;
-                @Override public void actionPerformed(ActionEvent e) {
-                    destroyDialog(null);
-                }
+                @Override public void actionPerformed(ActionEvent e) { destroy(null); }
             });
 
             setLayout(new GridBagLayout());
@@ -932,11 +937,16 @@ public class LoginPanel extends JPanel
                     GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                     GridBagConstants.SOUTHEAST, 0, 0));
 
-            setIconImage(icon);
+            setIconImages(icons);
             getRootPane().setDefaultButton(approveButton);
             pack();
             setResizable(false);
             setLocationRelativeTo(null);
+
+            setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+            addWindowListener(new WindowAdapter() {
+                 @Override public void windowClosing(WindowEvent e) { destroy(null); }
+            });
         }
 
         public Credentials getCredentials()
@@ -944,7 +954,19 @@ public class LoginPanel extends JPanel
             return credentials;
         }
 
-        private void destroyDialog(Credentials credentials)
+        /**
+         * Destroys the dialog GUI. The visibility is set to {@code false} so
+         * that any methods blocking until the dialog disappears can continue.
+         * The {@code LoginPanel} is removed from the dialog and system
+         * resources are freed. This method also sets {@link #credentials}.
+         *
+         * @param credentials the credentials to return. This value should be
+         * {@code null} if this method is called when the "Cancel" button is
+         * clicked. Otherwise, the credentials should come from the panel being
+         * displayed.
+         * @since 1.0.0
+         */
+        private void destroy(Credentials credentials)
         {
             this.credentials = credentials;
             setVisible(false);

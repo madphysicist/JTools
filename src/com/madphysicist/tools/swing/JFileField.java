@@ -337,6 +337,7 @@ public class JFileField extends JPanel
                 new Insets(2, 5, 5, 8), 0, 0));
 
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }
