@@ -39,7 +39,7 @@
  * </p>
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 4 Mar 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 4 Mar 2012
+ * @since 1.0.0
  */
 package com.madphysicist.tools;

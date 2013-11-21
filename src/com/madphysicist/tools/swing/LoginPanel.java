@@ -853,6 +853,14 @@ public class LoginPanel extends JPanel
          */
         private static final long serialVersionUID = 1000L;
 
+        /**
+         * The current credentials. This reference is always {@code null} except
+         * immediately after the user presses the OK button, when the latest
+         * state of the panel is retrieved.
+         *
+         * @serial
+         * @since 1.0.0
+         */
         private Credentials credentials;
 
         public LoginDialog()
@@ -887,6 +895,7 @@ public class LoginPanel extends JPanel
             getRootPane().setDefaultButton(approveButton);
             pack();
             setResizable(false);
+            setLocationRelativeTo(null);
         }
 
         public Credentials getCredentials()
@@ -1053,6 +1062,7 @@ public class LoginPanel extends JPanel
             frame.add(SwingUtilities.lookAndFeelSelector(frame), BorderLayout.SOUTH);
 
             frame.pack();
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         }
     }
