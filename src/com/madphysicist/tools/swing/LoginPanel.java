@@ -34,6 +34,7 @@ import java.awt.Dialog.ModalityType;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -596,7 +597,23 @@ public class LoginPanel extends JPanel
      */
     public Credentials showDialog()
     {
-        LoginDialog dialog = new LoginDialog();
+        return showDialog((Image)null);
+    }
+
+    /**
+     * Shows this panel on an appliation modal dialog and blocks until the
+     * dialog closes. The dialog will have "OK" and "Cancel" buttons. If the
+     * user clicks "OK", the entered credentials are returned. If the user
+     * clicks "Cancel", the return value is {@code null}.
+     *
+     * @param icon an icon to set for the displayed dialog;
+     * @return either the entered credentials if the user clicks "OK", or {@code
+     * null} if the user clicks "Cancel".
+     * @since 1.0.0
+     */
+    public Credentials showDialog(Image icon)
+    {
+        LoginDialog dialog = new LoginDialog(icon);
         dialog.setVisible(true);
         return dialog.getCredentials();
     }
@@ -604,7 +621,26 @@ public class LoginPanel extends JPanel
     /**
      * A convenience method for showing a dialog without explicitly
      * instantiating this class. This method is an alias for
-     * <pre>new LoginPanel(userNames, domains).showDialog()</pre>
+     * <pre>showDialog(userNames, null, null)</pre>
+     * The panel in the dialog will not display a domain selector.
+     *
+     * @param userNames the user names to show in the editable combo box where
+     * the user enters their user name. If this reference is {@code null} or
+     * empty, the user name will be entered through a simple text field.
+     * @return the credentials set by the user in the dialog if the user clicks
+     * "OK", or {@code null} if the user clicks "Cancel".
+     * @see #showDialog()
+     * @since 1.0.0
+     */
+    public static Credentials showDialog(Collection<String> userNames)
+    {
+        return showDialog(userNames, null);
+    }
+
+    /**
+     * A convenience method for showing a dialog without explicitly
+     * instantiating this class. This method is an alias for
+     * <pre>new LoginPanel(userNames, domains, null).showDialog()</pre>
      * 
      * @param userNames the user names to show in the editable combo box where
      * the user enters their user name. If this reference is {@code null} or
@@ -625,20 +661,24 @@ public class LoginPanel extends JPanel
     /**
      * A convenience method for showing a dialog without explicitly
      * instantiating this class. This method is an alias for
-     * <pre>showDialog(userNames, null)</pre>
-     * The panel in the dialog will not display a domain selector.
-     *
+     * <pre>new LoginPanel(userNames, domains, icon).showDialog()</pre>
+     * 
      * @param userNames the user names to show in the editable combo box where
      * the user enters their user name. If this reference is {@code null} or
      * empty, the user name will be entered through a simple text field.
+     * @param domains the domains to show in the non-editable combo box from
+     * which the user selects their domain. If this reference is {@code null} or
+     * empty, the domain combo box will not be shown at all.
+     * @param icon the icon that will be displayed on the dialog. This may be
+     * {@code null}.
      * @return the credentials set by the user in the dialog if the user clicks
      * "OK", or {@code null} if the user clicks "Cancel".
-     * @see #showDialog()
+     * @see #showDialog(Image)
      * @since 1.0.0
      */
-    public static Credentials showDialog(Collection<String> userNames)
+    public static Credentials showDialog(Collection<String> userNames, Collection<String> domains, Image icon)
     {
-        return showDialog(userNames, null);
+        return new LoginPanel(userNames, domains).showDialog(icon);
     }
 
     /**
@@ -863,7 +903,7 @@ public class LoginPanel extends JPanel
          */
         private Credentials credentials;
 
-        public LoginDialog()
+        public LoginDialog(Image icon)
         {
             super(null, "Login Credentials", ModalityType.APPLICATION_MODAL);
             this.credentials = null;
@@ -892,6 +932,7 @@ public class LoginPanel extends JPanel
                     GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                     GridBagConstants.SOUTHEAST, 0, 0));
 
+            setIconImage(icon);
             getRootPane().setDefaultButton(approveButton);
             pack();
             setResizable(false);
@@ -949,7 +990,7 @@ public class LoginPanel extends JPanel
             this.type = type;
 
             ActionListener addActionListener = new ActionListener() {
-                @SuppressWarnings({"UseSpecificCatch", "CallToThreadDumpStack"})
+                @SuppressWarnings({"UseSpecificCatch", "CallToThreadDumpStack", "UseOfSystemOutOrSystemErr"})
                 @Override public void actionPerformed(ActionEvent e) {
                     String entry = text.getText();
                     if(entry != null && !entry.isEmpty()) {
@@ -968,7 +1009,7 @@ public class LoginPanel extends JPanel
                 }
             };
             ActionListener removeActionListener = new ActionListener() {
-                @SuppressWarnings({"UseSpecificCatch", "CallToThreadDumpStack"})
+                @SuppressWarnings({"UseSpecificCatch", "CallToThreadDumpStack", "UseOfSystemOutOrSystemErr"})
                 @Override public void actionPerformed(ActionEvent e) {
                     int[] indices = list.getSelectedIndices();
                     // list is in ascending order
