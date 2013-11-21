@@ -57,7 +57,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 
 /**
