@@ -156,7 +156,7 @@ public class ResourceUtilities
      * resource could not be found or loaded.
      * @since 1.0.2
      */
-    public static ImageIcon loadIcon(String resourceName)
+    public static Icon loadIcon(String resourceName)
     {
         Image image = null;
         try {
