@@ -28,7 +28,6 @@
 
 package com.madphysicist.tools.util;
 
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -469,7 +468,7 @@ public class TextUtilities
             throw new ArrayIndexOutOfBoundsException("" + properties.length +
                                                      " % 2 != 0");
         }
-        TreeMap<String, String> map = new TreeMap<String, String>();
+        TreeMap<String, String> map = new TreeMap<>();
         for(int i = 0; i < properties.length; i += 2) {
             if(properties[i] == null)
                 throw new NullPointerException("null key (value=" + properties[i + 1] + ")");
@@ -758,6 +757,25 @@ public class TextUtilities
                sb.append("&#").append((int)c).append(';');
             else
                 sb.append(c);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Converts the specified array to a hex string. This method is similar to
+     * {@link Integer#toHexString(int)}. Every two digits represent a successive
+     * byte.
+     *
+     * @param bytes the byte array to encode.
+     * @return a hex represenetation of the specified bytes. The length of the
+     * string is always exactly twice the length of the input array.
+     * @since 1.0.0
+     */
+    public static String toHexString(byte[] bytes)
+    {
+        StringBuilder sb = new StringBuilder(bytes.length * 2);
+        for(int i = 0; i < bytes.length; i++) {
+            sb.append(String.format("%02X", (bytes[i] & 0xFF)));
         }
         return sb.toString();
     }

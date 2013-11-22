@@ -139,12 +139,7 @@ public class HashUtilities
     public static String hashPassword(String password)
     {
         byte[] hash = obfuscator.digest(password.getBytes(TextUtilities.CHARSET));
-        char[] chars = new char[hash.length * 2];
-        for(int i = 0; i < hash.length; i++) {
-            chars[2 * i] = Integer.toHexString((hash[i] >> 4) & 0x0F).charAt(0);
-            chars[2 * i + 1] = Integer.toHexString(hash[i] & 0x0F).charAt(0);
-        }
-        return new String(chars);
+        return TextUtilities.toHexString(hash);
     }
 
     /**
