@@ -44,9 +44,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.swing.Action;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -100,6 +103,39 @@ public class SwingUtilities
         if(comp instanceof Window)
             return (Window)comp;
         return javax.swing.SwingUtilities.getWindowAncestor(comp);
+    }
+
+    public static void setGlobalAccelerator(JComponent component, KeyStroke accelerator, Action action)
+    {
+        System.out.println("Setting " + accelerator + " -> " + action);
+        Object actionCommand = action.getValue(Action.ACTION_COMMAND_KEY);
+        component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(accelerator, actionCommand);
+        component.getActionMap().put(actionCommand, action);
+        removeAcceleratorFromChildren(component, accelerator);
+    }
+
+    private static void removeAcceleratorFromChildren(Container container, KeyStroke accelerator)
+    {
+        System.out.println("    Removing " + accelerator + " from " + container);
+        for(Component child : container.getComponents()) {
+            System.out.println("        Found child " + child);
+            if(child instanceof JComponent) {
+                System.out.println("            Child is a JComponent");
+                removeAcceleratorFromComponent((JComponent)child, accelerator);
+            }
+            if(child instanceof Container) {
+                System.out.println("            Child is a Container");
+                removeAcceleratorFromChildren((Container)child, accelerator);
+                System.out.println("    ... Back to " + container);
+            }
+        }
+    }
+
+    private static void removeAcceleratorFromComponent(JComponent component, KeyStroke accelerator)
+    {
+        component.getInputMap(JComponent.WHEN_FOCUSED).remove(accelerator);
+        component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).remove(accelerator);
+        component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(accelerator);
     }
 
     /**
