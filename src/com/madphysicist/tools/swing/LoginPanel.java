@@ -920,7 +920,7 @@ public class LoginPanel extends JPanel
                     destroy(LoginPanel.this.getCredentials());
                 }
             });
-            JButton cancelButton = new JButton(new AbstractAction("Cancel") {
+            JButton rejectButton = new JButton(new AbstractAction("Cancel") {
                 private static final long serialVersionUID = 1000L;
                 @Override public void actionPerformed(ActionEvent e) { destroy(null); }
             });
@@ -929,7 +929,7 @@ public class LoginPanel extends JPanel
             add(LoginPanel.this, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0,
                     GridBagConstraints.CENTER, GridBagConstraints.NONE,
                     GridBagConstants.FILL_HORIZONTAL_NORTH, 0, 0));
-            add(cancelButton, new GridBagConstraints(0, 1, 1, 1, 1.0, 0.0,
+            add(rejectButton, new GridBagConstraints(0, 1, 1, 1, 1.0, 0.0,
                     GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                     GridBagConstants.SOUTH, 0, 0));
             add(approveButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
