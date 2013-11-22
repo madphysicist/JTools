@@ -809,7 +809,7 @@ public class TextUtilities
             if(Character.digit(d1, 16) < 0 || Character.digit(d2, 16) < 0) {
                 throw new NumberFormatException("not a hex string" + hexString);
             }
-            bytes[i] = Byte.parseByte("" + d1 + d2, 16);
+            bytes[i] = (byte)(Integer.parseInt("" + d1 + d2, 16) & 0xFF);
         }
         return bytes;
     }
