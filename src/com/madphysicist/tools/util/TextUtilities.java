@@ -764,7 +764,9 @@ public class TextUtilities
     /**
      * Converts the specified array to a hex string. This method is similar to
      * {@link Integer#toHexString(int)}. Every two digits represent a successive
-     * byte.
+     * byte. This method is an exact inverse of {@link #fromHexString(String)}.
+     * Calling {@code fromHexString(toHexString(bytes))} will return the
+     * original sequence of numbers.
      *
      * @param bytes the byte array to encode.
      * @return a hex represenetation of the specified bytes. The length of the
@@ -773,11 +775,43 @@ public class TextUtilities
      */
     public static String toHexString(byte[] bytes)
     {
-        StringBuilder sb = new StringBuilder(bytes.length * 2);
+        StringBuilder hex = new StringBuilder(bytes.length * 2);
         for(int i = 0; i < bytes.length; i++) {
-            sb.append(String.format("%02X", (bytes[i] & 0xFF)));
+            hex.append(String.format("%02X", (bytes[i] & 0xFF)));
         }
-        return sb.toString();
+        return hex.toString();
+    }
+
+    /**
+     * Converts the hex string to a byte array. The string must have an even
+     * number of digits, each of which must be a valid hexadecimal digit. Every
+     * two digits represent a successive byte. This method is an almost exact
+     * inverse of {@link #toHexString(byte[])}. Calling {@code
+     * toHexString(fromHexString(hexString))} will return the original string,
+     * up to the case of the hexadecimal digits.
+     *
+     * @param hexString the string to decode. Must have an even number of
+     * characters, each pair of which represents a hexadecimal byte.
+     * @return a numerical representation of the input string.
+     * @throws NumberFormatException if the string can not be parsed as a
+     * sequence of hexadecimal digits for any reason.
+     * @since 1.0.0
+     */
+    public static byte[] fromHexString(String hexString) throws NumberFormatException
+    {
+        if(hexString.length() % 2 != 0) {
+            throw new NumberFormatException("odd number of digits: " + hexString);
+        }
+        byte[] bytes = new byte[hexString.length() / 2];
+        for(int i = 0; i < bytes.length; i++) {
+            char d1 = hexString.charAt(i * 2);
+            char d2 = hexString.charAt(i * 2 + 1);
+            if(Character.digit(d1, 16) < 0 || Character.digit(d2, 16) < 0) {
+                throw new NumberFormatException("not a hex string" + hexString);
+            }
+            bytes[i] = Byte.parseByte("" + d1 + d2, 16);
+        }
+        return bytes;
     }
 
     /**
