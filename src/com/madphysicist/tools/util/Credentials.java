@@ -29,6 +29,7 @@
 package com.madphysicist.tools.util;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Represents the set of password based login credentials. The password should
@@ -142,9 +143,7 @@ public class Credentials implements Serializable
     public void clearPassword()
     {
         if(password != null) {
-            for(int i = 0; i < password.length; i++) {
-                password[i] = (char)0;
-            }
+            Arrays.fill(password, (char)0);
             password = null;
         }
     }
