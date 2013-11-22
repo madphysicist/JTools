@@ -30,12 +30,14 @@ package com.madphysicist.tools.swing;
 
 import com.madphysicist.tools.util.Credentials;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dialog.ModalityType;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.TextComponent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -58,6 +60,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.JTextComponent;
 
 /**
  * A panel in which the user can enter their user name and password. The user
@@ -291,6 +294,12 @@ public class LoginPanel extends JPanel
             setUserNameField();
         } else {
             setUserNameCombo(userNames);
+            Component editor = userNameCombo.getEditor().getEditorComponent();
+            if(editor instanceof TextComponent) {
+                ((TextComponent)editor).setCaretPosition(Integer.MAX_VALUE);
+            } else if(editor instanceof JTextComponent) {
+                ((JTextComponent)editor).setCaretPosition(((JTextComponent)editor).getText().length());
+            }
         }
         add(userNameLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
@@ -951,6 +960,22 @@ public class LoginPanel extends JPanel
         public Credentials getCredentials()
         {
             return credentials;
+        }
+
+        /**
+         * Makes the dialog visible and requests keyboard focus for the password
+         * field. The password field is focused first because this method
+         * blocks.
+         *
+         * @param b {@inheritDoc}
+         * @since 1.0.0
+         */
+        @Override public void setVisible(boolean b)
+        {
+            if(b) {
+                passwordField.requestFocusInWindow();
+            }
+            super.setVisible(b);
         }
 
         /**
