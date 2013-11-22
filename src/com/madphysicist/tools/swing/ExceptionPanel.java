@@ -45,13 +45,16 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
 /**
- * Displays information about an exception. This class can show a standard
- * dialog as well.
+ * Displays information about an exception. The exception stack trace is shown
+ * in a non-editable but selectable text area below the message. This area can
+ * be expanded or collapsed by pressing a button. This class can show a dialog
+ * as well.
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0 21 Nov 2013 - J. Fox-Rabinovitz - Created
@@ -71,15 +74,79 @@ public class ExceptionPanel extends JPanel
      */
     private static final long serialVersionUID = 1000L;
 
+    /**
+     * The text that appears on the button notifying the user that the panel can
+     * be expanded.
+     *
+     * @since 1.0.0
+     */
     private static final String EXPAND_TEXT = "Details >>";
+
+    /**
+     * The text that appears on the button notifying the user that the panel can
+     * be collapsed.
+     *
+     * @since 1.0.0
+     */
     private static final String COLLAPSE_TEXT = "Details <<";
 
+    /**
+     * The exception that is displayed by this panel. The stack trace of the
+     * exception is shown if the user expands the panel.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private Throwable exception;
+
+    /**
+     * The message that is displayed by the panel. The message appears in the
+     * part of the panel that is always visible. The default value for the
+     * message is just the exception message.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private String message;
 
-    private JLabel notice;
-    private JButton expand;
+    /**
+     * The label that displays the message. The label is always in the visible
+     * part of the component.
+     *
+     * @serial
+     * @since 1.0.0
+     */
+    private JLabel messageLabel;
+
+    /**
+     * The button that triggers the expansion or collapse of the detailed
+     * description of the exception. The text of the button is either {@link
+     * #EXPAND_TEXT} if the detail area is collapsed, or {@link #COLLAPSE_TEXT}
+     * if the area is expanded. The button is placed differently if this panel
+     * appears in a dialog.
+     *
+     * @serial
+     * @since 1.0.0
+     */
+    private JButton expandButton;
+
+    /**
+     * The text area containing the detailed exception information. The stack
+     * trace of the exception is printed into this area.
+     *
+     * @serial
+     * @since 1.0.0
+     */
     private JTextArea details;
+
+    /**
+     * The scroll pane containing the text area. The visibility of this
+     * component is altered to collapse or expand the details pane.
+     *
+     * @serial
+     * @since 1.0.0
+     */
+    private JScrollPane collapsePane;
 
     public ExceptionPanel(Throwable exception)
     {
@@ -96,18 +163,18 @@ public class ExceptionPanel extends JPanel
 
     private void initComponents()
     {
-        notice = new JLabel(message);
-        notice.setHorizontalAlignment(SwingConstants.LEADING);
+        messageLabel = new JLabel(message);
+        messageLabel.setHorizontalAlignment(SwingConstants.LEADING);
 
-        expand = new JButton(new AbstractAction(EXPAND_TEXT) {
+        expandButton = new JButton(new AbstractAction(EXPAND_TEXT) {
             private static final long serialVersionUID = 1000L;
             @Override public void actionPerformed(ActionEvent e) {
-                if(details.isVisible()) {
-                    details.setVisible(false);
-                    expand.setText(EXPAND_TEXT);
+                if(collapsePane.isVisible()) {
+                    collapsePane.setVisible(false);
+                    expandButton.setText(EXPAND_TEXT);
                 } else {
-                    details.setVisible(true);
-                    expand.setText(COLLAPSE_TEXT);
+                    collapsePane.setVisible(true);
+                    expandButton.setText(COLLAPSE_TEXT);
                 }
                 Window window = SwingUtilities.windowForComponent(ExceptionPanel.this);
                 if(window != null) {
@@ -120,15 +187,20 @@ public class ExceptionPanel extends JPanel
         details.setBorder(new BevelBorder(BevelBorder.LOWERED));
         details.setEditable(false);
         details.setEnabled(true);
+        details.setLineWrap(false);
+        details.setTabSize(4);
+        details.setRows(20);
         details.setFont(Font.decode(Font.MONOSPACED));
-        details.setVisible(false);
+
+        collapsePane = new JScrollPane(details);
+        collapsePane.setVisible(false);
 
         setLayout(new GridBagLayout());
-        add(notice, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0,
+        add(messageLabel, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 GridBagConstants.FILL_HORIZONTAL_NORTH, 0, 0));
-        addExpandComponent(expand);
-        add(details, new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
+        addExpandComponent(expandButton);
+        add(collapsePane, new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 GridBagConstants.FILL_BOTH, 0, 0));
     }
@@ -198,6 +270,16 @@ public class ExceptionPanel extends JPanel
          */
         private static final long serialVersionUID = 1000L;
 
+        /**
+         * The panel that replaces {@link ExceptionPanel#expandButton} in the
+         * parent panel's layout. This panel contains the original button as
+         * well as an additional "OK" button that closes that dialog. When the
+         * dialog is closed, this panel is removed from the parent and replaced
+         * with the original button.
+         *
+         * @serial
+         * @since 1.0.0
+         */
         private JPanel expandPanel;
 
         public ExceptionDialog(Window parent, String title)
@@ -209,11 +291,11 @@ public class ExceptionPanel extends JPanel
                 @Override public void actionPerformed(ActionEvent e) { destroy(); }
             });
 
-            ExceptionPanel.this.remove(expand);
+            ExceptionPanel.this.remove(expandButton);
             expandPanel = new JPanel(new GridLayout(1, 2,
                     GridBagConstants.HORIZONTAL_INSET,
                     GridBagConstants.VERTICAL_INSET));
-            expandPanel.add(expand);
+            expandPanel.add(expandButton);
             expandPanel.add(okButton);
             addExpandComponent(expandPanel);
 
@@ -244,7 +326,7 @@ public class ExceptionPanel extends JPanel
         {
             setVisible(false);
             ExceptionPanel.this.remove(expandPanel);
-            ExceptionPanel.this.addExpandComponent(expand);
+            ExceptionPanel.this.addExpandComponent(expandButton);
             remove(ExceptionPanel.this);
             dispose();
         }
