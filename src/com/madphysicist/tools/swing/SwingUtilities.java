@@ -127,6 +127,9 @@ public class SwingUtilities
     public static void setGlobalAccelerator(JComponent component, KeyStroke accelerator, Action action)
     {
         Object actionCommand = action.getValue(Action.ACTION_COMMAND_KEY);
+        if(actionCommand == null) {
+            actionCommand = action.getValue(Action.NAME);
+        }
         component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(accelerator, actionCommand);
         component.getActionMap().put(actionCommand, action);
         removeAcceleratorFromChildren(component, accelerator);

@@ -47,6 +47,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -59,6 +60,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 
@@ -923,30 +925,37 @@ public class LoginPanel extends JPanel
             super(null, "Login Credentials", ModalityType.APPLICATION_MODAL);
             this.credentials = null;
 
-            JButton approveButton = new JButton(new AbstractAction("OK") {
+            Action approveAction = new AbstractAction("OK") {
                 private static final long serialVersionUID = 1000L;
                 @Override public void actionPerformed(ActionEvent e) {
                     destroy(LoginPanel.this.getCredentials());
                 }
-            });
-            JButton rejectButton = new JButton(new AbstractAction("Cancel") {
+            };
+            Action rejectAction = new AbstractAction("Cancel") {
                 private static final long serialVersionUID = 1000L;
                 @Override public void actionPerformed(ActionEvent e) { destroy(null); }
-            });
+            };
+
+            JButton approveButton = new JButton(approveAction);
+            JButton rejectButton = new JButton(rejectAction);
+
+            JPanel buttonPanel = new JPanel(new GridLayout(1, 2, GridBagConstants.HORIZONTAL_INSET, 0));
+            buttonPanel.add(rejectButton);
+            buttonPanel.add(approveButton);
 
             setLayout(new GridBagLayout());
-            add(LoginPanel.this, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.NONE,
+            add(LoginPanel.this, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     GridBagConstants.FILL_HORIZONTAL_NORTH, 0, 0));
-            add(rejectButton, new GridBagConstraints(0, 1, 1, 1, 1.0, 0.0,
-                    GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                    GridBagConstants.SOUTH, 0, 0));
-            add(approveButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-                    GridBagConstants.SOUTHEAST, 0, 0));
+            add(buttonPanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.LAST_LINE_END, GridBagConstraints.NONE,
+                    GridBagConstants.FILL_HORIZONTAL_SOUTH, 0, 0));
+
+            getRootPane().setDefaultButton(approveButton);
+            SwingUtilities.setGlobalAccelerator(getRootPane(),
+                    KeyStroke.getKeyStroke("ESCAPE"), rejectAction);
 
             setIconImages(icons);
-            getRootPane().setDefaultButton(approveButton);
             pack();
             setResizable(false);
             setLocationRelativeTo(null);
