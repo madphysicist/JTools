@@ -45,6 +45,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.swing.Action;
+import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -61,6 +62,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 25 Feb 2013
  * @version 1.0.1, 13 June 2013: Added {@code setEnabled()} method.
+ * @version 1.0.2, 13 June 2013: Added {@code setGlobalAccelerator()} method.
  * @since 1.0.0
  */
 public class SwingUtilities
@@ -105,37 +107,86 @@ public class SwingUtilities
         return javax.swing.SwingUtilities.getWindowAncestor(comp);
     }
 
+    /**
+     * Sets an accelerator for all subcomponents of the specified {@code
+     * JComponent}. This method can be run on the {@code RootPane} of a window
+     * to set the accelerator globally for the window. Note that this method
+     * can override the default behavior of the current look-and-feel, in which
+     * case the accelerator it sets may be deactivated when the look-and-feel
+     * changes.
+     *
+     * @param component the base component to set the accelerator for. If any of
+     * the components in the subtree of this one have a mapping for the
+     * accelerator, the mapping is removed from their user {@code InputMap} and
+     * parent {@code InputMap} (set by the LAF).
+     * @param accelerator the keystroke that activates the accelerator.
+     * @param action the action that is performed when the keystroke activates
+     * it.
+     * @since 1.0.2
+     */
     public static void setGlobalAccelerator(JComponent component, KeyStroke accelerator, Action action)
     {
-        System.out.println("Setting " + accelerator + " -> " + action);
         Object actionCommand = action.getValue(Action.ACTION_COMMAND_KEY);
         component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(accelerator, actionCommand);
         component.getActionMap().put(actionCommand, action);
         removeAcceleratorFromChildren(component, accelerator);
     }
 
+    /**
+     * Removes the specified keystroke form the input mappings of all {@code
+     * JComponent} subcomponents of the specified container. This method is
+     * recursive: all subcomponents that are also {@code Container}s are
+     * processed.
+     *
+     * @param container the container whose children will have the accelerator
+     * removed. The container itself does not lose the mappings it has for the
+     * accelerator.
+     * @param accelerator the accelerator to remove.
+     * @since 1.0.2
+     */
     private static void removeAcceleratorFromChildren(Container container, KeyStroke accelerator)
     {
-        System.out.println("    Removing " + accelerator + " from " + container);
         for(Component child : container.getComponents()) {
-            System.out.println("        Found child " + child);
             if(child instanceof JComponent) {
-                System.out.println("            Child is a JComponent");
                 removeAcceleratorFromComponent((JComponent)child, accelerator);
             }
             if(child instanceof Container) {
-                System.out.println("            Child is a Container");
                 removeAcceleratorFromChildren((Container)child, accelerator);
-                System.out.println("    ... Back to " + container);
             }
         }
     }
 
+    /**
+     * Removes the specified key mapping from a component. The mapping is
+     * removed from all input maps and parent input maps. This affects the
+     * behavior of the look-and-feel in some cases. The parent mappings will be
+     * reinstated if the look-and-feel changes after this method is invoked.
+     *
+     * @param component the component to remove the mapping from.
+     * @param accelerator the keystroke to remove.
+     * @since 1.0.2
+     */
     private static void removeAcceleratorFromComponent(JComponent component, KeyStroke accelerator)
     {
-        component.getInputMap(JComponent.WHEN_FOCUSED).remove(accelerator);
-        component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).remove(accelerator);
-        component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(accelerator);
+        removeAcceleratorFromMap(component.getInputMap(JComponent.WHEN_FOCUSED), accelerator);
+        removeAcceleratorFromMap(component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT), accelerator);
+        removeAcceleratorFromMap(component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW), accelerator);
+    }
+
+    /**
+     * Removes a keystroke from an input map and its parent map.
+     *
+     * @param map the map to remove the keystroke from.
+     * @param accelerator the keystroke to remove.
+     * @since 1.0.2
+     */
+    private static void removeAcceleratorFromMap(InputMap map, KeyStroke accelerator)
+    {
+        map.remove(accelerator);
+        InputMap parent = map.getParent();
+        if(parent != null) {
+            parent.remove(accelerator);
+        }
     }
 
     /**
