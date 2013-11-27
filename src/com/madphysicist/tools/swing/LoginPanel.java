@@ -718,6 +718,7 @@ public class LoginPanel extends JPanel
         userNameModel = new SetListModel<>(userNames);
         userNameCombo = new JComboBox<>(userNameModel);
         userNameCombo.setEditable(true);
+        userNameCombo.putClientProperty("JComboBox.isTableCellEditor", Boolean.TRUE);
         addUserNameEditor(userNameCombo, userNameField);
         userNameField = null;
     }
