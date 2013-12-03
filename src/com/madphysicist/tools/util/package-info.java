@@ -33,7 +33,8 @@
  * objects that provide extended functionality.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 4 Mar 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 04 Mar 2012 - J. Fox-Rabinovitz - Created
+ * @version 1.0.1, 03 Dec 2012 - J. Fox-Rabinovitz - Added PathManager and FilePathManager
+ * @since 1.0.0
  */
 package com.madphysicist.tools.util;
