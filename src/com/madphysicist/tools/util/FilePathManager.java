@@ -151,4 +151,27 @@ public class FilePathManager extends PathManager<File, File>
         }
         return files;
     }
+
+    public static FilePathManager getEnvironmentPath()
+    {
+        return getEnvironmentPath("PATH");
+    }
+
+    public static FilePathManager getEnvironmentPath(String variableName)
+    {
+        String value = System.getenv(variableName);
+        if(value == null) {
+            return new FilePathManager();
+        }
+        return new FilePathManager(value, File.pathSeparator);
+    }
+
+    public static FilePathManager getPropertyPath(String propertyName)
+    {
+        String value = System.getProperty(propertyName);
+        if(value == null) {
+            return new FilePathManager();
+        }
+        return new FilePathManager(value);
+    }
 }
