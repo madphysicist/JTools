@@ -1147,7 +1147,7 @@ public class LoginPanel extends JPanel
 
             JPanel sidePanel = new JPanel(new GridLayout(2, 1));
             sidePanel.setBorder(new TitledBorder("Edit Properties"));
-            sidePanel.add(loginPanel.new DemoPanel("User"));
+            sidePanel.add(loginPanel.new DemoPanel("UserName"));
             sidePanel.add(loginPanel.new DemoPanel("Domain"));
 
             JFrame frame = new JFrame("LoginPanel Demo v1.0.0");
