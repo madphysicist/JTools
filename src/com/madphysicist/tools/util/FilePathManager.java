@@ -38,7 +38,7 @@ import java.util.List;
  * Manages the a file path and associated lookup tasks. This class is very
  * lenient with input types. Path elements must always be {@code File}s, but
  * checking for any non-{@code File} type is done by converting it to a {@code
- * String} first. This class always attempts to store canonical paths.
+ * String} first.
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 03 Dec 2012 - J. Fox-Rabinovitz - Created

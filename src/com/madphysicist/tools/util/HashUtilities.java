@@ -81,8 +81,8 @@ import java.util.Arrays;
  * This class can not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 11 Nov 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 11 Nov 2012 - J. Fox-Rabinovitz - Created
+ * @since 1.0.0
  */
 public class HashUtilities
 {
