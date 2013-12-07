@@ -46,6 +46,23 @@ public class EnumUtilities
      */
     private EnumUtilities() {}
 
+
+    /**
+     * Converts an enum name into a more user friendly representation. This
+     * method assumes that the enum name follows the all-caps with underscores
+     * naming convention for enums. All underscores are replaced with spaces and
+     * all letters except the first letter of every resulting word are converted
+     * to lowercase.
+     *
+     * @param enm the enum whose name is to be to converted.
+     * @return the formatted user-friendly version of the enum's name.
+     * @since 1.0.0
+     */
+    public static <E extends Enum> String nameToString(E enm)
+    {
+        return nameToString(enm.name());
+    }
+
     /**
      * Converts an enum name into a more user friendly representation. This
      * method assumes that the enum name follows the all-caps with underscores
