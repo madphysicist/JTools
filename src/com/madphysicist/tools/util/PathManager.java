@@ -171,6 +171,31 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
         return path.iterator();
     }
 
+    /**
+     * Checks if the specified manager is equal to this one. The managers are
+     * considered equal if an only if they are of the exact same class and
+     * contain the same elements in the same order. A return value of {@code
+     * true} can be used as an indicator of the fact that this object and the
+     * one being compared to are of the same class.
+     *
+     * @param o the object to compare this one to.
+     * @return {@code true} if both objects have the exact same class and the
+     * same elements in the same order.
+     * @since 1.0.0
+     */
+    @Override public boolean equals(Object o)
+    {
+        if(this.getClass() == o.getClass()) {
+            return this.path.equals(((PathManager<?, ?>)o).path);
+        }
+        return false;
+    }
+
+    @Override public int hashCode()
+    {
+        return HashUtilities.hashCode(path);
+    }
+
     public abstract boolean contains(T element, Object item);
 
     public abstract U combine(T element, Object item);
