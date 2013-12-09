@@ -54,11 +54,12 @@ public class EnumUtilities
      * all letters except the first letter of every resulting word are converted
      * to lowercase.
      *
+     * @param <E> the type of {@code enum} being passed in.
      * @param enm the enum whose name is to be to converted.
      * @return the formatted user-friendly version of the enum's name.
      * @since 1.0.0
      */
-    public static <E extends Enum> String nameToString(E enm)
+    public static <E extends Enum<?>> String nameToString(E enm)
     {
         return nameToString(enm.name());
     }
