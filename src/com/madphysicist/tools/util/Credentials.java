@@ -39,6 +39,7 @@ import java.util.Arrays;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0 20 Nov 2013 - J. Fox-Rabinovitz - Created
+ * @version 1.0.1  9 Dec 2013 - J. Fox-Rabinovitz - Added toString()
  * @since 1.0.0
  */
 public class Credentials implements Serializable
@@ -146,6 +147,31 @@ public class Credentials implements Serializable
             Arrays.fill(password, (char)0);
             password = null;
         }
+    }
+
+    /**
+     * Returns a {@code String} representation of this instance. The password is
+     * never shown, even when it has not been cleared.
+     *
+     * @return a {@code String} representing this instance, without the actual
+     * password.
+     * @since 1.0.1
+     */
+    @Override public String toString()
+    {
+        StringBuilder sb = new StringBuilder(super.toString());
+        sb.append(" [userName=").append(userName).append("; ");
+        if(domain != null) {
+            sb.append("domain=").append(domain).append("; ");
+        }
+        sb.append("password=");
+        if(password == null) {
+            sb.append("<CLEARED>");
+        } else {
+            sb.append("*****");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }
 
