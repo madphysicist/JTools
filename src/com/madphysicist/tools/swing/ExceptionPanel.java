@@ -30,10 +30,12 @@ package com.madphysicist.tools.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.PopupMenu;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -191,9 +193,11 @@ public class ExceptionPanel extends JPanel
         details.setTabSize(4);
         details.setRows(20);
         details.setFont(Font.decode(Font.MONOSPACED));
+        details.setComponentPopupMenu(SwingUtilities.createActionMenu(details, false));
 
         collapsePane = new JScrollPane(details);
         collapsePane.setVisible(false);
+        collapsePane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
         setLayout(new GridBagLayout());
         add(messageLabel, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0,

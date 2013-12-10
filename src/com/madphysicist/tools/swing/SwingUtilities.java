@@ -44,15 +44,20 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.Action;
 import javax.swing.InputMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.JTextComponent;
 
 
 /**
@@ -61,8 +66,9 @@ import javax.swing.UnsupportedLookAndFeelException;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 25 Feb 2013
- * @version 1.0.1, 13 June 2013: Added {@code setEnabled()} method.
- * @version 1.0.2, 13 June 2013: Added {@code setGlobalAccelerator()} method.
+ * @version 1.0.1, 13 Jun 2013: Added {@code setEnabled()} method.
+ * @version 1.0.2, 13 Jun 2013: Added {@code setGlobalAccelerator()} method.
+ * @version 1.0.3,  9 Dec 2013: Added {@code createCutCopyPastePopup()} method.
  * @since 1.0.0
  */
 public class SwingUtilities
@@ -268,7 +274,7 @@ public class SwingUtilities
      * @see #lookAndFeelSelector(Component)
      * @see javax.swing.UIManager.LookAndFeelInfo
      * @author Joseph Fox-Rabinovitz
-     * @version 1.0.0, 13 June 2013
+     * @version 1.0.0, 13 June 2013 - J. Fox-Rabinovitz - Created
      * @since 1.0.0
      */
     private static class LAFNode implements Serializable
@@ -315,6 +321,48 @@ public class SwingUtilities
         {
             return info.getName();
         }
+    }
+
+    /**
+     * Creates a menu for a text component with select, copy and optionally cut
+     * and paste actions.
+     *
+     * @param text the component to create the popup for.
+     * @param includeModifying whether or not to include the modifying actions
+     * (cut and paste) in the popup.
+     * @return a popup menu that has actions for the component.
+     * @since 1.0.0
+     */
+    public static JPopupMenu createActionMenu(JTextComponent text, boolean includeModifying)
+    {
+        JPopupMenu menu = new JPopupMenu();
+        Action[] actions = text.getActions();
+        Map<String, Action> actionMap = new HashMap<>(actions.length);
+        for(Action action : actions) {
+            actionMap.put((String)action.getValue(Action.NAME), action);
+        }
+        menu.add(setActionName("Select All", actionMap.get(DefaultEditorKit.selectAllAction)));
+        menu.add(setActionName("Copy", actionMap.get(DefaultEditorKit.copyAction)));
+        if(includeModifying) {
+            menu.add(setActionName("Cut", actionMap.get(DefaultEditorKit.cutAction)));
+            menu.add(setActionName("Paste", actionMap.get(DefaultEditorKit.pasteAction)));
+        }
+        return menu;
+    }
+
+    /**
+     * Changes the name but not the command of an action. Use this method with
+     * care.
+     *
+     * @param name the new name to assign to the action.
+     * @param action the action to change the name of.
+     * @return the input action.
+     * @since 1.0.0
+     */
+    private static Action setActionName(String name, Action action)
+    {
+        action.putValue(Action.NAME, name);
+        return action;
     }
 
     public static void main(String[] args)
