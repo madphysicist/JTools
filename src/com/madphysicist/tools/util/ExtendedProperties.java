@@ -28,6 +28,7 @@
 
 package com.madphysicist.tools.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,8 +46,9 @@ import java.util.ResourceBundle;
  * {@code ExtendedProperties} or not.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 2 Nov 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 2 Nov 2012 - J. Fox-Rabinovitz - Created
+ * @version 1.0.1, 10 Dec 2013 - J. Fox-Rabinovitz - Added loadFromFile(File) method
+ * @since 1.0.0
  */
 public class ExtendedProperties extends Properties
 {
@@ -57,14 +59,14 @@ public class ExtendedProperties extends Properties
      * is not compromised by a structural change (e.g. adding a new field with
      * a sensible default value), and the upper digits when the change makes
      * serialized versions of of the class incompatible with previous releases.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final long serialVersionUID = 1000L;
 
     /**
      * Initializes a property set with no parent properties. If a property is
      * not found in this set, no other set will be searched.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public ExtendedProperties()
     {
@@ -78,7 +80,7 @@ public class ExtendedProperties extends Properties
      *
      * @param defaults the default values to use if a property is not found in
      * this property set.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public ExtendedProperties(Properties defaults)
     {
@@ -94,7 +96,7 @@ public class ExtendedProperties extends Properties
      * @param baseName the name of the resource to load.
      * @throws IOException if the resource can not be found or loaded for any
      * reason.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void loadFromResource(String baseName) throws IOException
     {
@@ -107,13 +109,28 @@ public class ExtendedProperties extends Properties
      * Loads a property file into this property set.
      *
      * @param fileName the name of the file to load.
-     * @throws IOException if an error occurrs while searching, opening or
+     * @throws IOException if an error occurrs while searching for, opening or
      * reading the file.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void loadFromFile(String fileName) throws IOException
     {
         try(InputStream input = new FileInputStream(fileName)) {
+            load(input);
+        }
+    }
+
+    /**
+     * Loads a property file into this property set.
+     *
+     * @param file the file to load.
+     * @throws IOException if an error occurrs while searching for, opening or
+     * reading the file.
+     * @since 1.0.1
+     */
+    public void loadFromFile(File file) throws IOException
+    {
+        try(InputStream input = new FileInputStream(file)) {
             load(input);
         }
     }
@@ -130,7 +147,7 @@ public class ExtendedProperties extends Properties
      * @throws MissingResourceException if the specified bundle can not be
      * found.
      * @see ResourceBundle#getBundle(java.lang.String)
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void importResourceBundle(String basename) throws NullPointerException, ClassCastException, MissingResourceException
     {
@@ -147,7 +164,7 @@ public class ExtendedProperties extends Properties
      * @throws NullPointerException if {@code bundle} is {@code null}.
      * @throws ClassCastException if the bundle contains non-string values for
      * any of its keys.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void importResourceBundle(ResourceBundle bundle) throws NullPointerException, ClassCastException
     {
@@ -163,7 +180,7 @@ public class ExtendedProperties extends Properties
      *
      * @param map the map to import.
      * @throws NullPointerException if {@code map} is {@code null}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void importMap(Map<String, String> map) throws NullPointerException
     {
@@ -176,7 +193,7 @@ public class ExtendedProperties extends Properties
      *
      * @param property the key and value for the property to set.
      * @return the previous value for the specified key.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public String setProperty(Property property)
     {
@@ -194,7 +211,7 @@ public class ExtendedProperties extends Properties
      * the value could not be parsed as an integer.
      * @return the value for {@code key} as an {@code int}, or {@code
      * defaultValue}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public int getIntegerProperty(String key, int defaultValue)
     {
@@ -220,7 +237,7 @@ public class ExtendedProperties extends Properties
      * property set or one of its parents.
      * @throws NumberFormatException if the specified value can not be parsed as
      * an integer.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public int getIntegerProperty(String key) throws MissingResourceException, NumberFormatException
     {
@@ -240,7 +257,7 @@ public class ExtendedProperties extends Properties
      * the value could not be parsed as a a double.
      * @return the value for {@code key} as an {@code double}, or {@code
      * defaultValue}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public double getDoubleProperty(String key, double defaultValue)
     {
@@ -266,7 +283,7 @@ public class ExtendedProperties extends Properties
      * property set or one of its parents.
      * @throws NumberFormatException if the specified value can not be parsed as
      * a double.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public double getDoubleProperty(String key) throws MissingResourceException, NumberFormatException
     {
@@ -281,9 +298,9 @@ public class ExtendedProperties extends Properties
      * Map.Entry} as a convenience.
      *
      * @author Joseph Fox-Rabinovitz
-     * @version 1.0.0.0, 9 Nov 2012
+     * @version 1.0.0, 9 Nov 2012
      * @serial include
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @SuppressWarnings("PublicInnerClass")
     public static class Property implements Serializable, Map.Entry<String, String>
@@ -296,7 +313,7 @@ public class ExtendedProperties extends Properties
          * a new field with a sensible default value), and the upper digits when
          * the change makes serialized versions of of the class incompatible
          * with previous releases.
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private static final long serialVersionUID = 1000L;
 
@@ -304,7 +321,7 @@ public class ExtendedProperties extends Properties
          * The key of this property.
          *
          * @serial include
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private String key;
 
@@ -312,7 +329,7 @@ public class ExtendedProperties extends Properties
          * The value of this property.
          *
          * @serial include
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private String value;
         
@@ -321,7 +338,7 @@ public class ExtendedProperties extends Properties
          * The value will <b>no</b> be set to {@code null}.
          *
          * @param key the key of this property.
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         public Property(String key)
         {
@@ -344,7 +361,7 @@ public class ExtendedProperties extends Properties
          * Returns the key of this porperty.
          *
          * @return the key of this property.
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         @Override public String getKey()
         {
@@ -355,7 +372,7 @@ public class ExtendedProperties extends Properties
          * Returns the value of this porperty.
          *
          * @return the value of this property.
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         @Override public String getValue()
         {
@@ -367,7 +384,7 @@ public class ExtendedProperties extends Properties
          *
          * @param value the new value to use for this property.
          * @return the previous value of this property.
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         @Override public String setValue(String value)
         {
