@@ -98,7 +98,9 @@ public class ExtendedProperties extends Properties
      */
     public void loadFromResource(String baseName) throws IOException
     {
-        load(this.getClass().getClassLoader().getResourceAsStream(baseName));
+        try(InputStream input = ClassLoader.getSystemResourceAsStream(baseName)) {
+            load(input);
+        }
     }
 
     /**
@@ -111,14 +113,8 @@ public class ExtendedProperties extends Properties
      */
     public void loadFromFile(String fileName) throws IOException
     {
-        InputStream input = null;
-        try {
-            input = new FileInputStream(fileName);
+        try(InputStream input = new FileInputStream(fileName)) {
             load(input);
-        } finally {
-            if(input != null) {
-                input.close();
-            }
         }
     }
 
