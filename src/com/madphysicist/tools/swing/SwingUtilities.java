@@ -331,7 +331,7 @@ public class SwingUtilities
      * @param includeModifying whether or not to include the modifying actions
      * (cut and paste) in the popup.
      * @return a popup menu that has actions for the component.
-     * @since 1.0.0
+     * @since 1.0.3
      */
     public static JPopupMenu createActionMenu(JTextComponent text, boolean includeModifying)
     {
@@ -357,7 +357,7 @@ public class SwingUtilities
      * @param name the new name to assign to the action.
      * @param action the action to change the name of.
      * @return the input action.
-     * @since 1.0.0
+     * @since 1.0.3
      */
     private static Action setActionName(String name, Action action)
     {
