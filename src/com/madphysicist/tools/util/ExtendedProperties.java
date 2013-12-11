@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import javax.swing.KeyStroke;
 
 /**
  * Provides extended functionality to the {@link java.util.Properties
@@ -47,7 +48,8 @@ import java.util.ResourceBundle;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 2 Nov 2012 - J. Fox-Rabinovitz - Created
- * @version 1.0.1, 10 Dec 2013 - J. Fox-Rabinovitz - Added loadFromFile(File) method
+ * @version 1.0.1, 10 Dec 2013 - J. Fox-Rabinovitz - Added {@code
+ * loadFromFile(File)} method, {@code load*NoEx()} methods, special getters.
  * @since 1.0.0
  */
 public class ExtendedProperties extends Properties
@@ -90,8 +92,8 @@ public class ExtendedProperties extends Properties
     /**
      * Loads properties from a property resource. The rules for searching for
      * resources and loading property files can be found in the documentation
-     * of {@link ClassLoader#getResourceAsStream(java.lang.String)} and {@link
-     * Properties#load(java.io.InputStream)}, respectively.
+     * of {@link ClassLoader#getSystemResourceAsStream(java.lang.String)} and
+     * {@link Properties#load(java.io.InputStream)}, respectively.
      *
      * @param baseName the name of the resource to load.
      * @throws IOException if the resource can not be found or loaded for any
@@ -103,6 +105,24 @@ public class ExtendedProperties extends Properties
         try(InputStream input = ClassLoader.getSystemResourceAsStream(baseName)) {
             load(input);
         }
+    }
+
+    /**
+     * Loads properties from a property resource, ignoring any exceptions that
+     * may occur. The rules for searching for resources and loading property
+     * files can be found in the documentation of {@link
+     * ClassLoader#getSystemResourceAsStream(java.lang.String)} and {@link
+     * Properties#load(java.io.InputStream)}, respectively.
+     *
+     * @param baseName the name of the resource to load. If the resource could
+     * be found or loaded, this instance will remain unchanged.
+     * @since 1.0.1
+     */
+    public void loadFromResourceNoEx(String baseName)
+    {
+        try(InputStream input = ClassLoader.getSystemResourceAsStream(baseName)) {
+            load(input);
+        } catch(IOException | IllegalArgumentException ex) {}
     }
 
     /**
@@ -121,6 +141,22 @@ public class ExtendedProperties extends Properties
     }
 
     /**
+     * Loads a property file into this property set, ignoring any exceptions
+     * that may occur.
+     *
+     * @param fileName the name of the file to load. If an error occurrs while
+     * searching for, opening or reading the file, this instance remains
+     * unchanged.
+     * @since 1.0.1
+     */
+    public void loadFromFileNoEx(String fileName) throws IOException
+    {
+        try(InputStream input = new FileInputStream(fileName)) {
+            load(input);
+        } catch(IOException | IllegalArgumentException ex) {}
+    }
+
+    /**
      * Loads a property file into this property set.
      *
      * @param file the file to load.
@@ -133,6 +169,21 @@ public class ExtendedProperties extends Properties
         try(InputStream input = new FileInputStream(file)) {
             load(input);
         }
+    }
+
+    /**
+     * Loads a property file into this property set, ignoring any exceptions
+     * that may occur.
+     *
+     * @param file the file to load. If an error occurrs while searching for,
+     * opening or reading the file, this instance remains unchanged.
+     * @since 1.0.1
+     */
+    public void loadFromFileNoEx(File file)
+    {
+        try(InputStream input = new FileInputStream(file)) {
+            load(input);
+        } catch(IOException | IllegalArgumentException ex) {}
     }
 
     /**
@@ -169,9 +220,7 @@ public class ExtendedProperties extends Properties
     public void importResourceBundle(ResourceBundle bundle) throws NullPointerException, ClassCastException
     {
         for(String key : bundle.keySet()) {
-            try {
-                setProperty(key, bundle.getString(key));
-            } catch(ClassCastException cce) {}
+            setProperty(key, bundle.getString(key));
         }
     }
 
@@ -199,6 +248,43 @@ public class ExtendedProperties extends Properties
     {
         // using cast instead of *.toString() so that null case does not require special treatment
         return (String)setProperty(property.getKey(), property.getValue());
+    }
+
+    /**
+     * Retreives a property as a boolean value. If the property can not be found
+     * or can not be parsed as a boolean, no exception is thrown and the default
+     * value is returned.
+     *
+     * @param key the property to search for.
+     * @param defaultValue the value to return if the key could not be found.
+     * @return the value for {@code key} as a {@code boolean}, or {@code
+     * defaultValue}.
+     * @since 1.0.1
+     */
+    public boolean getBooleanProperty(String key, boolean defaultValue)
+    {
+        String property = getProperty(key);
+        if(property == null)
+            return defaultValue;
+        return Boolean.parseBoolean(property);
+    }
+
+    /**
+     * Retreives a property as a boolean value. If the property can not be found
+     * or can not be parsed as a boolean, an exception is thrown.
+     *
+     * @param key the property to search for.
+     * @return the value for {@code key} as a {@code boolean}.
+     * @throws MissingResourceException if {@code key} can not be found in this
+     * property set or one of its parents.
+     * @since 1.0.1
+     */
+    public boolean getBooleanProperty(String key) throws MissingResourceException
+    {
+        String property = getProperty(key);
+        if(property == null)
+            throw new MissingResourceException("null", getClass().getSimpleName(), key);
+        return Boolean.parseBoolean(property);
     }
 
     /**
@@ -254,7 +340,7 @@ public class ExtendedProperties extends Properties
      *
      * @param key the property to search for.
      * @param defaultValue the value to return if the key could not be found or
-     * the value could not be parsed as a a double.
+     * the value could not be parsed as a double.
      * @return the value for {@code key} as an {@code double}, or {@code
      * defaultValue}.
      * @since 1.0.0
@@ -291,6 +377,77 @@ public class ExtendedProperties extends Properties
         if(property == null)
             throw new MissingResourceException("null", getClass().getSimpleName(), key);
         return Double.parseDouble(property);
+    }
+
+    /**
+     * Retrieves a property as an instance of the specified {@code enum}. If the
+     * property can not be found or can not be parsed as an {@code enum} of the
+     * required type, no exception is thrown and the default value is returned.
+     *
+     * @param <T> the type of the {@code enum}.
+     * @param key the property to search for.
+     * @param clazz the class of the {@code enum}. This will determine the set
+     * of permitted values. See {@link Enum#valueOf(Class, String)}.
+     * @param defaultValue the value to return if the key could not be found or
+     * the value could not be parsed as an {@code enum} of the specified type.
+     * @return the value for {@code key} as an {@code enum} of the specified
+     * type, or {@code defaultValue}.
+     * @since 1.0.1
+     */
+    public <T extends Enum<T>> T getEnumProperty(String key, Class<T> clazz, T defaultValue)
+    {
+        String property = getProperty(key);
+        if(property == null)
+            return defaultValue;
+        try {
+            return Enum.valueOf(clazz, property);
+        } catch(IllegalArgumentException | NullPointerException ex) {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Retrieves a property as an instance of the specified {@code enum}. If the
+     * property can not be found or can not be parsed as an {@code enum} of the
+     * required type, an exception is thrown.
+     *
+     * @param <T> the type of the {@code enum}.
+     * @param key the property to search for.
+     * @param clazz the class of the {@code enum}. This will determine the set
+     * of permitted values. See {@link Enum#valueOf(Class, String)}.
+     * @return the value for {@code key} as an {@code enum} of the specified
+     * type.
+     * @throws MissingResourceExceptionn if {@code key} can not be found in this
+     * property set or one of its parents.
+     * @throws IllegalArgumentException if the enum type has no constant named
+     * by the property, or the specified class object does not represent an enum
+     * type.
+     * @since 1.0.1
+     */
+    public <T extends Enum<T>> T getEnumProperty(String key, Class<T> clazz)
+            throws MissingResourceException, IllegalArgumentException
+    {
+        String property = getProperty(key);
+        if(property == null)
+            throw new MissingResourceException("null", getClass().getSimpleName(), key);
+        return Enum.valueOf(clazz, property);
+    }
+
+    /**
+     * Retreives a property as a {@code KeyStroke}. If the property can not be
+     * found or can not be parsed, the return value is {@code null}. The
+     * property string must be parseable according to {@link
+     * KeyStroke#getKeyStroke(String)}.
+     *
+     * @param key the property to search for.
+     * @return the value for {@code key} as a {@code KeyStroke}, or {@code null}
+     * if the key is missing or the value is not parseable.
+     * @since 1.0.1
+     */
+    public KeyStroke getKeyStrokeProperty(String key)
+    {
+        String property = getProperty(key);
+        return KeyStroke.getKeyStroke(property);
     }
 
     /**
