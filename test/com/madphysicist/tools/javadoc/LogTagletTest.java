@@ -76,7 +76,7 @@ public class LogTagletTest
     @Test public void testRegister_newTaglet()
     {
         System.out.println("register (new taglet)");
-        Map<String, Taglet> testMap = new TreeMap<String, Taglet>();
+        Map<String, Taglet> testMap = new TreeMap<>();
         LogTaglet.register(testMap);
         Assert.assertTrue(testMap.containsKey(testTaglet.getName()));
         Assert.assertTrue(testMap.get(testTaglet.getName()) instanceof LogTaglet);
@@ -93,7 +93,7 @@ public class LogTagletTest
     @Test public void testRegister_replaceTaglet()
     {
         System.out.println("register (replace taglet)");
-        Map<String, Taglet> testMap = new TreeMap<String, Taglet>();
+        Map<String, Taglet> testMap = new TreeMap<>();
         testMap.put(testTaglet.getName(), null);
         Assert.assertTrue(testMap.containsKey(testTaglet.getName()));
         Assert.assertFalse(testMap.get(testTaglet.getName()) instanceof LogTaglet);

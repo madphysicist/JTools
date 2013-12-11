@@ -70,7 +70,7 @@ public class TextUtilitiesTest
      *
      * @since 1.0.0.0
      */
-    private SortedMap<String, String> emptyMap = new TreeMap<String, String>();
+    private SortedMap<String, String> emptyMap = new TreeMap<>();
     
     /**
      * A sample property list used by the methods of this class. This value
@@ -498,8 +498,9 @@ public class TextUtilitiesTest
                     }
                 }
                 // if no match was found for the current key, fail
-                if(searchIndex >= expectedValue.length)
+                if(searchIndex >= expectedValue.length) {
                     Assert.fail("key \"" + result[keyIndex] + "\" not found among expected");
+                }
             }
         }
     }
@@ -899,7 +900,7 @@ public class TextUtilitiesTest
     public Object[][] testMethodsByValueDataProvider()
     {
         // mapToString
-        Map<String, String> singleMap = new TreeMap<String, String>();
+        Map<String, String> singleMap = new TreeMap<>();
         singleMap.put(complexProperties[0], complexProperties[1]);
         String singleMapString = escapedName + prefix + escapedProperties[0]
                                   + keyValueSeparator + escapedProperties[1] + suffix;
@@ -921,14 +922,14 @@ public class TextUtilitiesTest
                                     + keyValueSeparator + escapedProperties[1] + suffix;
 
         // propertiesToMap
-        SortedMap<String, String> p2mBaseMap = new TreeMap<String, String>();
+        SortedMap<String, String> p2mBaseMap = new TreeMap<>();
         p2mBaseMap.put("a", "A");
         p2mBaseMap.put("b", "B");
         p2mBaseMap.put("c", "C");
 
         String[] p2mBaseProperties = new String[] {"a", "A", "b", "B", "c", "C"};
 
-        SortedMap<String, String> p2mNullValueMap = new TreeMap<String, String>(p2mBaseMap);
+        SortedMap<String, String> p2mNullValueMap = new TreeMap<>(p2mBaseMap);
         p2mNullValueMap.put("b", null);
 
         String[] p2mNullValueProperties = p2mBaseProperties.clone();
@@ -1137,19 +1138,19 @@ public class TextUtilitiesTest
     @DataProvider(name = "testMapEqualsDataProvider")
     private Object[][] testMapEqualsDataProvider()
     {
-        TreeMap<String, String> treeMap = new TreeMap<String, String>(basicMap);
-        TreeMap<String, String> diffrentKeyTreeMap = new TreeMap<String, String>(basicMap);
-        TreeMap<String, String> diffrentValueTreeMap = new TreeMap<String, String>(basicMap);
-        TreeMap<String, String> extendedTreeMap = new TreeMap<String, String>(basicMap);
+        TreeMap<String, String> treeMap = new TreeMap<>(basicMap);
+        TreeMap<String, String> diffrentKeyTreeMap = new TreeMap<>(basicMap);
+        TreeMap<String, String> diffrentValueTreeMap = new TreeMap<>(basicMap);
+        TreeMap<String, String> extendedTreeMap = new TreeMap<>(basicMap);
         diffrentKeyTreeMap.remove("a");
         diffrentKeyTreeMap.put("A", "A");
         diffrentValueTreeMap.put("b", "b");
         extendedTreeMap.put("d", "D");
 
-        HashMap<String, String> hashMap = new HashMap<String, String>(basicMap);
-        HashMap<String, String> diffrentKeyHashMap = new HashMap<String, String>(basicMap);
-        HashMap<String, String> diffrentValueHashMap = new HashMap<String, String>(basicMap);
-        HashMap<String, String> extendedHashMap = new HashMap<String, String>(basicMap);
+        HashMap<String, String> hashMap = new HashMap<>(basicMap);
+        HashMap<String, String> diffrentKeyHashMap = new HashMap<>(basicMap);
+        HashMap<String, String> diffrentValueHashMap = new HashMap<>(basicMap);
+        HashMap<String, String> extendedHashMap = new HashMap<>(basicMap);
         diffrentKeyHashMap.remove("a");
         diffrentKeyHashMap.put("A", "A");
         diffrentValueHashMap.put("b", "b");
@@ -1157,8 +1158,8 @@ public class TextUtilitiesTest
         
         return new Object[][] {
             {"both null", null, null, true},
-            {"one null one empty [T]", null, new TreeMap<String, String>(), false},
-            {"one null one empty [H]", null, new HashMap<String, String>(), false},
+            {"one null one empty [T]", null, new TreeMap<>(), false},
+            {"one null one empty [H]", null, new HashMap<>(), false},
             {"one null one normal [T]", null, treeMap, false},
             {"one null one normal [H]", null, hashMap, false},
             {"same type diff size [T]", treeMap, extendedTreeMap, false},
@@ -1167,8 +1168,8 @@ public class TextUtilitiesTest
             {"same type diff key [H]", hashMap, diffrentKeyHashMap, false},
             {"same type diff value [T]", treeMap, diffrentValueTreeMap, false},
             {"same type diff value [H]", hashMap, diffrentValueHashMap, false},
-            {"same type equal [T]", treeMap, new TreeMap<String, String>(hashMap), true},
-            {"same type equal [H]", hashMap, new HashMap<String, String>(treeMap), true},
+            {"same type equal [T]", treeMap, new TreeMap<>(hashMap), true},
+            {"same type equal [H]", hashMap, new HashMap<>(treeMap), true},
             {"diff type diff size [TH]", treeMap, extendedHashMap, false},
             {"diff type diff size [HT]", hashMap, extendedTreeMap, false},
             {"diff type diff key [TH]", treeMap, diffrentKeyHashMap, false},
@@ -1206,8 +1207,8 @@ public class TextUtilitiesTest
     private Object[][] testKeyListDataProvider()
     {
         // Use HashMap since TreeMap with natural ordering forbids null keys
-        HashMap<String, String> onlyNullMap = new HashMap<String, String>();
-        HashMap<String, String> someNullMap = new HashMap<String, String>(basicMap);
+        HashMap<String, String> onlyNullMap = new HashMap<>();
+        HashMap<String, String> someNullMap = new HashMap<>(basicMap);
         onlyNullMap.put(null, null);
         someNullMap.put(null, null);
 
@@ -1392,12 +1393,12 @@ public class TextUtilitiesTest
     @DataProvider(name = "testStringToMapDataProvider")
     private Object[][] testStringToMapDataProvider()
     {
-        SortedMap<String, String> prefixMap = new TreeMap<String, String>(complexMap);
+        SortedMap<String, String> prefixMap = new TreeMap<>(complexMap);
         // replace the first key with the name and prefix as part of the key
         prefixMap.remove(complexProperties[0]);
         prefixMap.put(name + prefix + complexProperties[0], complexProperties[1]);
         
-        SortedMap<String, String> suffixMap = new TreeMap<String, String>(complexMap);
+        SortedMap<String, String> suffixMap = new TreeMap<>(complexMap);
         // append the fuffix to the last value
         suffixMap.put(suffixMap.lastKey(), suffixMap.get(suffixMap.lastKey()) + suffix);
 
@@ -1434,7 +1435,7 @@ public class TextUtilitiesTest
 
         SortedMap<String, String> nonEmptyMap = TextUtilities.propertiesToMap(
                 complexProperties[2], complexProperties[5], missingString, missingString);
-        SortedMap<String, String> complexNonEmptyMap = new TreeMap<String, String>(nonEmptyMap);
+        SortedMap<String, String> complexNonEmptyMap = new TreeMap<>(nonEmptyMap);
         // replaces prop[2]->prop[5] with prop[2]->prop[3] and adds missing->missing
         complexNonEmptyMap.putAll(complexMap);
 
@@ -1446,7 +1447,7 @@ public class TextUtilitiesTest
                     keyValueSeparator, entrySeparator, null, escapeSymbol,
                     name, complexMap},
             {"all empty", "", emptyMap, "", "", keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, "", new TreeMap<String, String>()},
+                    escapeChars, escapeSymbol, "", new TreeMap<>()},
             {"empty prefix", complexMapString, emptyMap, "", suffix,
                     keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
                     "", prefixMap},
@@ -1477,10 +1478,10 @@ public class TextUtilitiesTest
                     "", complexMap},
             {"bare string with name", escapedName + prefix + suffix, emptyMap,
                     prefix, suffix, keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, name, new TreeMap<String, String>(emptyMap)},
+                    escapeChars, escapeSymbol, name, new TreeMap<>(emptyMap)},
             {"bare string no name", prefix + suffix, emptyMap,
                     prefix, suffix, keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, "", new TreeMap<String, String>(emptyMap)},
+                    escapeChars, escapeSymbol, "", new TreeMap<>(emptyMap)},
             {"non-empty map", complexMapString, nonEmptyMap, prefix, suffix,
                     keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
                     name, complexNonEmptyMap},
@@ -1554,14 +1555,14 @@ public class TextUtilitiesTest
     @DataProvider(name = "testMapToPropertiesDataProvider")
     private Object[][] testMapToPropertiesDataProvider()
     {
-        SortedMap<String, String> baseMap = new TreeMap<String, String>();
+        SortedMap<String, String> baseMap = new TreeMap<>();
         baseMap.put("a", "A");
         baseMap.put("b", "B");
         baseMap.put("c", "C");
 
         String[] baseProperties = new String[] {"a", "A", "b", "B", "c", "C"};
 
-        SortedMap<String, String> nullValueMap = new TreeMap<String, String>(baseMap);
+        SortedMap<String, String> nullValueMap = new TreeMap<>(baseMap);
         nullValueMap.put("b", null);
 
         String[] nullValueProperties = baseProperties.clone();
@@ -1816,8 +1817,9 @@ public class TextUtilitiesTest
     {
         for(int index = 0; index < input.length(); index++) {
             // search for the first escapable character in input
-            if(escapeChars.indexOf(input.charAt(index)) >= 0)
+            if(escapeChars.indexOf(input.charAt(index)) >= 0) {
                 return input.substring(0, index) + escapeSymbol + input.substring(index);
+            }
         }
         // the default case is that the string could not be escaped
         return input;
