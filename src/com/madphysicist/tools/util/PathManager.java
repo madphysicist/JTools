@@ -32,8 +32,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Manages the tasks of path construction and lookup. Lookup is done in a linear
@@ -166,9 +166,9 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
         return element.toString();
     }
 
-    @Override public Iterator<T> iterator()
+    @Override public ListIterator<T> iterator()
     {
-        return path.iterator();
+        return path.listIterator();
     }
 
     /**
