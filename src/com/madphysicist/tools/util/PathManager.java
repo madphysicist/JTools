@@ -32,6 +32,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -133,6 +134,11 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
     public T getElement(int index)
     {
         return path.get(index);
+    }
+
+    public List<T> getElements()
+    {
+        return Collections.unmodifiableList(path);
     }
 
     public int indexOf(T element)
