@@ -77,6 +77,14 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
         }
     }
 
+    public void insertElement(T element, int index)
+    {
+        if(element == null) {
+            throw new NullPointerException("adding null element");
+        }
+        path.add(index, element);
+    }
+
     public void addElement(T element)
     {
         if(element == null) {
@@ -95,6 +103,11 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
         for(T element : elements) {
             addElement(element);
         }
+    }
+
+    public void removeElement(int index)
+    {
+        path.remove(index);
     }
 
     public void removeElement(T element)
@@ -117,9 +130,59 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
         }
     }
 
+    public T getElement(int index)
+    {
+        return path.get(index);
+    }
+
     public int indexOf(T element)
     {
         return path.indexOf(element);
+    }
+
+    public int size()
+    {
+        return path.size();
+    }
+
+    public void moveUp(T element)
+    {
+        move(element, -1);
+    }
+
+    public void moveUp(int index)
+    {
+        move(index, -1);
+    }
+
+    public void moveDown(T element)
+    {
+        move(element, +1);
+    }
+
+    public void moveDown(int index)
+    {
+        move(index, +1);
+    }
+
+    public void move(T element, int delta)
+    {
+        int index = indexOf(element);
+        if(index >= 0) {
+            move(index, delta);
+        }
+    }
+
+    public void move(int index, int delta)
+    {
+        int newIndex = index + delta;
+        if(newIndex < 0) {
+            newIndex = 0;
+        } else if(newIndex >= path.size()) {
+            newIndex = path.size() - 1;
+        }
+        T element = path.remove(index);
+        path.add(newIndex, element);
     }
 
     public boolean contains(T element)
