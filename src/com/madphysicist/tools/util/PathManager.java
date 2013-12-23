@@ -229,6 +229,11 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
         return element.toString();
     }
 
+    public String getElementString(int index)
+    {
+        return getElementString(path.get(index));
+    }
+
     @Override public ListIterator<T> iterator()
     {
         return path.listIterator();

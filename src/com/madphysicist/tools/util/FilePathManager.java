@@ -29,6 +29,7 @@
 package com.madphysicist.tools.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -125,6 +126,15 @@ public class FilePathManager extends PathManager<File, File>
     @Override public File combine(File element, Object item)
     {
         return new File(element, item.toString());
+    }
+
+    @Override public String getElementString(File element)
+    {
+        try {
+            return element.getCanonicalPath();
+        } catch(IOException ioe) {
+            return element.getAbsolutePath();
+        }
     }
 
     private static List<File> makeFiles(String[] names)
