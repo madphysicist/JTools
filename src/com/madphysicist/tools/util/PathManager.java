@@ -154,44 +154,49 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
         return path.size();
     }
 
-    public void moveUp(T element)
+    public boolean moveUp(T element)
     {
-        move(element, -1);
+        return move(element, -1);
     }
 
-    public void moveUp(int index)
+    public boolean moveUp(int index)
     {
-        move(index, -1);
+        return move(index, -1);
     }
 
-    public void moveDown(T element)
+    public boolean moveDown(T element)
     {
-        move(element, +1);
+        return move(element, +1);
     }
 
-    public void moveDown(int index)
+    public boolean moveDown(int index)
     {
-        move(index, +1);
+        return move(index, +1);
     }
 
-    public void move(T element, int delta)
+    public boolean move(T element, int delta)
     {
         int index = indexOf(element);
         if(index >= 0) {
-            move(index, delta);
+            return move(index, delta);
         }
+        return false;
     }
 
-    public void move(int index, int delta)
+    public boolean move(int index, int delta)
     {
         int newIndex = index + delta;
+        boolean inside = true;
         if(newIndex < 0) {
             newIndex = 0;
+            inside = false;
         } else if(newIndex >= path.size()) {
             newIndex = path.size() - 1;
+            inside = false;
         }
         T element = path.remove(index);
         path.add(newIndex, element);
+        return inside;
     }
 
     public boolean contains(T element)
