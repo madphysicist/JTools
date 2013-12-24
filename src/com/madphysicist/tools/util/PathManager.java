@@ -194,8 +194,15 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
             newIndex = path.size() - 1;
             inside = false;
         }
-        T element = path.remove(index);
-        path.add(newIndex, element);
+        if(Math.abs(delta) <= 1) {
+            // special case only moving by 1 element: swap
+            T element = path.get(index);
+            path.set(index, path.get(newIndex));
+            path.set(newIndex, element);
+        } else {
+            T element = path.remove(index);
+            path.add(newIndex, element);
+        }
         return inside;
     }
 
