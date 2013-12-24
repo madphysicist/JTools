@@ -191,14 +191,17 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
     public boolean move(int index, int delta)
     {
         int newIndex = index + delta;
-        boolean inside = true;
+
         if(newIndex < 0) {
             newIndex = 0;
-            inside = false;
         } else if(newIndex >= path.size()) {
             newIndex = path.size() - 1;
-            inside = false;
         }
+
+        if(newIndex == index) {
+            return false;
+        }
+
         if(Math.abs(delta) <= 1) {
             // special case only moving by 1 element: swap
             T element = path.get(index);
@@ -208,7 +211,8 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
             T element = path.remove(index);
             path.add(newIndex, element);
         }
-        return inside;
+
+        return true;
     }
 
     public boolean contains(T element)
