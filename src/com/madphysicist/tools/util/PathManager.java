@@ -154,6 +154,11 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
         return path.size();
     }
 
+    public boolean isEmpty()
+    {
+        return path.isEmpty();
+    }
+
     public boolean moveUp(T element)
     {
         return move(element, -1);
