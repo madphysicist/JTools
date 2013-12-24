@@ -116,7 +116,10 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
         if(element == null) {
             throw new NullPointerException("removing null element");
         }
-        path.remove(element);
+        int index = path.indexOf(element);
+        if(index >= 0) {
+            removeElement(index);
+        }
     }
 
     public void removeElements(T[] elements)
