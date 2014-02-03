@@ -237,7 +237,8 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
 
     public U which(Object item)
     {
-        return combine(whichElement(item), item);
+        T element = whichElement(item);
+        return (element == null) ? null : combine(element, item);
     }
 
     public String toString()
