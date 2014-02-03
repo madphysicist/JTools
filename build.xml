@@ -88,8 +88,7 @@
         <mkdir dir="${jar.dir}" />
         <jar destfile="${jar.file}"
              basedir="${lib.classes.dir}"
-             excludes="">
-        </jar>
+             excludes="" />
     </target>
 
     <target name="clean-jar"
@@ -123,9 +122,33 @@
         </javadoc>
     </target>
 
-    <target name="clean-doc"
+    <target name="clean-doc" depends="clean-doc-jar"
             description="removes javadoc documentation of the the library classes">
         <delete dir="${lib.doc.dir}" />
+    </target>
+
+    <target name="doc-jar" depends="doc"
+            description="packages the library javadoc into a jar file">
+        <jar destfile="${lib.doc.jar}"
+             basedir="${lib.doc.dir}"
+             excludes="" />
+    </target>
+
+    <target name="clean-doc-jar"
+            description="removes the packaged library javadoc">
+        <delete file="${lib.doc.jar}" />
+    </target>
+
+    <target name="src-jar"
+            description="packages the library source code into a jar file">
+        <jar destfile="${lib.src.jar}"
+             basedir="${lib.src.dir}"
+             excludes="" />
+    </target>
+
+    <target name="clean-src-jar"
+            description="removes the packaged library source code">
+        <delete file="${lib.doc.jar}" />
     </target>
 
     <!-- Demo Run Targets -->
@@ -267,11 +290,11 @@
 
     <!-- Meta-Targets -->
 
-    <target name="rebuild" depends="clean,jar"
-            description="rebuilds the jar from scratch after a clean" />
+    <target name="rebuild" depends="clean-compile,clean-jar,jar"
+            description="rebuilds the library jar from scratch after a clean" />
 
-    <target name="all" depends="clean,jar,doc"
-            description="cleans the project and creates all build, distribution and documentation artifacts" />
+    <target name="all" depends="clean,jar,doc-jar,src-jar"
+            description="cleans the project and creates all build, distribution, source, and documentation artifacts" />
 
     <target name="test" depends="testng"
             description="creates reports from the unit tests (static and coverage are coming)" />
