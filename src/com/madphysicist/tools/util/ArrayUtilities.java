@@ -37,15 +37,15 @@ import java.util.Arrays;
  * This class can not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 20 Sept 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 20 Sept 2012
+ * @since 1.0.0
  */
 public class ArrayUtilities
 {
     /**
      * Private constructor to prevent the class from being instantiated.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private ArrayUtilities() {}
     
@@ -62,7 +62,7 @@ public class ArrayUtilities
      * the end.
      * @return the sorted array, or {@code null} if {@code array} is {@code
      * null}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      * @see java.util.Arrays#sort(Object[]) Arrays.sort()
      */
     public static <T> T[] sort(T[] array, boolean nullsFirst)

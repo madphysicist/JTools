@@ -40,8 +40,8 @@ import java.io.IOException;
  *
  * @see Runtime#addShutdownHook(java.lang.Thread)
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 9 Nov 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 9 Nov 2012
+ * @since 1.0.0
  */
 public class Closer extends Thread
 {
@@ -50,7 +50,7 @@ public class Closer extends Thread
      * nothing if the closeable has been closed before the application
      * terminates.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private Closeable closeable;
 
@@ -61,7 +61,7 @@ public class Closer extends Thread
      *
      * @param closeable the object to be registered with the {@code Runtime} to
      * be closed when the application terminates normally.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public Closer(Closeable closeable)
     {
@@ -75,7 +75,7 @@ public class Closer extends Thread
      *
      * @see #run()
      * @see Runtime#addShutdownHook(java.lang.Thread)
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void register()
     {
@@ -85,7 +85,7 @@ public class Closer extends Thread
     /**
      * Executes the {@code close()} method of the associated {@code Closeable}
      * and traps any exceptions that are thrown.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Override public void run()
     {
