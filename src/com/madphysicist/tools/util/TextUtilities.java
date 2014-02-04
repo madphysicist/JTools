@@ -60,8 +60,9 @@ import java.util.TreeMap;
  * This class can not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 4 Mar 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 04 Mar 2012 - J. Fox-Rabinovitz: Created
+ * @version 1.0.1, 04 Feb 2014 - J. Fox-Rabinovitz: Added countOccurences()
+ * @since 1.0.0
  */
 public class TextUtilities
 {
@@ -812,6 +813,27 @@ public class TextUtilities
             bytes[i] = (byte)(Integer.parseInt("" + d1 + d2, 16) & 0xFF);
         }
         return bytes;
+    }
+
+    /**
+     * Counts the number of times the specified character appears in the
+     * specified string.
+     *
+     * @param string the string to search in.
+     * @param character the character to search for.
+     * @return the number of times that the specified character appears in the
+     * string. The number will be between zero and the length of the string.
+     * @since 1.0.1
+     */
+    public static int countOccurrences(String string, char character)
+    {
+        int count = 0;
+        for(int i = 0; i < string.length(); i++) {
+            if(string.charAt(i) == character) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
