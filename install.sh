@@ -84,7 +84,8 @@ then
 elif [ ${#} -ne 0 ]
 then
     echo "Usage: ${0} [-u]"
-    echo "    -u ininstalls JTools"
+    echo "    no argument installs JTools"
+    echo "    -u uninstalls JTools"
     exit 1
 else
     inst "${ISRC}" "-sources"
