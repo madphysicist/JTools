@@ -63,9 +63,11 @@ public class ArrayUtilities
      * as the input, containing the specified subset of elements.
      * @throws IndexOutOfBoundsException if {@code length} does not meet the
      * restrictions imposed by the length of {@code array}.
+     * @throws ArrayStoreException if {@code array} is not an array.
      * @since 1.0.1
      */
     public static Object truncate(Object array, int length)
+            throws ArrayStoreException, IndexOutOfBoundsException
     {
         return truncate(array, 0, length);
     }
@@ -84,12 +86,18 @@ public class ArrayUtilities
      * as the input, containing the specified subset of elements.
      * @throws IndexOutOfBoundsException if {@code start} or {@code length} do
      * not meet the restrictions imposed by the length of {@code array}.
+     * @throws ArrayStoreException if {@code array} is not an array.
      * @since 1.0.1
      */
     @SuppressWarnings("SuspiciousSystemArraycopy")
     public static Object truncate(Object array, int start, int length)
+            throws ArrayStoreException, IndexOutOfBoundsException
     {
-        Object copy = Array.newInstance(array.getClass().getComponentType(), length);
+        Class<?> componentType = array.getClass().getComponentType();
+        if(componentType == null) {
+            throw new ArrayStoreException();
+        }
+        Object copy = Array.newInstance(componentType, length);
         System.arraycopy(array, start, copy, 0, length);
         return copy;
     }
