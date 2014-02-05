@@ -28,6 +28,7 @@
 
 package com.madphysicist.tools.util;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
@@ -37,7 +38,8 @@ import java.util.Arrays;
  * This class can not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 20 Sept 2012
+ * @version 1.0.0, 20 Sep 2012 - J. Fox-Rabinovitz: Created
+ * @version 1.0.1, 05 Feb 2014 - J. Fox-Rabinovitz: Added truncate() methods
  * @since 1.0.0
  */
 public class ArrayUtilities
@@ -48,7 +50,52 @@ public class ArrayUtilities
      * @since 1.0.0
      */
     private ArrayUtilities() {}
-    
+
+    /**
+     * Returns a subset of an array, starting from the beginning. The input
+     * array is not actually modified in any way. The return value is always a
+     * copy, even if the requested subset is the entire array.
+     *
+     * @param <T> The type of the input array.
+     * @param array the array to truncate.
+     * @param length the length of the subset. The length may not be larger than
+     * the length of the input array.
+     * @return a new array of the specified length with the same component type
+     * as the input, containing the specified subset of elements.
+     * @throws IndexOutOfBoundsException if {@code length} does not meet the
+     * restrictions imposed by the length of {@code array}.
+     * @since 1.0.1
+     */
+    public <T> T[] truncate(T[] array, int length)
+    {
+        return truncate(array, 0, length);
+    }
+
+    /**
+     * Returns a subset of an array. The input array is not actually modified
+     * in any way. The return value is always a copy, even if the requested
+     * subset is the entire array.
+     *
+     * @param <T> The type of the input array.
+     * @param array the array to truncate.
+     * @param start the index to copy from within {@code array}. This number
+     * must be between {@code 0} and {@code array.length - 1}.
+     * @param length the length of the subset. {@code start + length} may not be
+     * larger than the length of the input array.
+     * @return a new array of the specified length with the same component type
+     * as the input, containing the specified subset of elements.
+     * @throws IndexOutOfBoundsException if {@code start} or {@code length} do
+     * not meet the restrictions imposed by the length of {@code array}.
+     * @since 1.0.1
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T[] truncate(T[] array, int start, int length)
+    {
+        T[] copy = (T[])Array.newInstance(array.getClass().getComponentType(), length);
+        System.arraycopy(array, start, copy, 0, length);
+        return copy;
+    }
+
     /**
      * Sorts an array with {@code null} elements according to the natural order
      * of the elements. {@code null} elements can be placed at the beginning or
