@@ -66,7 +66,7 @@ public class ArrayUtilities
      * restrictions imposed by the length of {@code array}.
      * @since 1.0.1
      */
-    public <T> T[] truncate(T[] array, int length)
+    public static <T> T[] truncate(T[] array, int length)
     {
         return truncate(array, 0, length);
     }
@@ -89,7 +89,7 @@ public class ArrayUtilities
      * @since 1.0.1
      */
     @SuppressWarnings("unchecked")
-    public <T> T[] truncate(T[] array, int start, int length)
+    public static <T> T[] truncate(T[] array, int start, int length)
     {
         T[] copy = (T[])Array.newInstance(array.getClass().getComponentType(), length);
         System.arraycopy(array, start, copy, 0, length);
