@@ -56,7 +56,6 @@ public class ArrayUtilities
      * array is not actually modified in any way. The return value is always a
      * copy, even if the requested subset is the entire array.
      *
-     * @param <T> The type of the input array.
      * @param array the array to truncate.
      * @param length the length of the subset. The length may not be larger than
      * the length of the input array.
@@ -66,7 +65,7 @@ public class ArrayUtilities
      * restrictions imposed by the length of {@code array}.
      * @since 1.0.1
      */
-    public static <T> T[] truncate(T[] array, int length)
+    public static Object truncate(Object array, int length)
     {
         return truncate(array, 0, length);
     }
@@ -76,7 +75,6 @@ public class ArrayUtilities
      * in any way. The return value is always a copy, even if the requested
      * subset is the entire array.
      *
-     * @param <T> The type of the input array.
      * @param array the array to truncate.
      * @param start the index to copy from within {@code array}. This number
      * must be between {@code 0} and {@code array.length - 1}.
@@ -88,10 +86,10 @@ public class ArrayUtilities
      * not meet the restrictions imposed by the length of {@code array}.
      * @since 1.0.1
      */
-    @SuppressWarnings("unchecked")
-    public static <T> T[] truncate(T[] array, int start, int length)
+    @SuppressWarnings("SuspiciousSystemArraycopy")
+    public static Object truncate(Object array, int start, int length)
     {
-        T[] copy = (T[])Array.newInstance(array.getClass().getComponentType(), length);
+        Object copy = Array.newInstance(array.getClass().getComponentType(), length);
         System.arraycopy(array, start, copy, 0, length);
         return copy;
     }
