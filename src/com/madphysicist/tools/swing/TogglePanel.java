@@ -39,6 +39,7 @@ import java.awt.event.ItemListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -55,7 +56,8 @@ import javax.swing.border.TitledBorder;
  * convenience methods with the word "Content" in their name.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 13 June 2013
+ * @version 1.0.0, 13 Jun 2013 - J. Fox-Rabinovitz - Created
+ * @version 1.0.1, 21 May 2014 - J. Fox-Rabinovitz - Made panel Container, added setter, added is/setOn methods
  * @since 1.0.0
  */
 public class TogglePanel extends JPanel
@@ -69,13 +71,13 @@ public class TogglePanel extends JPanel
      * serialized versions of of the class incompatible with previous releases.
      * @since 1.0.0
      */
-    private static final long serialVersionUID = 1000L;
+    private static final long serialVersionUID = 10001L;
 
     /**
      * @serial
      * @since 1.0.0.0
      */
-    private JPanel panel;
+    private Container panel;
 
     /**
      * @serial
@@ -83,6 +85,9 @@ public class TogglePanel extends JPanel
      */
     private JCheckBox checkBox;
 
+   /**
+    * @since 1.0.0.0
+    */
     public TogglePanel()
     {
         this(null);
@@ -107,6 +112,23 @@ public class TogglePanel extends JPanel
 
         if(layout != null)
             panel.setLayout(layout);
+    }
+
+    public boolean isOn()
+    {
+    	return checkBox.isSelected();
+    }
+
+    public void setOn(boolean on)
+    {
+    	checkBox.setSelected(on);
+    }
+
+    public Container setContentPane(Container contentPane)
+    {
+    	Container oldContentPane = this.panel;
+    	this.panel = contentPane;
+    	return oldContentPane;
     }
 
     public Container getContentPane()
@@ -176,22 +198,18 @@ public class TogglePanel extends JPanel
 
     public Border getContentBorder()
     {
-        return panel.getBorder();
+        return (panel instanceof JComponent) ? ((JComponent)panel).getBorder() : null;
     }
 
     public void setContentBorder(Border border)
     {
-        panel.setBorder(border);
+        if(panel instanceof JComponent)
+        	((JComponent)panel).setBorder(border);
     }
 
     public Insets getContentInsets()
     {
         return panel.getInsets();
-    }
-
-    public Insets getContentInsets(Insets insets)
-    {
-        return panel.getInsets(insets);
     }
 
     @Override public void setEnabled(boolean b)

@@ -54,7 +54,7 @@ import com.madphysicist.tools.util.TextUtilities;
  * {@literal {@literal}} tag, the {@code Reason} text is interpreted as HTML.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 4 Mar 2012
+ * @version 1.0.0.0, 4 Mar 2012 - J. Fox-Rabinovitz - Created
  * @since 1.0.0.0
  */
 public class LogTaglet implements Taglet
