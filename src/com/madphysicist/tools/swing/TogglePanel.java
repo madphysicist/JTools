@@ -85,14 +85,17 @@ public class TogglePanel extends JPanel
      */
     private JCheckBox checkBox;
 
-   /**
-    * @since 1.0.0.0
-    */
+    /**
+     * @since 1.0.0.0
+     */
     public TogglePanel()
     {
         this(null);
     }
 
+    /**
+     * @since 1.0.0.0
+     */
     public TogglePanel(LayoutManager layout)
     {
         this.panel = new JPanel();
@@ -114,6 +117,9 @@ public class TogglePanel extends JPanel
             panel.setLayout(layout);
     }
 
+    /**
+     * @since 1.0.0.0
+     */
     public boolean isOn()
     {
     	return checkBox.isSelected();
@@ -127,7 +133,9 @@ public class TogglePanel extends JPanel
     public Container setContentPane(Container contentPane)
     {
     	Container oldContentPane = this.panel;
+    	remove(oldContentPane);
     	this.panel = contentPane;
+    	add(panel, BorderLayout.CENTER, 1);
     	return oldContentPane;
     }
 
