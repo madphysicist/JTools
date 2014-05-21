@@ -57,7 +57,8 @@ import javax.swing.border.TitledBorder;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 13 Jun 2013 - J. Fox-Rabinovitz - Created
- * @version 1.0.1, 21 May 2014 - J. Fox-Rabinovitz - Made panel Container, added setter, added is/setOn methods
+ * @version 1.1.0, 20 May 2014 - J. Fox-Rabinovitz - Made panel Container, added setter, added is/setOn methods
+ * @version 1.2.0, 21 May 2014 - J. Fox-Rabinovitz - Added new constructors
  * @since 1.0.0
  */
 public class TogglePanel extends JPanel
@@ -90,7 +91,7 @@ public class TogglePanel extends JPanel
      */
     public TogglePanel()
     {
-        this(null);
+        this(null, null);
     }
 
     /**
@@ -98,7 +99,24 @@ public class TogglePanel extends JPanel
      */
     public TogglePanel(LayoutManager layout)
     {
-        this.panel = new JPanel();
+    	this(null, layout);
+    }
+
+    /**
+     * @since 1.2.0
+     */
+    public TogglePanel(Container contentPane)
+    {
+    	this(contentPane, null);
+    }
+
+    /**
+     * @since 1.2.0
+     */
+    private TogglePanel(Container contentPane, LayoutManager layout)
+    {
+        this.panel = (contentPane == null) ? new JPanel() : contentPane;
+
         this.checkBox = new JCheckBox();
 
         this.checkBox.setSelected(true);
@@ -118,7 +136,7 @@ public class TogglePanel extends JPanel
     }
 
     /**
-     * @since 1.0.1
+     * @since 1.1.0
      */
     public boolean isOn()
     {
@@ -126,7 +144,7 @@ public class TogglePanel extends JPanel
     }
 
     /**
-     * @since 1.0.1
+     * @since 1.1.0
      */
     public void setOn(boolean on)
     {
@@ -134,7 +152,7 @@ public class TogglePanel extends JPanel
     }
 
     /**
-     * @since 1.0.1
+     * @since 1.1.0
      */
     public Container setContentPane(Container contentPane)
     {
