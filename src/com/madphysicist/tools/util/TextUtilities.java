@@ -164,7 +164,6 @@ public class TextUtilities
      * @see #stringToMap
      * @since 1.0.0.0
      */
-    @SuppressWarnings("AssignmentToMethodParameter")
     public static String mapToString(String name, Map<String, String> map,
                                      String prefix, String suffix,
                                      String keyValueSeparator,
@@ -249,7 +248,6 @@ public class TextUtilities
      * @see #mapToString
      * @since 1.0.0.0
      */
-    @SuppressWarnings({"AssignmentToMethodParameter", "NestedAssignment"})
     public static String stringToMap(String string, Map<String, String> map,
                                      String prefix, String suffix,
                                      String keyValueSeparator,
@@ -332,7 +330,6 @@ public class TextUtilities
      * @see #mapToString
      * @since 1.0.0.0
      */
-    @SuppressWarnings("AssignmentToMethodParameter")
     public static String propertiesToString(String name, String[] properties,
                                             String prefix, String suffix,
                                             String keyValueSeparator,
@@ -416,8 +413,6 @@ public class TextUtilities
      * @return the string with all escape sequences eliminated.
      * @since 1.0.0.0
      */
-    @SuppressWarnings({"AssignmentToMethodParameter",
-                       "AssignmentToForLoopParameter"})
     public static String unescapeString(String string,
                                         String escapeChars,
                                         char escapeSymbol)
@@ -493,7 +488,6 @@ public class TextUtilities
      * odd indices.
      * @since 1.0.0.0
      */
-    @SuppressWarnings("ValueOfIncrementOrDecrementUsed")
     public static String[] mapToProperties(Map<String, String> map)
     {
         if(map == null)
@@ -557,7 +551,6 @@ public class TextUtilities
      * @throws NullPointerException if the template or the key are {@code null}.
      * @since 1.0.0.0
      */
-    @SuppressWarnings("AssignmentToMethodParameter")
     public static int nextIndexOf(String template, String key, int start, String escapeChars, char escapeSymbol)
     {
         if(template == null || key == null)
@@ -602,7 +595,6 @@ public class TextUtilities
      * @throws NullPointerException if the template is {@code null}.
      * @since 1.0.0.0
      */
-    @SuppressWarnings("AssignmentToMethodParameter")
     public static int nextIndexOf(String template, char key, int start, char escapeSymbol, boolean symbolEscaped)
     {
         if(template == null)

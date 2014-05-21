@@ -35,7 +35,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.PopupMenu;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -241,7 +240,6 @@ public class ExceptionPanel extends JPanel
                 GridBagConstants.SOUTHEAST, 0, 0));
     }
 
-    @SuppressWarnings("ConvertToTryWithResources")
     private String stackTraceToString()
     {
         StringWriter sw = new StringWriter();

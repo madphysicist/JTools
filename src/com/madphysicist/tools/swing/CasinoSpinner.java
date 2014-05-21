@@ -1233,7 +1233,6 @@ public class CasinoSpinner extends JPanel
          * @return a {@code String} representation of this object.
          * @since 1.0.0
          */
-        @SuppressWarnings("StringBufferWithoutInitialCapacity")
         @Override public String toString()
         {
             StringBuilder sb = new StringBuilder();
@@ -1346,7 +1345,6 @@ public class CasinoSpinner extends JPanel
          * @return a {@code String} representation of this object.
          * @since 1.0.0
          */
-        @SuppressWarnings("StringBufferWithoutInitialCapacity")
         @Override public String toString()
         {
             StringBuilder sb = new StringBuilder();

@@ -481,7 +481,6 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * be ignored unless the spin direction is set to {@link #SPIN_BOTH}.
      * @since 1.0.0.0
      */
-    @SuppressWarnings("AssignmentToMethodParameter")
     public void spin(int increment)
     {
         synchronized(this.spinLock) {
@@ -587,7 +586,6 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * {@code null}.
      * @since 1.0.0.0
      */
-    @SuppressWarnings("ReturnOfCollectionOrArrayField")
     public List<String> getData()
     {
         return this.data;
@@ -1301,7 +1299,6 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @return a {@code String} representation of this object.
      * @since 1.0.0.0
      */
-    @SuppressWarnings("StringBufferWithoutInitialCapacity")
     @Override public String toString()
     {
         StringBuilder sb = new StringBuilder();
@@ -1346,7 +1343,6 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @return a position in [{@code 0}, {@code data.size() - 1}).
      * @since 1.0.0.0
      */
-    @SuppressWarnings("AssignmentToMethodParameter")
     protected double normalize(double position)
     {
         position %= this.dataSize;
@@ -1364,7 +1360,6 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @return an index in [{@code 0}, {@code data.size() - 1}).
      * @since 1.0.0.0
      */
-    @SuppressWarnings("AssignmentToMethodParameter")
     protected int normalize(int index)
     {
         index %= this.data.size();
@@ -1385,7 +1380,6 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * #spinLock} could not be acquired.
      * @since 1.0.0.0
      */
-    @SuppressWarnings("NotifyWhileNotSynced")
     private void fireSyncedPropertyChange(String propertyName, Object oldValue, Object newValue)
     {
         firePropertyChange(propertyName, oldValue, newValue);
@@ -1405,7 +1399,6 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * not be acquired.
      * @since 1.0.0.0
      */
-    @SuppressWarnings("WaitWhileNotSynced")
     private void checkSpin(boolean block)
     {
         while(this.spinning && block) {
@@ -1620,9 +1613,9 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
                                         * CasinoSpinnerModel.this.spinRate
                                         / CasinoSpinnerModel.this.acceleration;
             // Position where max velocity is reached and acceleration cuts off
-            @SuppressWarnings("LocalVariableHidesMemberVariable") double xA = x0 + dx;
+            double xA = x0 + dx;
             // Position where negative acceleration cuts back in
-            @SuppressWarnings("LocalVariableHidesMemberVariable") double xB = xF - dx;
+            double xB = xF - dx;
 
             /*
              * The next section does the following:
@@ -1715,7 +1708,6 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * @return a {@code String} representation of this object.
          * @since 1.0.0.0
          */
-        @SuppressWarnings("StringBufferWithoutInitialCapacity")
         @Override public String toString()
         {
             StringBuilder sb = new StringBuilder();

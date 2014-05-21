@@ -30,7 +30,6 @@ package com.madphysicist.tools.test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import java.util.TreeMap;
@@ -186,7 +185,7 @@ public class ParametrizedTestsTest
         {
             return new TreeMap<>(TextUtilities.propertiesToMap(properties));
         }
-
+/*
         public static HashMap<String, String> getHashMap()
         {
             return new HashMap<>(TextUtilities.propertiesToMap(properties));
@@ -196,7 +195,7 @@ public class ParametrizedTestsTest
         {
             return getMethod("getTreeMap");
         }
-
+*/
         public static Method getHashMapMethod()
         {
             return getMethod("getHashMap");

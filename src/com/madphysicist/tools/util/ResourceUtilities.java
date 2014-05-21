@@ -118,7 +118,6 @@ public class ResourceUtilities
      * not be copied into it.
      * @since 1.0.1
      */
-    @SuppressWarnings("NestedAssignment")
     public static void copyResourceToFile(String resourceName, File file) throws IOException
     {
         try (InputStream input = ClassLoader.getSystemResourceAsStream(resourceName)) {

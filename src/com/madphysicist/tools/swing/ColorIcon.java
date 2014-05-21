@@ -31,6 +31,8 @@ import com.madphysicist.tools.util.ColorUtilities;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.io.Serializable;
+
 import javax.swing.Icon;
 
 /**
@@ -42,7 +44,7 @@ import javax.swing.Icon;
  * @version 1.0.1, 16 Nov 2013 - J. Fox-Rabinovitz - Made border configurable.
  * @since 1.0.0
  */
-public class ColorIcon implements Icon
+public class ColorIcon implements Icon, Serializable
 {
     /**
      * The version ID for serialization.

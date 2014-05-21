@@ -89,7 +89,6 @@ public class ArrayUtilities
      * @throws ArrayStoreException if {@code array} is not an array.
      * @since 1.0.1
      */
-    @SuppressWarnings("SuspiciousSystemArraycopy")
     public static Object truncate(Object array, int start, int length)
             throws ArrayStoreException, IndexOutOfBoundsException
     {

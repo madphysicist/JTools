@@ -31,7 +31,6 @@ package com.madphysicist.tools.swing;
 import com.madphysicist.tools.util.Credentials;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dialog.ModalityType;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -1046,7 +1045,6 @@ public class LoginPanel extends JPanel
             this.type = type;
 
             ActionListener addActionListener = new ActionListener() {
-                @SuppressWarnings({"UseSpecificCatch", "CallToThreadDumpStack", "UseOfSystemOutOrSystemErr"})
                 @Override public void actionPerformed(ActionEvent e) {
                     String entry = text.getText();
                     if(entry != null && !entry.isEmpty()) {
@@ -1065,7 +1063,6 @@ public class LoginPanel extends JPanel
                 }
             };
             ActionListener removeActionListener = new ActionListener() {
-                @SuppressWarnings({"UseSpecificCatch", "CallToThreadDumpStack", "UseOfSystemOutOrSystemErr"})
                 @Override public void actionPerformed(ActionEvent e) {
                     int[] indices = list.getSelectedIndices();
                     // list is in ascending order

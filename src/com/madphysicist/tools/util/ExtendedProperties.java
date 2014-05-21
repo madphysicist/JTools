@@ -459,7 +459,6 @@ public class ExtendedProperties extends Properties
      * @serial include
      * @since 1.0.0
      */
-    @SuppressWarnings("PublicInnerClass")
     public static class Property implements Serializable, Map.Entry<String, String>
     {
         /**

@@ -50,7 +50,9 @@ import java.util.ListIterator;
  */
 public abstract class PathManager<T, U> implements Serializable, Iterable<T>
 {
-    /**
+	private static final long serialVersionUID = 10001L;
+
+	/**
      * The list of path elements. The order of the elements is significant for
      * how items will be found.
      *
@@ -69,7 +71,6 @@ public abstract class PathManager<T, U> implements Serializable, Iterable<T>
         this(Arrays.asList(initialPath));
     }
 
-    @SuppressWarnings("OverridableMethodCallInConstructor")
     public PathManager(Collection<T> initialPath)
     {
         this.path = new ArrayList<>();
