@@ -75,18 +75,18 @@ public class TogglePanel extends JPanel
 
     /**
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private Container panel;
 
     /**
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private JCheckBox checkBox;
 
     /**
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public TogglePanel()
     {
@@ -94,7 +94,7 @@ public class TogglePanel extends JPanel
     }
 
     /**
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public TogglePanel(LayoutManager layout)
     {
@@ -118,18 +118,24 @@ public class TogglePanel extends JPanel
     }
 
     /**
-     * @since 1.0.0.0
+     * @since 1.0.1
      */
     public boolean isOn()
     {
     	return checkBox.isSelected();
     }
 
+    /**
+     * @since 1.0.1
+     */
     public void setOn(boolean on)
     {
     	checkBox.setSelected(on);
     }
 
+    /**
+     * @since 1.0.1
+     */
     public Container setContentPane(Container contentPane)
     {
     	Container oldContentPane = this.panel;
@@ -139,93 +145,147 @@ public class TogglePanel extends JPanel
     	return oldContentPane;
     }
 
+    /**
+     * @since 1.0.0
+     */
     public Container getContentPane()
     {
         return panel;
     }
     
+    /**
+     * @since 1.0.0
+     */
     public JCheckBox getCheckBox()
     {
         return checkBox;
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void addContent(Component comp)
     {
         panel.add(comp);
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void addContent(Component comp, Object constraints)
     {
         panel.add(comp, constraints);
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void addContent(Component comp, int index)
     {
         panel.add(comp, index);
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void addContent(Component comp, Object constraints, int index)
     {
         panel.add(comp, constraints, index);
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void addContent(String name, Component comp)
     {
         panel.add(name, comp);
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void removeContent(Component comp)
     {
         panel.remove(comp);
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void removeContent(int index)
     {
         panel.remove(index);
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void removeAllContent()
     {
         panel.removeAll();
     }
 
+    /**
+     * @since 1.0.0
+     */
     public LayoutManager getContentLayout()
     {
         return panel.getLayout();
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void setContentLayout(LayoutManager layout)
     {
         panel.setLayout(layout);
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void doContentLayout()
     {
         panel.doLayout();
     }
 
+    /**
+     * @since 1.0.0
+     */
     public Border getContentBorder()
     {
         return (panel instanceof JComponent) ? ((JComponent)panel).getBorder() : null;
     }
 
+    /**
+     * @since 1.0.0
+     */
     public void setContentBorder(Border border)
     {
         if(panel instanceof JComponent)
         	((JComponent)panel).setBorder(border);
     }
 
+    /**
+     * @since 1.0.0
+     */
     public Insets getContentInsets()
     {
         return panel.getInsets();
     }
 
+    /**
+     * @since 1.0.0
+     */
     @Override public void setEnabled(boolean b)
     {
         super.setEnabled(b);
         checkBox.setEnabled(b);
     }
 
+    /**
+     * @since 1.0.0
+     */
     public static void main(String[] args)
     {
         TogglePanel panel = new TogglePanel();
