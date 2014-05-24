@@ -36,12 +36,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -54,22 +51,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
-
 
 /**
  * Provides utilities for performing common tasks on members of the {@code
  * javax.swing} packages.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 25 Feb 2013
- * @version 1.0.1, 13 Jun 2013: Added {@code setEnabled()} method.
- * @version 1.0.2, 13 Jun 2013: Added {@code setGlobalAccelerator()} method.
- * @version 1.0.3,  9 Dec 2013: Added {@code createCutCopyPastePopup()} method.
- * @since 1.0.0
+ * @version 1.0.0, 25 Feb 2013 - J. Fox-Rabinovitz: Initial coding.
+ * @version 1.1.0, 13 Jun 2013 - J. Fox-Rabinovitz: Added {@code setEnabled()} method.
+ * @version 1.1.1, 13 Jun 2013 - J. Fox-Rabinovitz: Added {@code setGlobalAccelerator()} method.
+ * @version 1.1.2,  9 Dec 2013 - J. Fox-Rabinovitz: Added {@code createCutCopyPastePopup()} method.
+ * @version 2.0.0, 24 May 2014 - J. Fox-Rabinovitz: Removed {@code lookAndFeelSelector()} into {@code LAFUtilities}
+ * @since 1.0
  */
 public class SwingUtilities
 {
@@ -86,7 +81,7 @@ public class SwingUtilities
      *
      * @param comp the component to enable or disable.
      * @param b the enabled state to set for {@code comp} and possible children.
-     * @since 1.0.1
+     * @since 1.1.0
      */
     public static void setEnabled(Component comp, boolean b)
     {
@@ -128,7 +123,7 @@ public class SwingUtilities
      * @param accelerator the keystroke that activates the accelerator.
      * @param action the action that is performed when the keystroke activates
      * it.
-     * @since 1.0.2
+     * @since 1.1.1
      */
     public static void setGlobalAccelerator(JComponent component, KeyStroke accelerator, Action action)
     {
@@ -151,7 +146,7 @@ public class SwingUtilities
      * removed. The container itself does not lose the mappings it has for the
      * accelerator.
      * @param accelerator the accelerator to remove.
-     * @since 1.0.2
+     * @since 1.1.1
      */
     private static void removeAcceleratorFromChildren(Container container, KeyStroke accelerator)
     {
@@ -173,7 +168,7 @@ public class SwingUtilities
      *
      * @param component the component to remove the mapping from.
      * @param accelerator the keystroke to remove.
-     * @since 1.0.2
+     * @since 1.1.1
      */
     private static void removeAcceleratorFromComponent(JComponent component, KeyStroke accelerator)
     {
@@ -187,7 +182,7 @@ public class SwingUtilities
      *
      * @param map the map to remove the keystroke from.
      * @param accelerator the keystroke to remove.
-     * @since 1.0.2
+     * @since 1.1.1
      */
     private static void removeAcceleratorFromMap(InputMap map, KeyStroke accelerator)
     {
@@ -229,101 +224,6 @@ public class SwingUtilities
     }
 
     /**
-     * Creates a {@code JComboBox} that allows the user to select the
-     * look-and-feel for the specified component. The entries in the combo box
-     * are the names of registered looks and feels. Whenever the selection
-     * changes, the specified component gets its look-and-feel updated. If the
-     * component has been added to a window, the window is repacked.
-     *
-     * @param base the component to modify in response to changes in the combo
-     * box.
-     * @return a combo box listing all of the currently registered
-     * look-and-feels.
-     * @since 1.0.0
-     */
-    public static JComboBox<?> lookAndFeelSelector(final Component base)
-    {
-        UIManager.LookAndFeelInfo[] infoList = UIManager.getInstalledLookAndFeels();
-        LAFNode[] items = new LAFNode[infoList.length];
-        for(int i = 0; i < items.length; i++) {
-            items[i] = new LAFNode(infoList[i]);
-        }
-
-        JComboBox<LAFNode> comboBox = new JComboBox<>(items);
-        comboBox.addItemListener(new ItemListener() {
-            @Override public void itemStateChanged(ItemEvent e) {
-                try {
-                    UIManager.setLookAndFeel(((LAFNode)e.getItem()).info.getClassName());
-                    javax.swing.SwingUtilities.updateComponentTreeUI(base);
-                    Window window = windowForComponent(base);
-                    if(window != null) window.pack();
-                } catch(ReflectiveOperationException | UnsupportedLookAndFeelException ex) {
-                    // Silent ignore: do nothing in case of an error
-                }
-            }
-        });
-
-        return comboBox;
-    }
-
-    /**
-     * Wraps a {@code UIManager.LookAndFeelInfo} object to provide the look and
-     * feel name as its string representation. This allows the look and feel to
-     * be displayed in a combo box with the default renderer.
-     *
-     * @see #lookAndFeelSelector(Component)
-     * @see javax.swing.UIManager.LookAndFeelInfo
-     * @author Joseph Fox-Rabinovitz
-     * @version 1.0.0, 13 June 2013 - J. Fox-Rabinovitz - Created
-     * @since 1.0.0
-     */
-    private static class LAFNode implements Serializable
-    {
-        /**
-         * The version ID for serialization.
-         *
-         * @serial Increment the least significant three digits when
-         * compatibility is not compromised by a structural change (e.g. adding
-         * a new field with a sensible default value), and the upper digits when
-         * the change makes serialized versions of of the class incompatible
-         * with previous releases.
-         * @since 1.0.0
-         */
-        private static final long serialVersionUID = 1000L;
-
-        /**
-         * The {@code LookAndFeelInfo} object wrapped by this class.
-         *
-         * @since 1.0.0
-         */
-        public final UIManager.LookAndFeelInfo info;
-
-        /**
-         * Constructs a new node with the specified info object.
-         *
-         * @param info the object to wrap.
-         * @since 1.0.0
-         */
-        public LAFNode(UIManager.LookAndFeelInfo info)
-        {
-            this.info = info;
-        }
-
-        /**
-         * Returns the name of the wrapped {@code LookAndFeelInfo} object. This
-         * allows the object to be displayed as its name by the default combo
-         * box renderer.
-         *
-         * @return the name of the underlying look and feel info.
-         * @since 1.0.0
-         */
-        @Override public String toString()
-        {
-            return info.getName();
-        }
-    }
-
-    /**
      * Creates a menu for a text component with select, copy and optionally cut
      * and paste actions.
      *
@@ -331,7 +231,7 @@ public class SwingUtilities
      * @param includeModifying whether or not to include the modifying actions
      * (cut and paste) in the popup.
      * @return a popup menu that has actions for the component.
-     * @since 1.0.3
+     * @since 1.1.2
      */
     public static JPopupMenu createActionMenu(JTextComponent text, boolean includeModifying)
     {
@@ -357,7 +257,7 @@ public class SwingUtilities
      * @param name the new name to assign to the action.
      * @param action the action to change the name of.
      * @return the input action.
-     * @since 1.0.3
+     * @since 1.1.2
      */
     private static Action setActionName(String name, Action action)
     {
@@ -365,9 +265,16 @@ public class SwingUtilities
         return action;
     }
 
+    /**
+     * Runs a small demo of the hyperlink labels from this class and the look-and-feel selector from {@link
+     * LAFUtilities}.
+     *
+     * @param args command-line arguments, wich will be ignored.
+     * @since 1.0.0
+     */
     public static void main(String[] args)
     {
-        final JFrame frame = new JFrame("Demo of HyperlinkLabel & LAFSelector v1.0.1");
+        final JFrame frame = new JFrame("Demo of HyperlinkLabel & LAFSelector v1.1.0");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridBagLayout());
 
@@ -375,7 +282,7 @@ public class SwingUtilities
         JLabel yahooLink = createHyperlinkLabel("Yahoo!", "http://yahoo.com");
         JLabel wikipediaLink = createHyperlinkLabel("This will take you to English Wikipedia", "http://en.wikipedia.com");
 
-        JComboBox<?> lafSelector = lookAndFeelSelector(frame);        
+        JComboBox<?> lafSelector = LAFUtilities.lookAndFeelSelector(frame);        
 
         frame.add(googleLink, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0,
                   GridBagConstraints.WEST, GridBagConstraints.NONE,

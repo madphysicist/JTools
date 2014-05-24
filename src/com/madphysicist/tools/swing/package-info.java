@@ -34,7 +34,8 @@
  * additional functionality.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 10 Apr 2013
- * @since 1.0.0.0
+ * @version 1.0, 10 Apr 2013 - J. Fox-Rabinovitz: Initial Coding
+ * @version 1.1, 24 May 2014 - J. Fox-Rabinovitz: Added LAFUtilities
+ * @since 1.0
  */
 package com.madphysicist.tools.swing;

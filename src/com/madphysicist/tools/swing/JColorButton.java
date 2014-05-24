@@ -559,7 +559,7 @@ public class JColorButton extends JButton
      *
      * @param args the command line arguments of the program, which are ignored.
      * @see javax.swing.JSpinner JSpinner
-     * @see SwingUtilities#lookAndFeelSelector(java.awt.Component)
+     * @see LAFUtilities#lookAndFeelSelector(java.awt.Component)
      * SwingUtilities.lookAndFeelSelector()
      * @since 1.0.0
      */
@@ -605,7 +605,7 @@ public class JColorButton extends JButton
         frame.add(new JLabel("Look-and-Feel"), new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
                 new Insets(2, 8, 5, 5), 0, 0));
-        frame.add(SwingUtilities.lookAndFeelSelector(frame), new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+        frame.add(LAFUtilities.lookAndFeelSelector(frame), new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 5, 5, 8), 0, 0));
         frame.pack();

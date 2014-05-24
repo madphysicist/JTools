@@ -331,7 +331,7 @@ public class JFileField extends JPanel
         frame.add(toggleButton, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 new Insets(2, 8, 5, 5), 20, 0));
-        frame.add(SwingUtilities.lookAndFeelSelector(frame),
+        frame.add(LAFUtilities.lookAndFeelSelector(frame),
                 new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(2, 5, 5, 8), 0, 0));

@@ -1153,7 +1153,7 @@ public class LoginPanel extends JPanel
             frame.setLayout(new BorderLayout());
             frame.add(loginPanel, BorderLayout.CENTER);
             frame.add(sidePanel, BorderLayout.EAST);
-            frame.add(SwingUtilities.lookAndFeelSelector(frame), BorderLayout.SOUTH);
+            frame.add(LAFUtilities.lookAndFeelSelector(frame), BorderLayout.SOUTH);
 
             frame.pack();
             frame.setLocationRelativeTo(null);
