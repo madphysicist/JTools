@@ -32,6 +32,8 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -144,9 +146,8 @@ public class ResourceUtilities
     }
 
     /**
-     * Loads an icon from a resource. This method wraps an image returned by
-     * {@link #loadImage(java.lang.String) loadImage()} into an {@code Icon}.
-     * It also returns {@code null} instead of throwing an exception.
+     * Loads an icon from a resource. This method can load animated GIFs in addition
+     * to regular icons. It returns {@code null} instead of throwing an exception.
      *
      * @param resourceName the name of the resource to load.
      * @return the icon named by the specified resource, or {@code null} if the
@@ -155,13 +156,7 @@ public class ResourceUtilities
      */
     public static Icon loadIcon(String resourceName)
     {
-        Image image = null;
-        try {
-            image = loadImage(resourceName);
-        } catch(IOException ioe) {}
-        if(image != null) {
-            return new ImageIcon(image);
-        }
-        return null;
+        URL url = ClassLoader.getSystemResource(resourceName);
+        return (url == null) ? null : new ImageIcon(url);
     }
 }
