@@ -44,6 +44,7 @@ import java.util.List;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 22 May 2012 - J. Fox-Rabinovitz: Created
+ * @version 1.0.1, 24 May 2012 - J. Fox-Rabinovitz: Added overridable event firing methods
  * @since 1.0.0
  */
 public abstract class ProcessInputManager
@@ -226,6 +227,51 @@ public abstract class ProcessInputManager
     public abstract ProcessBuilder getProcessBuilder();
 
     /**
+     * Fires an event to registered standard input listeners.
+     *
+     * @param process the process sending the event. This may be {@code null} to indicate a startup error, or a {@code
+     * Process} reference returned by {@link #fork()}.
+     * @param line the line of input that this event represents.
+     * @since 1.0.1
+     */
+    protected void fireInputEvent(Process process, String line)
+    {
+        fireEvent(process, line, inputListeners);
+    }
+
+    /**
+     * Fires an event to registered error input listeners.
+     *
+     * @param process the process sending the event. This may be {@code null} to indicate a startup error, or a {@code
+     * Process} reference returned by {@link #fork()}.
+     * @param line the line of input that this event represents.
+     * @since 1.0.1
+     */
+    protected void fireErrorEvent(Process process, String line)
+    {
+        fireEvent(process, line, errorListeners);
+    }
+
+    /**
+     * Fires an event to listeners from a specific list. All listeners will receive the same event per each invocation
+     * of this method.
+     *
+     * @param process the process sending the event. This may be {@code null} to indicate a startup error, a {@code
+     * Process} reference returned by {@link #fork()}, or the internal reference used by {@link #execute()}.
+     * @param line the line of input that this event represents.
+     * @param listeners the list of listeners that the event will be sent to. Listeners should execute quickly to avoid
+     * deadlock around the input buffer.
+     * @since 1.0.1
+     */
+    private void fireEvent(Process process, String line, List<ProcessInputListener> listeners)
+    {
+        ProcessInputEvent event = new ProcessInputEvent(this, process, line);
+        for(ProcessInputListener listener : listeners) {
+            listener.input(event);
+        }
+    }
+
+    /**
      * Allows asynchronous input from a sub-process input stream. This class runs in the background as a daemon. It can
      * be terminated prematurely with the {link #close()} method.
      *
@@ -322,10 +368,7 @@ public abstract class ProcessInputManager
          */
         private void fireEvent(String line)
         {
-            ProcessInputEvent event = new ProcessInputEvent(ProcessInputManager.this, process, line);
-            for(ProcessInputListener listener : listeners) {
-                listener.input(event);
-            }
+            ProcessInputManager.this.fireEvent(process, line, listeners);
         }
 
         /**
