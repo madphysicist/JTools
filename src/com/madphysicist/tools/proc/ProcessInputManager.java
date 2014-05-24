@@ -44,7 +44,7 @@ import java.util.List;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 22 May 2012 - J. Fox-Rabinovitz: Created
- * @version 1.0.1, 24 May 2012 - J. Fox-Rabinovitz: Added overridable event firing methods
+ * @version 1.1.0, 24 May 2012 - J. Fox-Rabinovitz: Added overridable event firing methods
  * @since 1.0.0
  */
 public abstract class ProcessInputManager
@@ -232,7 +232,7 @@ public abstract class ProcessInputManager
      * @param process the process sending the event. This may be {@code null} to indicate a startup error, or a {@code
      * Process} reference returned by {@link #fork()}.
      * @param line the line of input that this event represents.
-     * @since 1.0.1
+     * @since 1.1.0
      */
     protected void fireInputEvent(Process process, String line)
     {
@@ -245,7 +245,7 @@ public abstract class ProcessInputManager
      * @param process the process sending the event. This may be {@code null} to indicate a startup error, or a {@code
      * Process} reference returned by {@link #fork()}.
      * @param line the line of input that this event represents.
-     * @since 1.0.1
+     * @since 1.1.0
      */
     protected void fireErrorEvent(Process process, String line)
     {
@@ -261,7 +261,7 @@ public abstract class ProcessInputManager
      * @param line the line of input that this event represents.
      * @param listeners the list of listeners that the event will be sent to. Listeners should execute quickly to avoid
      * deadlock around the input buffer.
-     * @since 1.0.1
+     * @since 1.1.0
      */
     private void fireEvent(Process process, String line, List<ProcessInputListener> listeners)
     {
