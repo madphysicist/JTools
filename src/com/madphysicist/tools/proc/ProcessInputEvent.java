@@ -36,8 +36,8 @@ import java.util.EventObject;
  *
  * @see ProcessInputListener
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 22 May 2012 - J. Fox-Rabinovitz: Created
- * @since 1.0.0
+ * @version 1.0.0, 22 May 2014 - J. Fox-Rabinovitz: Created
+ * @since 1.0
  */
 public class ProcessInputEvent extends EventObject
 {

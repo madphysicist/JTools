@@ -28,19 +28,13 @@
 
 /**
  * <p>
- * Contains collections of general purpose tools that are not project-specific.
- * Each of the sub-packages of this package are intended to contain a distinct
- * set of tools.
- * </p>
- * <p>
- * This package is an ongoing work. It is not intended to be tied to any single
- * project, but many of the other Mad Physicist projects will depend on this
- * one.
+ * Contains classes for registering listeners to system processes. This package
+ * is centered around the {@code ProcessInputManager} class.
  * </p>
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0,  4 Mar 2012 - J. Fox-Rabinovitz: Initial coding.
- * @version 1.1, 22 May 2014 - J. Fox-Rabinovitz: Added proc sub-package.
- * @since 1.0
+ * @version 1.0, 22 May 2014 - J. Fox-Rabinovitz: Initial coding.
+ * @version 2.0, 24 May 2014 - J. Fox-Rabinovitz: Added support for exceptions in listeners.
+ * @since 1.1
  */
-package com.madphysicist.tools;
+package com.madphysicist.tools.proc;

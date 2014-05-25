@@ -1,7 +1,7 @@
 /*
- * package-info.java
+ * InputExceptionHandler.java
  *
- * Mad Physicist JTools Project
+ * Mad Physicist JTools Project (General Purpose Utilities)
  *
  * The MIT License (MIT)
  *
@@ -26,21 +26,25 @@
  * THE SOFTWARE.
  */
 
+package com.madphysicist.tools.proc;
+
 /**
- * <p>
- * Contains collections of general purpose tools that are not project-specific.
- * Each of the sub-packages of this package are intended to contain a distinct
- * set of tools.
- * </p>
- * <p>
- * This package is an ongoing work. It is not intended to be tied to any single
- * project, but many of the other Mad Physicist projects will depend on this
- * one.
- * </p>
+ * A handler for {@code InputExceptions} that are thrown during the execution of {@code ProcessInputListener.input()}.
+ * A {@code ProcessInputManager} has an exception handler registered.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0,  4 Mar 2012 - J. Fox-Rabinovitz: Initial coding.
- * @version 1.1, 22 May 2014 - J. Fox-Rabinovitz: Added proc sub-package.
- * @since 1.0
+ * @version 1.0.0, 24 May 2014 - J. Fox-Rabinovitz: Initial coding
+ * @since 2.0
  */
-package com.madphysicist.tools;
+public interface InputExceptionHandler
+{
+    /**
+     * Responds to an exception that occurs during processing of an input exception in an {@code ProcessInputListener}.
+     * The exception contains a reference to the event which triggered it, which has references to both its originating
+     * {@code ProcessInputManager} and {@code Process}.
+     *
+     * @param exception the exception to handle.
+     * @since 1.0.0
+     */
+    public void exceptionOccurred(InputException exception);
+}

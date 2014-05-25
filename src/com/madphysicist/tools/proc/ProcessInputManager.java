@@ -43,9 +43,10 @@ import java.util.List;
  * {@link #fork()} method to execute processes rather than the {link #execute()} method. 
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 22 May 2012 - J. Fox-Rabinovitz: Created
- * @version 1.1.0, 24 May 2012 - J. Fox-Rabinovitz: Added overridable event firing methods
- * @since 1.0.0
+ * @version 1.0.0, 22 May 2014 - J. Fox-Rabinovitz: Initial coding.
+ * @version 1.1.0, 24 May 2014 - J. Fox-Rabinovitz: Added overrideable event firing methods.
+ * @version 2.0.0, 24 May 2014 - J. Fox-Rabinovitz: Added handling for exceptions from listeners
+ * @since 1.0
  */
 public abstract class ProcessInputManager
 {
@@ -64,7 +65,23 @@ public abstract class ProcessInputManager
     private List<ProcessInputListener> errorListeners;
 
     /**
-     * Constructs a process contoller.
+     * Handler for exceptions thrown by listeners during processing of standard input. The default handler ignores
+     * exceptions silently.
+     *
+     * @since 2.0.0
+     */
+    private InputExceptionHandler inputExceptionHandler;
+
+    /**
+     * Handler for exceptions thrown by listeners during processing of error input. The default handler ignores
+     * exceptions silently.
+     *
+     * @since 2.0.0
+     */
+    private InputExceptionHandler errorExceptionHandler;
+
+    /**
+     * Constructs a process input manager.
      *
      * @since 1.0.0
      */
@@ -72,6 +89,11 @@ public abstract class ProcessInputManager
     {
         this.inputListeners = new ArrayList<>();
         this.errorListeners = new ArrayList<>();
+
+        this.inputExceptionHandler = new InputExceptionHandler() {
+            @Override public void exceptionOccurred(InputException exception) {}
+        };
+        this.errorExceptionHandler = this.inputExceptionHandler;
     }
 
     /**
@@ -146,6 +168,38 @@ public abstract class ProcessInputManager
     {
         removeInputListener(listener);
         removeErrorListener(listener);
+    }
+
+    /**
+     * Sets the specified exception handler for the standard input stream. Returns the previous handler. The default
+     * exception handler ignores exceptions silently. The new handler may not be {@code null}, although it will not
+     * cause a problem until an exception is thrown by one of the listeners.
+     *
+     * @param newHandler the new handler to assign. May not be {@code null}.
+     * @return the previous handler used by this manager.
+     * @since 2.0.0
+     */
+    public InputExceptionHandler setInputExceptionHandler(InputExceptionHandler newHandler)
+    {
+        InputExceptionHandler oldHandler = this.inputExceptionHandler;
+        this.inputExceptionHandler = newHandler;
+        return oldHandler;
+    }
+
+    /**
+     * Sets the specified exception handler for the error input stream. Returns the previous handler. The default
+     * exception handler ignores exceptions silently. The new handler may not be {@code null}, although it will not
+     * cause a problem until an exception is thrown by one of the listeners.
+     *
+     * @param newHandler the new handler to assign. May not be {@code null}.
+     * @return the previous handler used by this manager.
+     * @since 2.0.0
+     */
+    public InputExceptionHandler setErrorExceptionHandler(InputExceptionHandler newHandler)
+    {
+        InputExceptionHandler oldHandler = this.errorExceptionHandler;
+        this.errorExceptionHandler = newHandler;
+        return oldHandler;
     }
 
     /**
@@ -236,7 +290,7 @@ public abstract class ProcessInputManager
      */
     protected void fireInputEvent(Process process, String line)
     {
-        fireEvent(process, line, inputListeners);
+        fireEvent(process, line, inputListeners, inputExceptionHandler);
     }
 
     /**
@@ -249,7 +303,7 @@ public abstract class ProcessInputManager
      */
     protected void fireErrorEvent(Process process, String line)
     {
-        fireEvent(process, line, errorListeners);
+        fireEvent(process, line, errorListeners, errorExceptionHandler);
     }
 
     /**
@@ -261,13 +315,18 @@ public abstract class ProcessInputManager
      * @param line the line of input that this event represents.
      * @param listeners the list of listeners that the event will be sent to. Listeners should execute quickly to avoid
      * deadlock around the input buffer.
+     * @param handler the exception handler to invoke if something goes wrong in the listener.
      * @since 1.1.0
      */
-    private void fireEvent(Process process, String line, List<ProcessInputListener> listeners)
+    private void fireEvent(Process process, String line, List<ProcessInputListener> listeners, InputExceptionHandler handler)
     {
         ProcessInputEvent event = new ProcessInputEvent(this, process, line);
         for(ProcessInputListener listener : listeners) {
-            listener.input(event);
+            try {
+                listener.input(event);
+            } catch(InputException ie) {
+                handler.exceptionOccurred(ie);
+            }
         }
     }
 
@@ -276,7 +335,7 @@ public abstract class ProcessInputManager
      * be terminated prematurely with the {link #close()} method.
      *
      * @author Joseph Fox-Rabinovitz
-     * @version 1.0.0, 22 May 2012 - J. Fox-Rabinovitz: Created
+     * @version 1.0.0, 22 May 2014 - J. Fox-Rabinovitz: Initial coding
      * @since 1.0.0
      */
     private class InputThread extends Thread implements Closeable
@@ -360,7 +419,11 @@ public abstract class ProcessInputManager
         /**
          * Sends an event representing the specified line to all listeners registered with the process controller. Only
          * one event object is allocated per line. All registered listeners get a reference to the same event during an
-         * invocation of this method. 
+         * invocation of this method.
+         * <p>
+         * A note to developers: The decision as to which exception handler to use from the enclosing class is made
+         * every time an event is fired. This is done so that the thread gets the latest version of the handler in case
+         * it is changed while the process is running. 
          *
          * @param line the line read by this event. A {@code null} line represents the end of input. The event fired
          * will not be {@code null}.
@@ -368,7 +431,8 @@ public abstract class ProcessInputManager
          */
         private void fireEvent(String line)
         {
-            ProcessInputManager.this.fireEvent(process, line, listeners);
+            ProcessInputManager.this.fireEvent(process, line, listeners, (listeners == inputListeners) ? inputExceptionHandler
+                                                                                                       : errorExceptionHandler);
         }
 
         /**

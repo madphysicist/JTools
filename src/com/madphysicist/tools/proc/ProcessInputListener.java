@@ -35,8 +35,9 @@ import java.util.EventListener;
  *
  * @see ProcessInputManager
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 22 May 2012 - J. Fox-Rabinovitz: Created
- * @since 1.0.0
+ * @version 1.0.0, 22 May 2014 - J. Fox-Rabinovitz: Initial coding.
+ * @version 2.0.0, 24 May 2014 - J. Fox-Rabinovitz: Added possibility for exception.
+ * @since 1.0
  */
 public interface ProcessInputListener extends EventListener
 {
@@ -47,5 +48,5 @@ public interface ProcessInputListener extends EventListener
      * @param event the event to react to.
      * @since 1.0.0
      */
-    public void input(ProcessInputEvent event);
+    public void input(ProcessInputEvent event) throws InputException;
 }
