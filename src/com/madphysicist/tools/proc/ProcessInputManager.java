@@ -46,6 +46,7 @@ import java.util.List;
  * @version 1.0.0, 22 May 2014 - J. Fox-Rabinovitz: Initial coding.
  * @version 1.1.0, 24 May 2014 - J. Fox-Rabinovitz: Added overrideable event firing methods.
  * @version 2.0.0, 24 May 2014 - J. Fox-Rabinovitz: Added handling for exceptions from listeners
+ * @version 2.0.1, 25 May 2014 - J. Fox-Rabinovitz: Added getter for the exception handler
  * @since 1.0
  */
 public abstract class ProcessInputManager
@@ -168,6 +169,28 @@ public abstract class ProcessInputManager
     {
         removeInputListener(listener);
         removeErrorListener(listener);
+    }
+
+    /**
+     * Returns the current exception handler for standard input.
+     *
+     * @return The exception handler for the standard input stream.
+     * @since 2.0.1
+     */
+    public InputExceptionHandler getInputExceptionHandler()
+    {
+        return this.inputExceptionHandler;
+    }
+
+    /**
+     * Returns the current exception handler for standard error.
+     *
+     * @return The exception handler for the standard error stream.
+     * @since 2.0.1
+     */
+    public InputExceptionHandler getErrorExceptionHandler()
+    {
+        return this.errorExceptionHandler;
     }
 
     /**
