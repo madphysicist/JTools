@@ -28,8 +28,10 @@
 
 /**
  * <p>
- * Contains classes for registering listeners to system processes. This package
- * is centered around the {@code ProcessInputManager} class.
+ * Contains classes for registering listeners to system processes. The core of this
+ * package is the {@code ProcessInputManager} class. It allows users to register listeners
+ * for lines of test coming through the standard input and error pipes when a sub-process
+ * is started.
  * </p>
  *
  * @author Joseph Fox-Rabinovitz
