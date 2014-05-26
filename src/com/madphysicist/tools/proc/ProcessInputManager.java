@@ -30,12 +30,14 @@ package com.madphysicist.tools.proc;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class wraps the ProcessBuilder and Process classes together. It provides functionality for managing the {@link
@@ -49,6 +51,7 @@ import java.util.List;
  * @version 2.0.0, 24 May 2014 - J. Fox-Rabinovitz: Added handling for exceptions from listeners.
  * @version 2.0.1, 25 May 2014 - J. Fox-Rabinovitz: Added getter for the exception handler.
  * @version 2.0.2, 25 May 2014 - J. Fox-Rabinovitz: Added additional convenience methods for interacting with listeners.
+ * @version 2.0.3, 25 May 2014 - J. Fox-Rabinovitz: Added path appender.
  * @since 1.0
  */
 public abstract class ProcessInputManager
@@ -503,6 +506,26 @@ public abstract class ProcessInputManager
                 handler.exceptionOccurred(ie);
             }
         }
+    }
+
+    /**
+     * A convenience method for adding paths to a map of environment variables. Checks if the path already exists, and
+     * appends to the existing variable if it does. This is particularly useful for setting up the process builder.
+     *
+     * @param variables a map of environment variables, for example obtained from {@link System#getenv()} or {@link
+     *      ProcessBuilder#environment()}.
+     * @param variable the variable name of the path to add. If a variable with this name is already present in the map,
+     *      it will be treated as a path and appended to.  
+     * @param path the path to add. If necessary, it will be appended to the end of an existing path, using {@link
+     *      File#pathSeparator}.
+     * @since 2.0.3
+     */
+    public static void addPath(Map<String, String> variables, String variable, String path)
+    {
+        String oldPath = variables.get(variable);
+        if(oldPath != null && !oldPath.isEmpty())
+            path = oldPath + File.pathSeparator + path;
+        variables.put(variable, path);
     }
 
     /**
