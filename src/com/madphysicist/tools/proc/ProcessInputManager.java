@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -92,10 +93,9 @@ public abstract class ProcessInputManager
         this.inputListeners = new ArrayList<>();
         this.errorListeners = new ArrayList<>();
 
-        this.inputExceptionHandler = new InputExceptionHandler() {
+        setExceptionHandler(new InputExceptionHandler() {
             @Override public void exceptionOccurred(InputException exception) {}
-        };
-        this.errorExceptionHandler = this.inputExceptionHandler;
+        });
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class ProcessInputManager
 
     /**
      * Adds a listener to both standard error and input events. This is a convenience method that is equivalent to
-     * calling both {@link #addInputListener(ProcessInputListener)} and {@link #addInputListener(ProcessInputListener)}. 
+     * calling both {@link #addInputListener(ProcessInputListener)} and {@link #addErrorListener(ProcessInputListener)}. 
      *
      * @param listener the listener to add.
      * @since 1.0.0
@@ -133,6 +133,42 @@ public abstract class ProcessInputManager
     {
         addInputListener(listener);
         addErrorListener(listener);
+    }
+
+    /**
+     * Adds all listeners from the specified collection to the standard input stream.
+     *
+     * @param listeners the listeners to add.
+     * @since 2.0.2
+     */
+    public void addInputListeners(Collection<ProcessInputListener> listeners)
+    {
+        inputListeners.addAll(listeners);
+    }
+
+    /**
+     * Adds all listeners from the specified collection to the error input stream.
+     *
+     * @param listeners the listeners to add.
+     * @since 2.0.2
+     */
+    public void addErrorListeners(Collection<ProcessInputListener> listeners)
+    {
+        errorListeners.addAll(listeners);
+    }
+
+    /**
+     * Adds all listeners from the specified collection to both the standard input and the error input streams. This is
+     * a convenience method that is equivalent to calling both {@link #addInputListeners(Collection)} and {@link
+     * #addErrorListeners(Collection)}. 
+     *
+     * @param listeners the listeners to add.
+     * @since 2.0.2
+     */
+    public void addListeners(Collection<ProcessInputListener> listeners)
+    {
+        addInputListeners(listeners);
+        addErrorListeners(listeners);
     }
 
     /**
@@ -160,7 +196,7 @@ public abstract class ProcessInputManager
     /**
      * Removes a listener for both standard error and input events. This is a convenience method that is equivalent to
      * calling both {@link #removeInputListener(ProcessInputListener)} and {@link
-     * #removeInputListener(ProcessInputListener)}. A listener will only be removed from the type of event it is
+     * #removeErrorListener(ProcessInputListener)}. A listener will only be removed from the type of event it is
      * registered for. 
      *
      * @param listener the listener to remove.
@@ -170,6 +206,77 @@ public abstract class ProcessInputManager
     {
         removeInputListener(listener);
         removeErrorListener(listener);
+    }
+
+    /**
+     * Removes all listeners for standard input events present in the specified collection. Listeners present in the
+     * collection but are not registered will be ignored.
+     *
+     * @param listeners the listeners to remove.
+     * @since 2.0.2
+     */
+    public void removeInputListeners(Collection<ProcessInputListener> listeners)
+    {
+        inputListeners.removeAll(listeners);
+    }
+
+    /**
+     * Removes all listeners for error input events present in the specified collection. Listeners present in the
+     * collection but are not registered will be ignored.
+     *
+     * @param listeners the listeners to remove.
+     * @since 2.0.2
+     */
+    public void removeErrorListeners(Collection<ProcessInputListener> listeners)
+    {
+        errorListeners.removeAll(listeners);
+    }
+
+    /**
+     * Removes all listeners present in the specified collection from both standard error and input events. This is a
+     * convenience method that is equivalent to calling both {@link #removeInputListeners(Collection)} and {@link
+     * #removeErrorListeners(Collection)}. Each listener will only be removed from the type of event it is registered
+     * for.
+     *
+     * @param listeners the listeners to remove.
+     * @since 2.0.2
+     */
+    public void removeListeners(Collection<ProcessInputListener> listeners)
+    {
+        removeInputListeners(listeners);
+        removeErrorListeners(listeners);
+    }
+
+    /**
+     * Removes all listeners for error input events.
+     *
+     * @since 2.0.2
+     */
+    public void clearInputListeners()
+    {
+        inputListeners.clear();
+    }
+
+    /**
+     * Removes all listeners for error input events.
+     *
+     * @since 2.0.2
+     */
+    public void clearErrorListeners()
+    {
+        errorListeners.clear();
+    }
+
+    /**
+     * Removes all listeners to process input events from this instance. This is a convenience method that is equivalent
+     * to calling both {@link #clearInputListeners()} and {@link #clearErrorListeners()}.
+     *
+     * @since 2.0.2
+     */
+    public void clearListeners()
+    {
+        clearListeners();
+        clearListeners();
     }
 
     /**
@@ -224,6 +331,26 @@ public abstract class ProcessInputManager
         InputExceptionHandler oldHandler = this.errorExceptionHandler;
         this.errorExceptionHandler = newHandler;
         return oldHandler;
+    }
+
+    /**
+     * Sets the specified exception handler for both the standard input and error input streams. Returns an array
+     * containing both of the the previous handlers. The new handler may not be {@code null}, although it will not cause
+     * a problem until an exception is thrown by one of the listeners. This is a convenience method that is equivalent
+     * to calling both {@link #setInputExceptionHandler(InputExceptionHandler)} and {@link
+     * #setErrorExceptionHandler(InputExceptionHandler)}.
+     *
+     * @param newHandler the new handler to assign. May not be {@code null}.
+     * @return an array of two elements containing the previous exception handlers. Element {@code 0} of the array
+     *          contains the input exception handler. Element {@code 1} contains the error exception handler.
+     * @since 2.0.2
+     */
+    public InputExceptionHandler[] setExceptionHandler(InputExceptionHandler newHandler)
+    {
+        InputExceptionHandler[] oldHandlers = new InputExceptionHandler[2];
+        oldHandlers[0] = setInputExceptionHandler(newHandler);
+        oldHandlers[1] = setErrorExceptionHandler(newHandler);
+        return oldHandlers;
     }
 
     /**
