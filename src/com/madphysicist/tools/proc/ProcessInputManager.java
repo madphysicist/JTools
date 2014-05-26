@@ -45,8 +45,9 @@ import java.util.List;
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 22 May 2014 - J. Fox-Rabinovitz: Initial coding.
  * @version 1.1.0, 24 May 2014 - J. Fox-Rabinovitz: Added overrideable event firing methods.
- * @version 2.0.0, 24 May 2014 - J. Fox-Rabinovitz: Added handling for exceptions from listeners
- * @version 2.0.1, 25 May 2014 - J. Fox-Rabinovitz: Added getter for the exception handler
+ * @version 2.0.0, 24 May 2014 - J. Fox-Rabinovitz: Added handling for exceptions from listeners.
+ * @version 2.0.1, 25 May 2014 - J. Fox-Rabinovitz: Added getter for the exception handler.
+ * @version 2.0.2, 25 May 2014 - J. Fox-Rabinovitz: Added additional convenience methods for interacting with listeners.
  * @since 1.0
  */
 public abstract class ProcessInputManager
@@ -327,6 +328,30 @@ public abstract class ProcessInputManager
     protected void fireErrorEvent(Process process, String line)
     {
         fireEvent(process, line, errorListeners, errorExceptionHandler);
+    }
+
+    /**
+     * Retrieves the listeners to standard input events. The returned list is modifiable and not thread-safe. It may
+     * cause a {@code ConcurrentModificationException} if modified while an event is being fired.
+     *
+     * @return the internal list of listeners to standard input events.
+     * @since 2.0.2
+     */
+    protected List<ProcessInputListener> getInputListeners()
+    {
+        return inputListeners;
+    }
+
+    /**
+     * Retrieves the listeners to error input events. The returned list is modifiable and not thread-safe. It may
+     * cause a {@code ConcurrentModificationException} if modified while an event is being fired.
+     *
+     * @return the internal list of listeners to error input events.
+     * @since 2.0.2
+     */
+    protected List<ProcessInputListener> getErrorListeners()
+    {
+        return errorListeners;
     }
 
     /**
