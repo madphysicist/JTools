@@ -37,8 +37,9 @@ import java.awt.Insets;
  * GridBagConstraints}.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0 18 Nov 2013 - J. Fox-Rabinovitz - Created
- * @since 1.0.0
+ * @version 1.0.0 18 Nov 2013 - J. Fox-Rabinovitz - Initial Coding.
+ * @version 1.0.1 27 May 2014 - J. Fox-Rabinovitz - Added NONE.
+ * @since 1.0
  */
 public interface GridBagConstants
 {
@@ -89,6 +90,13 @@ public interface GridBagConstants
      * @since 1.0.0
      */
     public int HORIZONTAL_INSET = 5;
+
+    /**
+     * Empty insets.
+     *
+     * @since 1.0.1
+     */
+    public Insets NONE = new Insets(0, 0, 0, 0);
 
     /**
      * Insets for a component that fills the entire layout in both the vertical
