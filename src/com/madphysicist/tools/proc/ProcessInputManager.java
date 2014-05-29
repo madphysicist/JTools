@@ -52,6 +52,7 @@ import java.util.Map;
  * @version 2.0.1, 25 May 2014 - J. Fox-Rabinovitz: Added getter for the exception handler.
  * @version 2.0.2, 25 May 2014 - J. Fox-Rabinovitz: Added additional convenience methods for interacting with listeners.
  * @version 2.0.3, 25 May 2014 - J. Fox-Rabinovitz: Added path appender.
+ * @version 2.0.4, 29 May 2014 - J. Fox-Rabinovitz: Fixed infinite recursion typo.
  * @since 1.0
  */
 public abstract class ProcessInputManager
@@ -278,8 +279,8 @@ public abstract class ProcessInputManager
      */
     public void clearListeners()
     {
-        clearListeners();
-        clearListeners();
+        clearInputListeners();
+        clearErrorListeners();
     }
 
     /**
