@@ -40,8 +40,9 @@ import java.util.regex.Pattern;
  * This class can not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 05 June 2013
- * @since 1.0.0
+ * @version 1.0.0, 05 Jun 2013 - J. Fox-Rabinovitz: Initial coding. 
+ * @version 1.1.0, 28 May 2014 - J. Fox-Rabinovitz: Added average() methods. 
+ * @since 1.0
  */
 public class ColorUtilities
 {
@@ -372,6 +373,86 @@ public class ColorUtilities
                          0xFF - color.getGreen(),
                          0xFF - color.getBlue(),
                          color.getAlpha());
+    }
+
+    /**
+     * Computes the average of two colors. The average is computed as {@code (color1 + color2) / 2.0} for each individual
+     * component. This is a convenience method. It is equivalent to {@code average(color1, color2, 0.5)}.
+     *
+     * @param color1 the first color to average together.
+     * @param color2 the second color to average together.
+     * @return the combined color.
+     * @see #average(Color, Color, double)
+     * @see #boundedAverage(Color, Color, double)
+     * @since 1.1.0
+     */
+    public static Color average(Color color1, Color color2)
+    {
+        return average(color1, color2, 0.5);
+    }
+
+    /**
+     * Computes the weighted average of two colors. The average is computed as {@code
+     * ratio * color1 + (1.0 - ratio * color2)} for each individual component, including alpha. A plain average can be
+     * obtained by setting the ration to 0.5. There is no explicit constraint on the ratio, but components whose values
+     * fall outside the allowable range of 0-255 will cause an exception. It is therefore advisable to either constrain
+     * ratio between 0.0 and 1.0, or to use {@link #boundedAverage(Color, Color, double)}. 
+     *
+     * @param color1 the first color to average together.
+     * @param color2 the second color to average together.
+     * @param ratio the ratio of color1 in the combination. When ratio is 1.0, the result is {@code color1}. When the
+     *      ratio is 0.0, the result is {@code color2}. Although negative ratios and ratios greater than one are
+     *      possible, there is a risk of combined color values falling outside the range of 0-255.
+     * @return the combined color.
+     * @throws IllegalArgumentException if the result would have an R, G, B or Alpha value outside the range 0-255. This
+     *      can only happen when ratio is either less than zero or greater than one.
+     * @since 1.1.0
+     */
+    public static Color average(Color color1, Color color2, double ratio)
+    {
+        double ratio2 = 1.0 - ratio;
+        return new Color((int)(ratio * color1.getRed()   + 0.5) + (int)(ratio2 * color2.getRed()   + 0.5),
+                         (int)(ratio * color1.getGreen() + 0.5) + (int)(ratio2 * color2.getGreen() + 0.5),
+                         (int)(ratio * color1.getBlue()  + 0.5) + (int)(ratio2 * color2.getBlue()  + 0.5),
+                         (int)(ratio * color1.getAlpha() + 0.5) + (int)(ratio2 * color2.getAlpha() + 0.5));
+    }
+
+    /**
+     * Computes the weighted average of two colors, with the constraint that each component of the result is in the
+     * range 0-255. Since the components are constrained, saturation may occur if a ratio sufficiently outside the range
+     * 0.0-1.0 is chosen. This method is equivalent to {@link #average(Color, Color, double)} for all cases where
+     * saturation of at least one component does not occur.
+     *
+     * @param color1 the first color to average together.
+     * @param color2 the second color to average together.
+     * @param ratio the ratio of color1 in the combination. When ratio is 1.0, the result is {@code color1}. When the
+     *      ratio is 0.0, the result is {@code color2}. There is no constraint on the ratio. Negative ratios yield a
+     *      color that scales up {@code color 1} and subtracts off some of {@code color2}. Ratios greater than one do
+     *      the reverse.
+     * @return the combined color, with components outside the range 0-255 adjusted to fall on the edges of the range.
+     * @since 1.1.0
+     */
+    public static Color boundedAverage(Color color1, Color color2, double ratio)
+    {
+        double ratio2 = 1.0 - ratio;
+        int r = (int)(ratio * color1.getRed()   + 0.5) + (int)(ratio2 * color2.getRed()   + 0.5);
+        int g = (int)(ratio * color1.getGreen() + 0.5) + (int)(ratio2 * color2.getGreen() + 0.5);
+        int b = (int)(ratio * color1.getBlue()  + 0.5) + (int)(ratio2 * color2.getBlue()  + 0.5);
+        int a = (int)(ratio * color1.getAlpha() + 0.5) + (int)(ratio2 * color2.getAlpha() + 0.5);
+
+        if(r > 255)    r = 255;
+        else if(r < 0) r = 0;
+
+        if(g > 255)    g = 255;
+        else if(g < 0) g = 0;
+
+        if(b > 255)    b = 255;
+        else if(b < 0) b = 0;
+
+        if(a > 255)    a = 255;
+        else if(a < 0) a = 0;
+
+        return new Color(r, g, b, a);
     }
 
     /**
