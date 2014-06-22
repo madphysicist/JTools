@@ -77,7 +77,7 @@ public class ResourceUtilities
      * @version 1.0.0, 20 Jun 2014 - J. Fox-Rabinovitz - Created
      * @since 1.1.0
      */
-    public static enum CursorHotsopt
+    public static enum CursorHotspot
     {
         CURSOR_TOP_LEFT(0.0, 0.0),
         CURSOR_TOP(0.5, 0.0),
@@ -115,7 +115,7 @@ public class ResourceUtilities
          * represents the bottom edge.
          * @since 1.0.0
          */
-        private CursorHotsopt(double x, double y)
+        private CursorHotspot(double x, double y)
         {
             this.x = x;
             this.y = y;
@@ -306,7 +306,7 @@ public class ResourceUtilities
      * @see #loadCursor(String, double, double)
      * @since 1.1.0
      */
-    public static Cursor loadCursor(String resourceName, CursorHotsopt hotspot) throws IOException
+    public static Cursor loadCursor(String resourceName, CursorHotspot hotspot) throws IOException
     {
         return loadCursor(resourceName, hotspot.getX(), hotspot.getY());
     }
