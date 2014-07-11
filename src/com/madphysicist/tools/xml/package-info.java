@@ -27,15 +27,10 @@
  */
 
 /**
- * Provides utilities for manipulating common objects such as arrays and
- * strings. This package contains two types of classes: static library classes
- * that contain methods for working with different types of data, and utility
- * objects that provide extended functionality.
+ * Provides a suite of utilities and extensions to the basic java XML parsing libraries.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 04 Mar 2012 - J. Fox-Rabinovitz - Created
- * @version 1.0.1, 03 Dec 2012 - J. Fox-Rabinovitz - Added PathManager and FilePathManager
- * @version 1.0.2, 22 Jun 2014 - J. Fox-Rabinovitz - Added TimeUtilities
- * @since 1.0
+ * @version 1.0.0, 22 Jun 2014 - J. Fox-Rabinovitz - Created
+ * @since 1.2
  */
-package com.madphysicist.tools.util;
+package com.madphysicist.tools.xml;

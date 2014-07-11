@@ -28,13 +28,19 @@
 
 package com.madphysicist.tools.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 /**
  * A utility library for doing bit manipulations on integers.
  * <p>
  * This class can not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 22 May 2013
+ * @version 1.0.0, 22 May 2013 - J. Fox-Rabinovitz: Initial coding
+ * @version 1.1.0, 22 Jun 2014 - J. Fox-Rabinovitz: Added listFlags() method and flagStatus()
  * @since 1.0.0
  */
 public class BitUtilities
@@ -138,7 +144,6 @@ public class BitUtilities
     {
         StringBuilder sb = new StringBuilder(QWORD_BITS);
         do {
-            System.out.println("" + aQWord + " " + (aQWord >> 1) + " " + (aQWord >>> 1));
             sb.append((aQWord & 1L) == 1L ? "1" : "0");
             aQWord >>>= 1;
         } while(aQWord != 0);
@@ -147,22 +152,170 @@ public class BitUtilities
         return sb.toString();
     }
 
-    public static int getByte(int n, int byteInex) throws IndexOutOfBoundsException
+    public static String listFlags(int flags, String[] names)
     {
-        if(byteInex < 0 || byteInex >= 4) {
-            throw new IndexOutOfBoundsException("Invalid BYTE: " + byteInex);
+        StringBuilder sb = new StringBuilder();
+        int maxShift = Math.min(32, names.length);
+        for(int bit = 0; bit < maxShift; bit++) {
+            int mask = (1 << bit);
+            if((flags & mask) != 0) {
+                sb.append(names[bit]);
+                flags &= ~mask;
+                if(flags != 0)
+                    sb.append(", ");
+            }
+            if(flags == 0)
+                break;
         }
-
-        return (n >> (BYTE_BITS * byteInex)) & INT_BYTE_MASK;
+        return sb.toString();
     }
 
-    public static long getByte(long n, int byteInex) throws IndexOutOfBoundsException
+    public static String listFlags(long flags, String[] names)
     {
-        if(byteInex < 0 || byteInex >= 8) {
-            throw new IndexOutOfBoundsException("Invalid BYTE: " + byteInex);
+        StringBuilder sb = new StringBuilder();
+        int maxShift = Math.min(64, names.length);
+        for(int bit = 0; bit < maxShift; bit++) {
+            long mask = (1L << bit);
+            if((flags & mask) != 0L) {
+                sb.append(names[bit]);
+                flags &= ~mask;
+                if(flags != 0L)
+                    sb.append(", ");
+            }
+            if(flags == 0L)
+                break;
+        }
+        return sb.toString();
+    }
+
+    public static String listFlags(int flags, Map<Integer, String> names)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int bit = 0; bit < 32; bit++) {
+            int mask = (1 << bit);
+            if((flags & mask) != 0) {
+                flags &= ~mask;
+                if(names.containsKey(Integer.valueOf(bit))) {
+                    sb.append(names.get(Integer.valueOf(bit)));
+                    if(flags != 0)
+                        sb.append(", ");
+                }
+            }
+            if(flags == 0)
+                break;
+        }
+        return sb.toString();
+    }
+
+    public static String listFlags(long flags, Map<Integer, String> names)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int bit = 0; bit < 64; bit++) {
+            long mask = (1L << bit);
+            if((flags & mask) != 0L) {
+                flags &= ~mask;
+                if(names.containsKey(Integer.valueOf(bit))) {
+                    sb.append(names.get(Integer.valueOf(bit)));
+                    if(flags != 0L)
+                        sb.append(", ");
+                }
+            }
+            if(flags == 0L)
+                break;
+        }
+        return sb.toString();
+    }
+
+    public static String flagStatus(int flags, String[] names)
+    {
+        return flagStatus(flags, names, Boolean.TRUE.toString(), Boolean.FALSE.toString());
+    }
+
+    public static String flagStatus(long flags, String[] names)
+    {
+        return flagStatus(flags, names, Boolean.TRUE.toString(), Boolean.FALSE.toString());
+    }
+
+    public static String flagStatus(int flags, String[] names, String on, String off)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < names.length; i++) {
+            int mask = (1 << i);
+            sb.append(names[i]).append("=").append((flags & mask) != 0 ? on : off);
+            if(i < names.length - 1)
+                sb.append(", ");
+        }
+        return sb.toString();
+    }
+
+    public static String flagStatus(long flags, String[] names, String on, String off)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int bit = 0; bit < names.length; bit++) {
+            long mask = (1L << bit);
+            sb.append(names[bit]).append("=").append((flags & mask) != 0L ? on : off);
+            if(bit < names.length - 1)
+                sb.append(", ");
+        }
+        return sb.toString();
+    }
+
+    public static String flagStatus(int flags, Map<Integer, String> names)
+    {
+        return flagStatus(flags, names, Boolean.TRUE.toString(), Boolean.FALSE.toString());
+    }
+
+    public static String flagStatus(long flags, Map<Integer, String> names)
+    {
+        return flagStatus(flags, names, Boolean.TRUE.toString(), Boolean.FALSE.toString());
+    }
+
+    public static String flagStatus(int flags, Map<Integer, String> names, String on, String off)
+    {
+        StringBuilder sb = new StringBuilder();
+        List<Integer> bits = new ArrayList<>(names.keySet());
+        Collections.sort(bits);
+        for(int index = 0; index < bits.size(); index++) {
+            Integer i = bits.get(index);
+            int mask = (1 << i.intValue());
+            sb.append(names.get(i)).append("=").append((flags & mask) != 0 ? on : off);
+            if(index < names.size() - 1)
+                sb.append(", ");
+        }
+        return sb.toString();
+    }
+
+    public static String flagStatus(long flags, Map<Integer, String> names, String on, String off)
+    {
+        StringBuilder sb = new StringBuilder();
+        List<Integer> bits = new ArrayList<>(names.keySet());
+        Collections.sort(bits);
+        for(int index = 0; index < bits.size(); index++) {
+            Integer bit = bits.get(index);
+            long mask = (1L << bit.intValue());
+            sb.append(names.get(bit)).append("=").append((flags & mask) != 0L ? on : off);
+            if(index < names.size() - 1)
+                sb.append(", ");
+        }
+        return sb.toString();
+    }
+
+    public static int getByte(int n, int byteIndex) throws IndexOutOfBoundsException
+    {
+        if(byteIndex < 0 || byteIndex >= 4) {
+            throw new IndexOutOfBoundsException("Invalid BYTE: " + byteIndex);
         }
 
-        return (n >> (BYTE_BITS * byteInex)) & LONG_BYTE_MASK;
+        return (n >> (BYTE_BITS * byteIndex)) & INT_BYTE_MASK;
+    }
+
+    public static long getByte(long n, int byteIndex) throws IndexOutOfBoundsException
+    {
+        if(byteIndex < 0 || byteIndex >= 8) {
+            throw new IndexOutOfBoundsException("Invalid BYTE: " + byteIndex);
+        }
+
+        return (n >> (BYTE_BITS * byteIndex)) & LONG_BYTE_MASK;
     }
 
     public static long getWord(long n, int wordIndex) throws IndexOutOfBoundsException

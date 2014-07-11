@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 by Joseph Fox-Rabinovitz
+ * Copyright (c) 2012 by Joseph Fox-Rabinovitz
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,6 @@
 package com.madphysicist.tools.util;
 
 import java.nio.charset.Charset;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -62,23 +60,24 @@ import java.util.TreeMap;
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 04 Mar 2012 - J. Fox-Rabinovitz: Created
  * @version 1.0.1, 04 Feb 2014 - J. Fox-Rabinovitz: Added countOccurences()
+ * @version 2.0.0, 22 Jun 2014 - J. Fox-Rabinovitz: Moved nowStr(), simpleNowStr(), timeStr() and simpleTimeStr() into
+ *                                                  new class TimeUtilities
  * @since 1.0.0
  */
 public class TextUtilities
 {
     /**
-     * The default {@link java.nio.Charset Charset} of all the text operations.
-     * This charset is intended to be used for consistence in all I/O
-     * operations.
+     * The default {@link java.nio.Charset Charset} of all the text operations. This charset is intended to be used for
+     * consistence in all I/O operations.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static final Charset CHARSET = Charset.forName("UTF-8");
 
     /**
      * Private constructor to prevent the class from being instantiated.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private TextUtilities() {}
 
@@ -92,7 +91,7 @@ public class TextUtilities
      * @param map2 the second map to compare.
      * @return {@code true} if both maps are {@code null} or all of their keys
      * and values are equal, {@code false} otherwise.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static boolean mapEquals(Map<String, String> map1,
                                     Map<String, String> map2)
@@ -118,7 +117,7 @@ public class TextUtilities
      * @param map a map keyed by strings.
      * @return the keys in the map, or {@code null} if {@code map} is {@code
      * null}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static String[] keyList(Map<String, ?> map)
     {
@@ -162,7 +161,7 @@ public class TextUtilities
      * suffix are all empty or {@code null}.
      * @see #propertiesToString
      * @see #stringToMap
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static String mapToString(String name, Map<String, String> map,
                                      String prefix, String suffix,
@@ -246,7 +245,7 @@ public class TextUtilities
      * valid suffix is found, or an entry does not have a valid key-value
      * separator. The message indicates which condition caused the exception.
      * @see #mapToString
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static String stringToMap(String string, Map<String, String> map,
                                      String prefix, String suffix,
@@ -328,7 +327,7 @@ public class TextUtilities
      * @throws ArrayIndexOutOfBoundsException if the property list does not have
      * an even number of elements.
      * @see #mapToString
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static String propertiesToString(String name, String[] properties,
                                             String prefix, String suffix,
@@ -380,7 +379,7 @@ public class TextUtilities
      * @param escapeSymbol a symbol used to escape the required characters.
      * @return a string similar to the input but with all of the characters in
      * {@code escapeChars} preceded by an escape sequence
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static String escapeString(String string,
                                       String escapeChars,
@@ -411,7 +410,7 @@ public class TextUtilities
      * escape characters are unescaped.
      * @param escapeSymbol the symbol that appears before escaped characters.
      * @return the string with all escape sequences eliminated.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static String unescapeString(String string,
                                         String escapeChars,
@@ -453,7 +452,7 @@ public class TextUtilities
      * number of elements
      * @throws NullPointerException if a key in the property list is {@code
      * null}. Values on the other hand may be {@code null}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static SortedMap<String, String> propertiesToMap(String... properties)
     {
@@ -486,7 +485,7 @@ public class TextUtilities
      * @return an array representation of the map with keys occupying even
      * indices in the array and corresponding values occupying the successive
      * odd indices.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static String[] mapToProperties(Map<String, String> map)
     {
@@ -549,7 +548,7 @@ public class TextUtilities
      * @return the index of the beginning of the first occurrence of the key in
      * the template after the start index, or {@code -1} if not found.
      * @throws NullPointerException if the template or the key are {@code null}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static int nextIndexOf(String template, String key, int start, String escapeChars, char escapeSymbol)
     {
@@ -593,7 +592,7 @@ public class TextUtilities
      * @return the index of the first occurrence of the key in
      * the template after the start index, or {@code -1} if not found.
      * @throws NullPointerException if the template is {@code null}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static int nextIndexOf(String template, char key, int start, char escapeSymbol, boolean symbolEscaped)
     {
@@ -615,116 +614,6 @@ public class TextUtilities
                 return index;
             start = index + 1;
         }
-    }
-
-    /**
-     * <p>
-     * Returns a string representation of the current date and time. The string
-     * is formatted as
-     * <pre>
-     *      YYYY-MM-DD hh:mm:ss.lll
-     * </pre>
-     * where {@code YYYY} is a four-digit year, {@code MM} is a two digit month
-     * number, {@code DD} is the two-digit day of the month, {@code hh} is the
-     * two-digit hour of the day, {@code mm} is the two digit minute of the hour,
-     * {@code ss} is the two digit second and {@code lll} is the fractional part
-     * of the second in milliseconds.
-     * </p>
-     * <p>
-     * This method is equivalent to {@link #timeString(java.util.Calendar)
-     * timeString(new GregorianCalendar())}.
-     * </p>
-     *
-     * @return a string representing the date and time of the method invocation.
-     * @see GregorianCalendar#GregorianCalendar()
-     * @since 1.0.0.0
-     */
-    public static String nowString()
-    {
-        return timeString(new GregorianCalendar());
-    }
-
-    /**
-     * <p>
-     * Returns a simplified string representation of the current date and time.
-     * The string is formatted as
-     * <pre>
-     *      YYYYMMDD hhmmss.lll
-     * </pre>
-     * where {@code YYYY} is a four-digit year, {@code MM} is a two digit month
-     * number, {@code DD} is the two-digit day of the month, {@code hh} is the
-     * two-digit hour of the day, {@code mm} is the two digit minute of the hour,
-     * {@code ss} is the two digit second and {@code lll} is the fractional part
-     * of the second in milliseconds.
-     * </p>
-     * <p>
-     * This method is equivalent to {@link #simpleTimeString(java.util.Calendar)
-     * simpleTimeString(new GregorianCalendar())}.
-     * </p>
-     *
-     * @return a string representing the date and time of the method invocation.
-     * @see GregorianCalendar#GregorianCalendar()
-     * @since 1.0.0.0
-     */
-    public static String simpleNowString()
-    {
-        return simpleTimeString(new GregorianCalendar());
-    }
-
-    /**
-     * Returns a string representation of the selected date and time. The string
-     * is formatted as
-     * <pre>
-     *      YYYY-MM-DD hh:mm:ss.lll
-     * </pre>
-     * where {@code YYYY} is a four-digit year, {@code MM} is a two digit month
-     * number, {@code DD} is the two-digit day of the month, {@code hh} is the
-     * two-digit hour of the day, {@code mm} is the two digit minute of the hour,
-     * {@code ss} is the two digit second and {@code lll} is the fractional part
-     * of the second in milliseconds.
-     *
-     * @param cal a calendar representing the date and time.
-     * @return a string representing the specified date and time.
-     * @since 1.0.0.0
-     */
-    public static String timeString(Calendar cal)
-    {
-        return String.format("%02d-%02d-%02d %02d:%02d:%02d.%03d",
-                             cal.get(Calendar.YEAR),
-                             cal.get(Calendar.MONTH) + 1,
-                             cal.get(Calendar.DAY_OF_MONTH),
-                             cal.get(Calendar.HOUR_OF_DAY),
-                             cal.get(Calendar.MINUTE),
-                             cal.get(Calendar.SECOND),
-                             cal.get(Calendar.MILLISECOND));
-    }
-
-    /**
-     * Returns a simplified string representation of the selected date and time.
-     * The string is formatted as
-     * <pre>
-     *      YYYYMMDD hhmmss.lll
-     * </pre>
-     * where {@code YYYY} is a four-digit year, {@code MM} is a two digit month
-     * number, {@code DD} is the two-digit day of the month, {@code hh} is the
-     * two-digit hour of the day, {@code mm} is the two digit minute of the hour,
-     * {@code ss} is the two digit second and {@code lll} is the fractional part
-     * of the second in milliseconds.
-     *
-     * @param cal a calendar representing the date and time.
-     * @return a string representing the specified date and time.
-     * @since 1.0.0.0
-     */
-    public static String simpleTimeString(Calendar cal)
-    {
-        return String.format("%02d%02d%02d %02d%02d%02d.%03d",
-                             cal.get(Calendar.YEAR),
-                             cal.get(Calendar.MONTH) + 1,
-                             cal.get(Calendar.DAY_OF_MONTH),
-                             cal.get(Calendar.HOUR_OF_DAY),
-                             cal.get(Calendar.MINUTE),
-                             cal.get(Calendar.SECOND),
-                             cal.get(Calendar.MILLISECOND));
     }
 
     /**
@@ -848,7 +737,7 @@ public class TextUtilities
      * @param escapeSymbol a symbol that indicates the start of escape sequences
      * @throws StringIndexOutOfBoundsException if separator does not appear in
      * entry
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static void addMapEntry(String entry, Map<String, String> map, String separator,
                                     String escapeChars, char escapeSymbol)
@@ -873,7 +762,7 @@ public class TextUtilities
      * @return the number of escape characters found. If the character at the
      * start index is not an escape character, this will be zero.
      * @throws NullPointerException if string is null.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static int countEscapesBack(String string, int start, char escape)
     {

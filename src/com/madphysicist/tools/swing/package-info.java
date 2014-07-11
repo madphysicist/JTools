@@ -36,6 +36,7 @@
  * @author Joseph Fox-Rabinovitz
  * @version 1.0, 10 Apr 2013 - J. Fox-Rabinovitz: Initial Coding
  * @version 1.1, 24 May 2014 - J. Fox-Rabinovitz: Added LAFUtilities
+ * @version 1.2, 24 Jun 2014 - J. Fox-Rabinovitz: Made StringBounds public
  * @since 1.0
  */
 package com.madphysicist.tools.swing;

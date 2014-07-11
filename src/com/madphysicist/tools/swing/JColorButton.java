@@ -57,6 +57,7 @@ import javax.swing.event.ChangeListener;
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 12 Jun 2013 - J. Fox-Rabinovitz - Created.
  * @version 1.0.1, 16 Nov 2013 - J. Fox-Rabinovitz - Made ColorIcon public main class.
+ * @version 1.1.0, 22 Jun 2014 - J. Fox-Rabinovitz - Added square constructors, change updates
  * @since 1.0
  */
 public class JColorButton extends JButton
@@ -71,6 +72,13 @@ public class JColorButton extends JButton
      * @since 1.0.0
      */
     private static final long serialVersionUID = 1000L;
+
+    /**
+     * The name of the color property that change listeners can listen to.
+     *
+     * @since 1.1.0
+     */
+    public static final String COLOR_PROPERTY = "color";
 
     /**
      * The default color for an icon.
@@ -146,6 +154,18 @@ public class JColorButton extends JButton
     }
 
     /**
+     * Initializes a button with the default color containing a square icon with the
+     * specified dimensions.
+     *
+     * @param size the width and height of the icon.
+     * @since 1.1.0
+     */
+    public JColorButton(int size)
+    {
+        this(DEFAULT_COLOR, size, size);
+    }
+
+    /**
      * Initializes a button with the default color containing an icon with the
      * specified dimensions.
      *
@@ -156,6 +176,19 @@ public class JColorButton extends JButton
     public JColorButton(int width, int height)
     {
         this(DEFAULT_COLOR, width, height);
+    }
+
+    /**
+     * Initializes a button with the specified color containing a square icon with the
+     * specified dimensions.
+     *
+     * @param color the color of the icon.
+     * @param size the width and height of the icon.
+     * @since 1.1.0
+     */
+    public JColorButton(Color color, int size)
+    {
+        this(createColorChooser(color), size, size);
     }
 
     /**
@@ -183,6 +216,20 @@ public class JColorButton extends JButton
     public JColorButton(JColorChooser chooser)
     {
         this(chooser, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+
+    /**
+     * Initializes a button with the specified color chooser and a square icon with
+     * the specified dimensions. This allows multiple components to depend on
+     * the same color chooser.
+     *
+     * @param chooser the chooser that will control the color of the icon.
+     * @param size the width and height of the icon.
+     * @since 1.1.0
+     */
+    public JColorButton(JColorChooser chooser, int size)
+    {
+        this(chooser, size, size);
     }
 
     /**
@@ -229,10 +276,8 @@ public class JColorButton extends JButton
      */
     public void setColor(Color color)
     {
-        if(icon.setIconColor(color)) {
-            chooser.setColor(color);
-            repaint();
-        }
+        chooser.setColor(color);
+        setColor();
     }
 
     /**
@@ -374,11 +419,15 @@ public class JColorButton extends JButton
      *
      * @since 1.0.1
      */
-    private void setColor()
+    private boolean setColor()
     {
+        Color prevColor = icon.getIconColor();
         if(icon.setIconColor(chooser.getColor())) {
+            firePropertyChange(COLOR_PROPERTY, prevColor, chooser.getColor());
             repaint();
+            return true;
         }
+        return false;
     }
 
     /**
@@ -476,6 +525,13 @@ public class JColorButton extends JButton
          */
         private static final long serialVersionUID = 1000L;
 
+        /**
+         * A weak reference to a dialog. Since the dialog is only strictly necessary when it is requested for display,
+         * this reference may be destroyed at any time by the garbage collector. It can be recreated upon request by
+         * calling the {@link #createDialog()} method.
+         *
+         * @since 1.0.0
+         */
         private transient WeakReference<JDialog> dialog;
         private transient Color color;
 

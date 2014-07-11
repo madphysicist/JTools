@@ -40,18 +40,17 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * Tests each of the methods of {@link
- * com.madphysicist.tools.javadoc.LogTaglet}.
+ * Tests each of the methods of {@link com.madphysicist.tools.javadoc.LogTaglet}.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 21 Sept 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 21 Sept 2012
+ * @since 1.0.0
  */
 public class LogTagletTest
 {
     /**
      * A sample taglet used to run tests on.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private LogTaglet testTaglet;
 
@@ -59,7 +58,7 @@ public class LogTagletTest
      * Common set up for the entire class. This method initializes the taglet
      * to test.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @BeforeClass public void setUpClass()
     {
@@ -71,7 +70,7 @@ public class LogTagletTest
      * This checks that the taglet is added correctly to a map in which there is
      * no mapping to the taglet's name.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testRegister_newTaglet()
     {
@@ -88,7 +87,7 @@ public class LogTagletTest
      * taglet's name is already present. The previous entry should be
      * overwritten.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testRegister_replaceTaglet()
     {
@@ -106,7 +105,7 @@ public class LogTagletTest
      * Test of inField method of class LogTaglet.
      * Checks that the method always returns {@code false}.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testInField()
     {
@@ -118,7 +117,7 @@ public class LogTagletTest
      * Test of inConstructor method of class LogTaglet.
      * Checks that the method always returns {@code true}.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testInConstructor()
     {
@@ -130,7 +129,7 @@ public class LogTagletTest
      * Test of inMethod method of class LogTaglet.
      * Checks that the method always returns {@code true}.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testInMethod()
     {
@@ -142,7 +141,7 @@ public class LogTagletTest
      * Test of inOverview method of class LogTaglet.
      * Checks that the method always returns {@code false}.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testInOverview()
     {
@@ -154,7 +153,7 @@ public class LogTagletTest
      * Test of inPackage method of class LogTaglet.
      * Checks that the method always returns {@code false}.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testInPackage()
     {
@@ -166,7 +165,7 @@ public class LogTagletTest
      * Test of inType method of class LogTaglet.
      * Checks that the method always returns {@code false}.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testInType()
     {
@@ -178,7 +177,7 @@ public class LogTagletTest
      * Test of isInlineTag method of class LogTaglet.
      * Checks that the method always returns {@code false}.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testIsInlineTag()
     {
@@ -190,7 +189,7 @@ public class LogTagletTest
      * Test of getName method of class LogTaglet.
      * Checks that the method always returns the string "{@code joe.log}".
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testGetName()
     {
@@ -202,7 +201,7 @@ public class LogTagletTest
      * Null tag test of toString(Tag) method of class LogTaglet.
      * Checks that {@code null} is returned if the input tag is {@code null}.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test public void testToStringTag_null()
     {
@@ -261,7 +260,7 @@ public class LogTagletTest
      * distinct runs of the test method. The inner Object arrays are parameter
      * lists representing the scenario label, the input tag text and the
      * expected result.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @DataProvider(name = "testTagDataProvider")
     private Object[][] testTagDataProvider()
@@ -315,7 +314,7 @@ public class LogTagletTest
      * output to the command line.
      * @param tagText the input tag text.
      * @param expectedValue the expected HTML code for the input tag text.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test(dataProvider = "testTagDataProvider")
     public void testToStringTag(final String label, final String tagText, final String expectedValue)
@@ -347,7 +346,7 @@ public class LogTagletTest
      * distinct runs of the test method. The inner Object arrays are parameter
      * lists representing the scenario label, an array of input tags, and the
      * expected result.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @DataProvider(name = "testTagArrayDataProvider")
     private Object[][] testTagArrayDataProvider()
@@ -407,7 +406,7 @@ public class LogTagletTest
      * @param tags an array of input tags. This may be null or empty or it may
      * contain null and empty elements.
      * @param expectedValue the expected HTML code for the input tag text.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Test(dataProvider = "testTagArrayDataProvider")
     public void testToStringTagArray(final String label, final Tag[] tags, final String expectedValue)

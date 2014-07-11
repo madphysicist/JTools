@@ -41,8 +41,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.font.FontRenderContext;
-import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -92,8 +90,9 @@ import javax.swing.event.ChangeListener;
  * </p>
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 11 Feb 2013
- * @version 1.0.1, 10 Apr 2013 - Added orientation property.
+ * @version 1.0.0, 11 Feb 2013 - J. Fox-Rabinovitz - Initial coding.
+ * @version 1.0.1, 10 Apr 2013 - J. Fox-Rabinovitz - Added orientation property.
+ * @version 1.1.0, 24 Jun 2014 - J. Fox-Rabinovitz - Made StringBounds public.
  * @since 1.0.0
  */
 public class CasinoSpinner extends JPanel
@@ -498,7 +497,7 @@ public class CasinoSpinner extends JPanel
      * changes to itself. The following is the list of relevant properties:
      * <dl>
      * <dt>font</dt><dd>The entire layout of data elements is recomputed using
-     * {@link #setOptimalSize()}. The component is repainted.</dd>
+     * {@link #setOptimalSize(boolean)}. The component is repainted.</dd>
      * <dt>border, insets</dt><dd>The component's {@link #insetsBuffer} is
      * reset. The entire layout of data elements is then recomputed. Once the
      * shades and selection window have been reset as well, {@link
@@ -507,7 +506,7 @@ public class CasinoSpinner extends JPanel
      * shades and selection window have been reset as well, {@link
      * #boundsBuffer} is computed and the component is repainted. The entire
      * layout of data components is not recomputed in this case. Part of the
-     * reason for this is that {@link #setOptimalSize()} usually triggers a
+     * reason for this is that {@link #setOptimalSize(boolean)} usually triggers a
      * change of the size.</dd>
      * </dl>
      * This method is intended for use in the constructor.
@@ -518,14 +517,14 @@ public class CasinoSpinner extends JPanel
     {
         PropertyChangeListener sizePropertyChangeListener = new PropertyChangeListener() {
             @Override public void propertyChange(PropertyChangeEvent evt) {
-                setOptimalSize();
+                setOptimalSize(true);
                 repaint();
             }
         };
         PropertyChangeListener borderPropertyChangeListener = new PropertyChangeListener() {
             @Override public void propertyChange(PropertyChangeEvent evt) {
                 getInsets(insetsBuffer);
-                setOptimalSize();
+                setOptimalSize(false);
                 getInternalBounds(); // gets bounds, sets shades, highlight, repaints
             }
         };
@@ -655,7 +654,7 @@ public class CasinoSpinner extends JPanel
     public void setVerticalPadding(int verticalPadding)
     {
         int oldPadding = setVerticalPaddingInternal(verticalPadding);
-        setOptimalSize();
+        setOptimalSize(false);
         firePropertyChange(VERTICAL_PADDING_PROPERTY, oldPadding, verticalPadding);
         repaint();
     }
@@ -758,7 +757,7 @@ public class CasinoSpinner extends JPanel
     public void setOrientation(boolean orientation)
     {
         boolean oldOrientation = setOrientationInternal(orientation);
-        setOptimalSize();
+        setOptimalSize(false);
         firePropertyChange(ORIENTATION_PROPERTY, oldOrientation, orientation);
         doInternalLayout();
     }
@@ -913,10 +912,10 @@ public class CasinoSpinner extends JPanel
              */
 
             // y is defined this way mostly for symmetry
-            float y = (index - position) * objectHeight + this.dataBounds[normIndex].baseLine;
-            g2.drawString(this.dataBounds[normIndex].str,
-                          x + 0.5f * (width - this.dataBounds[normIndex].width),
-                          y + 0.5f * (height - this.dataBounds[normIndex].height));
+            float y = (index - position) * objectHeight + this.dataBounds[normIndex].getBaseLine();
+            g2.drawString(this.dataBounds[normIndex].getString(),
+                          x + 0.5f * (width - this.dataBounds[normIndex].getWidth()),
+                          y + 0.5f * (height - this.dataBounds[normIndex].getHeight()));
         }
 
         // draw shades if they are not totally translucent
@@ -935,7 +934,7 @@ public class CasinoSpinner extends JPanel
      * triggered by {@link #setModelInternal(CasinoSpinnerModel)} as well as
      * {@link ModelListener#propertyChange(PropertyChangeEvent)}. The bounds of
      * the component and the data are set based on the model and the current set
-     * of properties via {@link #setOptimalSize()} once the array has been
+     * of properties via {@link #setOptimalSize(boolean)} once the array has been
      * recomputed.
      *
      * @since 1.0.0
@@ -946,11 +945,8 @@ public class CasinoSpinner extends JPanel
             this.dataBounds = null;
         } else {
             this.dataBounds = new StringBounds[this.model.getDataSize()];
-            List<String> data = this.model.getData();
-            for(int index = 0; index < dataBounds.length; index++)
-                this.dataBounds[index] = new StringBounds(data.get(index));
         }
-        setOptimalSize();
+        setOptimalSize(true);
     }
 
     /**
@@ -999,24 +995,26 @@ public class CasinoSpinner extends JPanel
      *
      * @since 1.0.0
      */
-    private void setOptimalSize()
+    private void setOptimalSize(boolean reset)
     {
         Dimension computedSize = new Dimension(0, 0);
 
         Font currentFont = getFont();
-        // This will only give an approximation of the real font sizes,
-        // but usually a good one
-        FontRenderContext rendererContext =
-                new FontRenderContext(currentFont.getTransform(), true, true);
 
         if(this.dataBounds != null) {
+            if(reset) {
+                for(int index = 0; index < this.dataBounds.length; index++) {
+                    this.dataBounds[index] = new StringBounds(model.getData().get(index), currentFont);
+                }
+            }
             // find the biggest width and height in the list
-            for(StringBounds bounds : this.dataBounds) {
-                bounds.setBounds(currentFont, rendererContext);
-                if(bounds.width > computedSize.width)
-                    computedSize.width = (int)Math.ceil(bounds.width);
-                if(bounds.height > computedSize.height)
-                    computedSize.height = (int)Math.ceil(bounds.height);
+            for(StringBounds bounds : dataBounds) {
+                float width = bounds.getWidth();
+                float height = bounds.getHeight();
+                if(width > computedSize.width)
+                    computedSize.width = (int)Math.ceil(width);
+                if(height > computedSize.height)
+                    computedSize.height = (int)Math.ceil(height);
             }
         }
 
@@ -1239,120 +1237,6 @@ public class CasinoSpinner extends JPanel
             sb.append(super.toString());
             sb.append(" [paint=").append(this.paint);
             sb.append(" [bounds=").append(this.bounds);
-            sb.append("]");
-            return sb.toString();
-        }
-    }
-
-    /**
-     * Stores the dimensions of a string when rendered with a specific font.
-     *
-     * @author Joseph Fox-Rabinovitz
-     * @version 1.0.0, 16 Feb 2013
-     * @since 1.0.0
-     */
-    private static class StringBounds implements Serializable
-    {
-        /**
-         * The version ID for serialization.
-         *
-         * @serial Increment the least significant three digits when
-         * compatibility is not compromised by a structural change (e.g. adding
-         * a new field with a sensible default value), and the upper digits when
-         * the change makes serialized versions of of the class incompatible
-         * with previous releases.
-         * @since 1.0.0
-         */
-        private static final long serialVersionUID = 1000L;
-
-        /**
-         * The width of the string in pixels for the current font and rendering
-         * context.
-         * 
-         * @since 1.0.0
-         */
-        public float width;
-
-        /**
-         * The height of the string in pixels for the current font and rendering
-         * context. The height is the sum of the ascent and descent of the
-         * current font.
-         *
-         * @since 1.0.0
-         */
-        public float height;
-
-        /**
-         * The base line of the string in pixels measured from the top for the
-         * current font and rendering context. The base line is given by the
-         * distance from the top of the ascent to the base line of the current
-         * font.
-         *
-         * @since 1.0.0
-         */
-        public float baseLine;
-
-        /**
-         * The string which this object encapsulates. This is the only field set
-         * by the constructor since it is font- and rendering
-         * context-independent.
-         *
-         * @since 1.0.0
-         */
-        public final String str;
-
-        /**
-         * Constructs a bounds object for the specified string. The width,
-         * height and base line fields are not set by the constructor. They must
-         * be computed for a specific font and context using {@link
-         * #setBounds(Font, FontRenderContext)}.
-         *
-         * @param str the string for which the bounds are to be computed.
-         * @since 1.0.0
-         */
-        public StringBounds(String str)
-        {
-            this.str = str;
-        }
-
-        /**
-         * Recomputes the bounds parameters of the string based on the specified
-         * font and renderer context. The result is a very good, generally
-         * accurate approximation of the size of the string. The baseling is
-         * computed from the top of the string.
-         *
-         * @param font the font to compute the bounds for.
-         * @param renderer the rendering context in which the string is to be
-         * displayed.
-         * @since 1.0.0
-         */
-        public void setBounds(Font font, FontRenderContext renderer)
-        {
-            Rectangle2D rect = font.getStringBounds(str, renderer);
-            LineMetrics metrics = font.getLineMetrics(str, renderer);
-            this.width = (float)rect.getWidth();
-            this.height = metrics.getAscent() + metrics.getDescent();
-            this.baseLine = metrics.getAscent();
-        }
-
-        /**
-         * Returns an informative string representation of this model. The
-         * resulting string will contain information about all of the task's
-         * properties. This method is useful for debugging and should not be
-         * used as a formal description of this object since the contents of the
-         * string may change at any time.
-         *
-         * @return a {@code String} representation of this object.
-         * @since 1.0.0
-         */
-        @Override public String toString()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.append(super.toString());
-            sb.append(" [str=").append(this.str);
-            sb.append(" [width=").append(this.width);
-            sb.append(" [height=").append(this.height);
-            sb.append(" [baseLine=").append(this.baseLine);
             sb.append("]");
             return sb.toString();
         }

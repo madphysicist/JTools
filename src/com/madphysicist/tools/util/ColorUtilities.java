@@ -40,9 +40,9 @@ import java.util.regex.Pattern;
  * This class can not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 05 Jun 2013 - J. Fox-Rabinovitz: Initial coding. 
- * @version 1.1.0, 28 May 2014 - J. Fox-Rabinovitz: Added average() methods. 
- * @since 1.0
+ * @version 1.0.0, 05 Jun 2013 - J. Fox-Rabinovitz: Initial coding.
+ * @version 1.1.0, 28 May 2014 - J. Fox-Rabinovitz: Added average() methods.
+ * @since 1.0.0
  */
 public class ColorUtilities
 {

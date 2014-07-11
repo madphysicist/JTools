@@ -76,12 +76,9 @@ public class FileUtilities
      * select a replacement from a file chooser dialog.
      *
      * @param filename the name of the file to check.
-     * @param filter the filter to apply in the dialog if the file does not
-     * exist. May be {@code null}.
-     * @return the original file if it exists, or the replacement file if
-     * another one had to be selected.
-     * @throws FileNotFoundException if the user refuses to select a file, or
-     * selects a non-existent one.
+     * @param filter the filter to apply in the dialog if the file does not exist. May be {@code null}.
+     * @return the original file if it exists, or the replacement file if another one had to be selected.
+     * @throws FileNotFoundException if the user refuses to select a file, or selects a non-existent one.
      * @since 1.0.0
      */
     public static File promptFile(String filename, FileFilter filter) throws FileNotFoundException
@@ -94,14 +91,10 @@ public class FileUtilities
      * select a replacement from a file chooser dialog.
      *
      * @param filename the name of the file to check.
-     * @param filter the filter to apply in the dialog if the file does not
-     * exist. May be {@code null}.
-     * @param title the title to set fot the dialog if the file does not exist.
-     * May be {@code null}.
-     * @return the original file if it exists, or the replacement file if
-     * another one had to be selected.
-     * @throws FileNotFoundException if the user refuses to select a file, or
-     * selects a non-existent one.
+     * @param filter the filter to apply in the dialog if the file does not exist. May be {@code null}.
+     * @param title the title to set fot the dialog if the file does not exist. May be {@code null}.
+     * @return the original file if it exists, or the replacement file if another one had to be selected.
+     * @throws FileNotFoundException if the user refuses to select a file, or selects a non-existent one.
      * @since 1.0.0
      */
     public static File promptFile(String filename, FileFilter filter, String title) throws FileNotFoundException
@@ -114,20 +107,15 @@ public class FileUtilities
      * select a replacement from a file chooser dialog.
      *
      * @param file the file to check.
-     * @param filter the filter to apply in the dialog if the file does not
-     * exist. May be {@code null}.
-     * @param title the title to set fot the dialog if the file does not exist.
-     * May be {@code null}.
-     * @return the original file if it exists, or the replacement file if
-     * another one had to be selected.
-     * @throws FileNotFoundException if the user refuses to select a file, or
-     * selects a non-existent one.
+     * @param filter the filter to apply in the dialog if the file does not exist. May be {@code null}.
+     * @param title the title to set for the dialog if the file does not exist. May be {@code null}.
+     * @return the original file if it exists, or the replacement file if another one had to be selected.
+     * @throws FileNotFoundException if the user refuses to select a file, or selects a non-existent one.
      * @since 1.0.0
      */
     public static File promptFile(File file, FileFilter filter, String title) throws FileNotFoundException
     {
         if(file == null || !file.exists()) {
-
             File start = file.getParentFile();
             if(!start.exists()) {
                 start = new File(".");

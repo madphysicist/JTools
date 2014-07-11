@@ -41,6 +41,7 @@
  * @author Joseph Fox-Rabinovitz
  * @version 1.0,  4 Mar 2012 - J. Fox-Rabinovitz: Initial coding.
  * @version 1.1, 22 May 2014 - J. Fox-Rabinovitz: Added proc sub-package.
+ * @version 1.2, 22 Jun 2014 - J. Fox-Rabinovitz: Added xml sub-package.
  * @since 1.0
  */
 package com.madphysicist.tools;

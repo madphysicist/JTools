@@ -42,10 +42,11 @@ import javax.swing.filechooser.FileFilter;
 
 /**
  * An extended swing component that displays a {@code JTextField} and a {@code
- * JFileChooser} triggred by a {@code JButton}.
+ * JFileChooser} triggered by a {@code JButton}.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 28 May 2013 - J. Fox-Rabinovitz - Created
+ * @version 1.0.0, 28 May 2013 - J. Fox-Rabinovitz - Initial coding.
+ * @version 1.0.1, 22 Jun 2014 - J. Fox-Rabinovitz - Added missing absolute functionality.
  * @since 1.0.0
  */
 public class JFileField extends JPanel
@@ -65,37 +66,43 @@ public class JFileField extends JPanel
 
     /**
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private JTextField textField;
 
     /**
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private JButton button;
 
     /**
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private JFileChooser fileChooser;
 
     /**
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private GridBagConstraints buttonConstraints;
 
     /**
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private GridBagConstraints textFieldConstraints;
 
+    /**
+     * @serial
+     * @since 1.0.1
+     */
+    private boolean absolute;
+
     public JFileField()
     {
-        this(false, JFileChooser.FILES_ONLY);
+        this(true, JFileChooser.FILES_ONLY);
     }
 
     /**
@@ -110,6 +117,7 @@ public class JFileField extends JPanel
         this.textField = new JTextField();
         this.button = new JButton("...");
         this.fileChooser = new JFileChooser(new File("."));
+        this.absolute = absolute;
 
         initTextField();
         initButton();
@@ -126,8 +134,11 @@ public class JFileField extends JPanel
     {
         button.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
-                if(fileChooser.showDialog(JFileField.this, null) == JFileChooser.APPROVE_OPTION)
-                    textField.setText(fileChooser.getSelectedFile().getPath());
+                if(fileChooser.showDialog(JFileField.this, null) == JFileChooser.APPROVE_OPTION) {
+                    String path = (absolute) ? fileChooser.getSelectedFile().getAbsolutePath() :
+                                               fileChooser.getSelectedFile().getPath();
+                    textField.setText(path);
+                }
             }
         });
     }
