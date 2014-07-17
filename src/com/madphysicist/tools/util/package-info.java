@@ -36,6 +36,7 @@
  * @version 1.0.0, 04 Mar 2012 - J. Fox-Rabinovitz - Created
  * @version 1.0.1, 03 Dec 2012 - J. Fox-Rabinovitz - Added PathManager and FilePathManager
  * @version 1.0.2, 22 Jun 2014 - J. Fox-Rabinovitz - Added TimeUtilities
+ * @version 1.0.3, 17 Jul 2014 - J. Fox-Rabinovitz - Added SelfIterator
  * @since 1.0
  */
 package com.madphysicist.tools.util;
