@@ -36,8 +36,13 @@ import java.io.Serializable;
 import javax.swing.Icon;
 
 /**
+ * <p>
  * An {@code Icon} that paints itself in a single solid color, with an optional border. The color, width and height are
  * dynamically modifiable. The border is painted with the inverse of the icon color be default if it is enabled.
+ * </p>
+ * <p>
+ * As with many other swing elements, this class is not properly synchronized.
+ * </p>
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 12 Jun 2013 - J. Fox-Rabinovitz - Created.
@@ -60,36 +65,61 @@ public class ColorIcon implements Icon, Serializable
     private static final long serialVersionUID = 1000L;
 
     /**
+     * The default width of the border when it is shown.
+     *
+     * @since 1.1.0
+     */
+    private static final int DEFAULT_BORDER_WIDTH = 1;
+
+    /**
      * The width of the icon in pixels.
      *
-     * @since 1.0.0
      * @serial
+     * @since 1.0.0
      */
     private int width;
 
     /**
      * The height of the icon in pixels.
      *
-     * @since 1.0.0
      * @serial
+     * @since 1.0.0
      */
     private int height;
 
     /**
+     * The color of the icon.
+     *
+     * @serial
+     * @since 1.0.1
+     */
+    private Color color;
+
+    /**
      * Whether or not to display the border.
      *
-     * @since 1.0.1
      * @serial
+     * @since 1.0.1
      */
     private boolean border;
 
     /**
-     * The color of the icon.
+     * The width of the border in pixels.
      *
-     * @since 1.0.1
      * @serial
+     * @since 1.1.0
      */
-    private Color color;
+    private int borderWidth;
+
+    /**
+     * The color of the border. This may be a {@code null} reference to indicate the default color, which is the inverse
+     * of the icon color.
+     *
+     * @see ColorUtilities#inverse(Color)
+     * @serial
+     * @since 1.1.0
+     */
+    private Color borderColor;
 
     /**
      * Constructs an icon with the specified color, width and height, and no
@@ -112,16 +142,18 @@ public class ColorIcon implements Icon, Serializable
      * @param color the desired color of the icon.
      * @param width the desired width of the icon.
      * @param height the desired height of the icon.
-     * @param border {@code true} if the icon is to have a border, {@code false}
+     * @param borderEnabled {@code true} if the icon is to have a border, {@code false}
      * otherwise.
      * @since 1.0.1
      */
-    public ColorIcon(Color color, int width, int height, boolean border)
+    public ColorIcon(Color color, int width, int height, boolean borderEnabled)
     {
         this.color = color;
         this.width = width;
         this.height = height;
-        this.border = border;
+        this.border = borderEnabled;
+        this.borderWidth = DEFAULT_BORDER_WIDTH;
+        this.borderColor = null;
     }
 
     /**
@@ -140,17 +172,20 @@ public class ColorIcon implements Icon, Serializable
         int iconHeight = height - 1;
 
         if(border) {
-            // draw an inverse border
-            copy.setColor(ColorUtilities.inverse(color));
-            copy.drawLine(x, y, x + iconWidth, y);                           // top
-            copy.drawLine(x + iconWidth, y, x + iconWidth, y + iconHeight);  // right
-            copy.drawLine(x + iconWidth, y + iconHeight, x, y + iconHeight); // bottom
-            copy.drawLine(x, y + iconHeight, x, y);                          // left
+            // draw a border
+            copy.setColor(getBorderColor());
+            if(borderWidth == 1)
+                copy.drawRect(x, y, iconWidth, iconHeight);
+            else
+                copy.fillRect(x, y, iconWidth + 1, iconHeight + 1);
         }
 
         // fill the color
         copy.setColor(color);
-        copy.fillRect(x + 1, y + 1, iconWidth - 1, iconHeight - 1);
+        if(border)
+            copy.fillRect(x + borderWidth, y + borderWidth, iconWidth - 2 * borderWidth + 1, iconHeight - 2 * borderWidth + 1);
+        else
+            copy.fillRect(x, y, iconWidth + 1, iconHeight + 1);
     }
 
     /**
@@ -178,6 +213,42 @@ public class ColorIcon implements Icon, Serializable
     public Color getIconColor()
     {
         return this.color;
+    }
+
+    /**
+     * Returns the display state of the icon border.
+     *
+     * @return {@code true} if the icon border will be drawn, {@code false} otherwise.
+     * @since 1.1.0
+     */
+    public boolean isBorderEnabled()
+    {
+        return border;
+    }
+
+    /**
+     * Returns the border width of the icon in pixels.
+     *
+     * @return the width of the icon border, when it is enabled.
+     * @since 1.1.0
+     */
+    public int getBorderWidth()
+    {
+        return this.borderWidth;
+    }
+
+    /**
+     * Returns the current border color of the icon. If the default color is being used, this will be the inverse of the
+     * current icon color.
+     *
+     * @see #getIconColor()
+     * @see ColorUtilities#inverse(Color)
+     * @return the color with which the border is displayed, when it is enabled.
+     * @since 1.1.0
+     */
+    public Color getBorderColor()
+    {
+        return (this.borderColor == null) ? ColorUtilities.inverse(this.color) : this.borderColor;
     }
 
     /**
@@ -229,6 +300,69 @@ public class ColorIcon implements Icon, Serializable
         if(!color.equals(this.color)) {
             this.color = color;
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Changes whether or not the border of the icon is displayed.
+     *
+     * @param borderEnabled the new status of the border.
+     * @return {@code true} if the status changed, {@code false} if the new display status is the same as the old. This
+     * is done so that components that display the icon can immediately tell if an update is necessary after a status
+     * change.
+     * @since 1.1.0
+     */
+    public boolean setBorderEnabled(boolean borderEnabled)
+    {
+        if(borderEnabled != this.border) {
+            this.border = borderEnabled;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Changes the border width of the icon in pixels. The border width is configurable even when the border itself is
+     * not being displayed.
+     *
+     * @param borderWidth the new border width in pixels.
+     * @return {@code true} if the border width changed and the border is being displayed, {@code false} if the new
+     * border width is the same as the old, or if the border is not being displayed. This is done so that components
+     * that display the icon can immediately tell if an update is necessary after a change.
+     * @since 1.1.0
+     */
+    public boolean setBorderWidth(int borderWidth)
+    {
+        if(this.borderWidth != borderWidth) {
+            this.borderWidth = borderWidth;
+            return border;
+        }
+
+        return false;
+    }
+
+    /**
+     * Changes the border color of the icon. The border width is configurable even when the border itself is not being
+     * displayed. If the new color is {@code null}, the border color defaults to the dynamic inverse of the icon color.
+     *
+     * @param borderColor the new border color.
+     * @return {@code true} if the border color changed and the border is being displayed, {@code false} if the new
+     * border color is the same as the old, or if the border is not being displayed. This is done so that components
+     * that display the icon can immediately tell if an update is necessary after a change. Note that explicitly setting
+     * the color to a value equal to the default when the current border color has been set to {@code null} or setting
+     * the border color to {@code null} when it has been explicitly set to a value that equals the default will cause
+     * a return value of {@code false} since no update is necessary to correctly display the icon. 
+     * @since 1.1.0
+     */
+    public boolean setBorderColor(Color borderColor)
+    {
+        if((borderColor == null && this.borderColor != null) || (borderColor != null && !borderColor.equals(this.borderColor))) {
+            Color oldColor = getBorderColor();
+            this.borderColor = borderColor;
+            return border && !oldColor.equals(getBorderColor());
         }
 
         return false;

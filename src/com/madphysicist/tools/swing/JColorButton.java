@@ -33,20 +33,29 @@ import java.awt.Dialog.ModalityType;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.colorchooser.ColorSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -57,7 +66,8 @@ import javax.swing.event.ChangeListener;
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 12 Jun 2013 - J. Fox-Rabinovitz - Created.
  * @version 1.0.1, 16 Nov 2013 - J. Fox-Rabinovitz - Made ColorIcon public main class.
- * @version 1.1.0, 22 Jun 2014 - J. Fox-Rabinovitz - Added square constructors, change updates
+ * @version 1.1.0, 22 Nov 2013 - J. Fox-Rabinovitz - Added square constructors, change updates.
+ * @version 1.1.1, 18 Jul 2014 - J. Fox-Rabinovitz - Updated demo with ColorIcon v1.1.0 features.
  * @since 1.0
  */
 public class JColorButton extends JButton
@@ -388,6 +398,14 @@ public class JColorButton extends JButton
     }
 
     /**
+     * @since 1.1.1
+     */
+    @Override public ColorIcon getIcon()
+    {
+        return this.icon;
+    }
+
+    /**
      * Adds a listener to changes in the color to the current selection model.
      * This listener will not be transferred to a new model if either the model
      * or the color chooser are changed.
@@ -609,9 +627,10 @@ public class JColorButton extends JButton
 
     /**
      * Runs a demo of this class. A {@code JColorButton} is displayed along with
-     * a pair of {@code JSpinners} that allow the icon size to be changed
-     * dynamically, as well as a LAF selector that allows the user to see the
-     * button being rendered by any of the currently installed LAFs.
+     * controls to manipulate the border and the icon a pair of {@code JSpinners} that allow the icon size, the icon border size
+     * and the border visibility to be changed dynamically, as well as a LAF selector
+     * that allows the user to see the button being rendered by any of the currently
+     * installed LAFs.
      *
      * @param args the command line arguments of the program, which are ignored.
      * @see javax.swing.JSpinner JSpinner
@@ -621,11 +640,27 @@ public class JColorButton extends JButton
      */
     public static void main(String[] args)
     {
+        JFrame frame = new JFrame("Demo of JColorButton v1.0.1");
+        frame.setResizable(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+
         final JColorButton colorButton = new JColorButton();
         final JSpinner heightSpinner = new JSpinner();
         final JSpinner widthSpinner = new JSpinner();
+        final JCheckBox borderCheck = new JCheckBox();
+        final JSpinner borderSpinner = new JSpinner();
+        final JColorButton borderButton = new JColorButton();
+        final JButton borderClear = new JButton("Clear");
 
         colorButton.setColor(Color.GREEN);
+        colorButton.setAlignmentX(0.5f);
+        colorButton.addPropertyChangeListener(COLOR_PROPERTY, new PropertyChangeListener() {
+            @Override public void propertyChange(PropertyChangeEvent evt)
+            {
+                borderButton.setColor(colorButton.getIcon().getBorderColor());
+            }
+        });
         heightSpinner.setValue(colorButton.getIconHeight());
         heightSpinner.addChangeListener(new ChangeListener() {
             @Override public void stateChanged(ChangeEvent e) {
@@ -638,32 +673,95 @@ public class JColorButton extends JButton
                 colorButton.setIconWidth(((Number)widthSpinner.getValue()).intValue());
             }
         });
+        borderCheck.setSelected(((ColorIcon)colorButton.getIcon()).isBorderEnabled());
+        borderCheck.addItemListener(new ItemListener() {
+            @Override public void itemStateChanged(ItemEvent e) {
+                colorButton.getIcon().setBorderEnabled(e.getStateChange() == ItemEvent.SELECTED);
+                colorButton.repaint();
+            }
+        });
+        borderSpinner.setValue(((ColorIcon)colorButton.getIcon()).getBorderWidth());
+        borderSpinner.addChangeListener(new ChangeListener() {
+            @Override public void stateChanged(ChangeEvent e) {
+                colorButton.getIcon().setBorderWidth(((Number)borderSpinner.getValue()).intValue());
+                colorButton.repaint();
+            }
+        });
+        borderButton.setColor(colorButton.getIcon().getBorderColor());
+        borderButton.getIcon().setBorderEnabled(false);
+        borderButton.addPropertyChangeListener(COLOR_PROPERTY, new PropertyChangeListener() {
+            @Override public void propertyChange(PropertyChangeEvent evt) {
+                colorButton.getIcon().setBorderColor((Color)evt.getNewValue());
+                colorButton.repaint();
+            }
+        });
+        borderClear.addActionListener(new ActionListener() {
+            @Override public void actionPerformed(ActionEvent e) {
+                colorButton.getIcon().setBorderColor(null);
+                colorButton.repaint();
+            }
+        });
 
-        JFrame frame = new JFrame("Demo of JColorButton v1.0.1");
-        frame.setResizable(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new GridBagLayout());
-        frame.add(colorButton, new GridBagConstraints(0, 0, 2, 1, 1.0, 1.0,
+        JPanel iconPanel = new JPanel(new GridBagLayout());
+        iconPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED), "Icon"));
+        iconPanel.setAlignmentX(0.5f);
+        iconPanel.add(new JLabel("Height"), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
+                GridBagConstants.NORTHWEST, 0, 0));
+        iconPanel.add(heightSpinner, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+                GridBagConstants.EAST, 0, 0));
+        iconPanel.add(new JLabel("Width"), new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.EAST, GridBagConstraints.NONE,
+                GridBagConstants.WEST, 0, 0));
+        iconPanel.add(widthSpinner, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
+                GridBagConstraints.SOUTHWEST, GridBagConstraints.HORIZONTAL,
+                GridBagConstants.SOUTHEAST, 0, 0));
+
+        JPanel borderPanel = new JPanel(new GridBagLayout());
+        borderPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED), "Border"));
+        borderPanel.setAlignmentX(0.5f);
+        borderPanel.add(new JLabel("Enabled"), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.EAST, GridBagConstraints.NONE,
+                GridBagConstants.NORTHWEST, 0, 0));
+        borderPanel.add(borderCheck, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(5, 8, 2, 8), 0, 0));
-        frame.add(new JLabel("Height"), new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                GridBagConstants.NORTHEAST, 0, 0));
+        borderPanel.add(new JLabel("Width"), new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
-                new Insets(2, 8, 2, 5), 0, 0));
-        frame.add(heightSpinner, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                GridBagConstants.WEST, 0, 0));
+        borderPanel.add(borderSpinner, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-                new Insets(2, 5, 2, 8), 0, 0));
-        frame.add(new JLabel("Width"), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+                GridBagConstants.EAST, 0, 0));
+        borderPanel.add(new JLabel("Color"), new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
-                new Insets(2, 8, 2, 5), 0, 0));
-        frame.add(widthSpinner, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+                GridBagConstants.WEST, 0, 0));
+        borderPanel.add(borderButton, new GridBagConstraints(1, 2, 1, 1, 1.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-                new Insets(2, 5, 2, 8), 0, 0));
-        frame.add(new JLabel("Look-and-Feel"), new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+                GridBagConstants.EAST, 0, 0));
+        borderPanel.add(new JLabel("Color Reset"), new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.NONE,
-                new Insets(2, 8, 5, 5), 0, 0));
-        frame.add(LAFUtilities.lookAndFeelSelector(frame), new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+                GridBagConstants.SOUTHWEST, 0, 0));
+        borderPanel.add(borderClear, new GridBagConstraints(1, 3, 1, 1, 1.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
-                new Insets(2, 5, 5, 8), 0, 0));
+                GridBagConstants.SOUTHEAST, 0, 0));
+
+        JPanel lafPanel = new JPanel(new GridBagLayout());
+        lafPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED), "Frame"));
+        lafPanel.setAlignmentX(0.5f);
+        lafPanel.add(new JLabel("Look-and-Feel"), new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.EAST, GridBagConstraints.NONE,
+                GridBagConstants.SOUTHWEST, 0, 0));
+        lafPanel.add(LAFUtilities.lookAndFeelSelector(frame), new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+                GridBagConstants.SOUTHEAST, 0, 0));
+
+        frame.add(Box.createVerticalStrut(GridBagConstants.NORTH_INSET));
+        frame.add(colorButton);
+        frame.add(iconPanel);
+        frame.add(borderPanel);
+        frame.add(lafPanel);
+        frame.add(Box.createVerticalStrut(GridBagConstants.SOUTH_INSET));
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
