@@ -1,7 +1,7 @@
 /*
- * SelfIterator.java
+ * ReferenceIterator.java (Class: com.madphysicist.tools.util.ReferenceIterator)
  *
- * Mad Physicist JTools Project
+ * Mad Physicist JTools Project (General Purpose Utilities)
  *
  * The MIT License (MIT)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.util;
 
 import java.util.Iterator;
@@ -44,7 +43,7 @@ import java.util.Iterator;
  * @version 1.0.0, 17 Jul 2014 - J. Fox-Rabinovitz - Initial coding
  * @since 1.0.3
  */
-public class SelfIterator<E> implements Iterator<E>
+public class ReferenceIterator<E> implements Iterator<E>
 {
     /**
      * The object to iterate over.
@@ -67,7 +66,7 @@ public class SelfIterator<E> implements Iterator<E>
      * @param object the object to iterate over.
      * @since 1.0.0
      */
-    public SelfIterator(E object)
+    public ReferenceIterator(E object)
     {
         this.object = object;
         this.on = true;

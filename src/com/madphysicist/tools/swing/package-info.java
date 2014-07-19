@@ -1,5 +1,5 @@
 /*
- * package-info.java
+ * package-info.java (Package: com.madphysicist.tools.swing)
  *
  * Mad Physicist JTools Project (Swing Utilities)
  *

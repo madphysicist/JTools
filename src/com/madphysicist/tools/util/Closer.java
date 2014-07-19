@@ -1,5 +1,5 @@
 /*
- * Closer.java
+ * Closer.java (Class: com.madphysicist.tools.util.Closer)
  *
  * Mad Physicist JTools Project (General Purpose Utilities)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.util;
 
 import java.io.Closeable;

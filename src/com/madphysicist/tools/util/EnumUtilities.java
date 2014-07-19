@@ -1,5 +1,5 @@
 /*
- * EnumUtilities.java
+ * EnumUtilities.java (Class: com.madphysicist.tools.util.EnumUtilities)
  *
  * Mad Physicist JTools Project (General Purpose Utilities)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.util;
 
 /**

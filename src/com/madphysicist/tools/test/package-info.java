@@ -1,5 +1,5 @@
 /*
- * package-info.java
+ * package-info.java (Package: com.madphysicist.tools.test)
  *
  * Mad Physicist JTools Project (TestNG Utilities)
  *

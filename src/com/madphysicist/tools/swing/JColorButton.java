@@ -1,5 +1,5 @@
 /*
- * JColorButton.java
+ * JColorButton.java (Class: com.madphysicist.tools.swing.JColorButton)
  *
  * Mad Physicist JTools Project (Swing Utilities)
  *

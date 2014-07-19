@@ -1,5 +1,5 @@
 /*
- * JFileField.java
+ * JFileField.java (Class: com.madphysicist.tools.swing.JFileField)
  *
  * Mad Physicist JTools Project (Swing Utilities)
  *

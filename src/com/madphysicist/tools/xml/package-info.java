@@ -1,7 +1,7 @@
 /*
- * package-info.java
+ * package-info.java (Package: com.madphysicist.tools.xml)
  *
- * Mad Physicist JTools Project (General Purpose Utilities)
+ * Mad Physicist JTools Project (XML Tools)
  *
  * The MIT License (MIT)
  *

@@ -1,5 +1,5 @@
 /*
- * LogTaglet.java
+ * LogTaglet.java (Class: com.madphysicist.tools.javadoc.LogTaglet)
  *
  * Mad Physicist JTools Project (Javadoc Utilities)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.javadoc;
 
 import com.sun.javadoc.Tag;

@@ -1,7 +1,7 @@
 /*
- * StackedHandler.java
+ * StackedHandler.java (Class: com.madphysicist.tools.xml.StackedHandler)
  *
- * Mad Physicist JTools Project (General Purpose Utilities)
+ * Mad Physicist JTools Project (XML Tools)
  *
  * The MIT License (MIT)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.xml;
 
 import java.io.Serializable;

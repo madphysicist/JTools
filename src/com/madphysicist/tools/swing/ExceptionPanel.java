@@ -1,5 +1,5 @@
 /*
- * LoginPanel.java
+ * LoginPanel.java (Class: com.madphysicist.tools.swing.ExceptionPanel)
  *
  * Mad Physicist JTools Project (Swing Utilities)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.swing;
 
 import java.awt.BorderLayout;
@@ -61,7 +60,6 @@ import javax.swing.border.BevelBorder;
  * @version 1.0.0 21 Nov 2013 - J. Fox-Rabinovitz - Created
  * @since 1.0.0
  */
-
 public class ExceptionPanel extends JPanel
 {
     /**

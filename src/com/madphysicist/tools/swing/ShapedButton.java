@@ -1,5 +1,5 @@
 /*
- * ShapedButton.java
+ * ShapedButton.java (Class: com.madphysicist.tools.swing.ShapedButton)
  *
  * Mad Physicist JTools Project (Swing Utilities)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.swing;
 
 import java.awt.Color;

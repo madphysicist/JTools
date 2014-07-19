@@ -1,5 +1,5 @@
 /*
- * StringBounds.java
+ * StringBounds.java (Class: com.madphysicist.tools.swing.StringBounds)
  *
  * Mad Physicist JTools Project (General Purpose Utilities)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.swing;
 
 import java.awt.Font;

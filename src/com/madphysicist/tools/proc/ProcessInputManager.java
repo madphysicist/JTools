@@ -1,7 +1,7 @@
 /*
- * ProcessController.java
+ * ProcessInputManager.java (Class: com.madphysicist.tools.proc.ProcessInputManager)
  *
- * Mad Physicist JTools Project (General Purpose Utilities)
+ * Mad Physicist JTools Project (System Process Utilities)
  *
  * The MIT License (MIT)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.proc;
 
 import java.io.BufferedReader;
@@ -40,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class wraps the ProcessBuilder and Process classes together. It provides functionality for managing the {@link
+ * Wraps the ProcessBuilder and Process classes together. It provides functionality for managing the {@link
  * ProcessInputListener}s which listen to the sub-process output and error streams. This class does not supply any
  * direct mechanism for using the output streams to a process. However, finer control can be obtained by using the
  * {@link #fork()} method to execute processes rather than the {link #execute()} method. 

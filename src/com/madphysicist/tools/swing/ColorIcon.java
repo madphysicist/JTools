@@ -1,5 +1,5 @@
 /*
- * ColorIcon.java
+ * ColorIcon.java (Class: com.madphysicist.tools.swing.ColorIcon)
  *
  * Mad Physicist JTools Project (Swing Utilities)
  *
@@ -36,12 +36,13 @@ import java.io.Serializable;
 import javax.swing.Icon;
 
 /**
- * An {@code Icon} that paints itself in a single solid color, with an optional
- * border. The color, width and height are dynamically modifiable.
+ * An {@code Icon} that paints itself in a single solid color, with an optional border. The color, width and height are
+ * dynamically modifiable. The border is painted with the inverse of the icon color be default if it is enabled.
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 12 Jun 2013 - J. Fox-Rabinovitz - Created.
- * @version 1.0.1, 16 Nov 2013 - J. Fox-Rabinovitz - Made border configurable.
+ * @version 1.0.1, 16 Nov 2013 - J. Fox-Rabinovitz - Made border display configurable.
+ * @version 1.1.0, 18 Jul 2014 - J. Fox-Rabinovitz - Added color and width configuration to border.
  * @since 1.0.0
  */
 public class ColorIcon implements Icon, Serializable
@@ -152,21 +153,41 @@ public class ColorIcon implements Icon, Serializable
         copy.fillRect(x + 1, y + 1, iconWidth - 1, iconHeight - 1);
     }
 
+    /**
+     * @since 1.0.0
+     */
     @Override public int getIconWidth()
     {
         return this.width;
     }
 
+    /**
+     * @since 1.0.0
+     */
     @Override public int getIconHeight()
     {
         return this.height;
     }
 
+    /**
+     * Returns the current color of the icon.
+     *
+     * @return the color of the icon.
+     * @since 1.0.0
+     */
     public Color getIconColor()
     {
         return this.color;
     }
 
+    /**
+     * Changes the width of the icon.
+     *
+     * @param width the new width of the icon in pixels.
+     * @return {@code true} if the width changed, {@code false} if the new width is the same as the old. This is done so
+     * that components that display the icon can immediately tell if an update is necessary after a resize.
+     * @since 1.0.0
+     */
     public boolean setIconWidth(int width)
     {
         if(width != this.width) {
@@ -177,6 +198,14 @@ public class ColorIcon implements Icon, Serializable
         return false;
     }
 
+    /**
+     * Changes the height of the icon.
+     *
+     * @param height the new height of the icon in pixels.
+     * @return {@code true} if the height changed, {@code false} if the new height is the same as the old. This is done
+     * so that components that display the icon can immediately tell if an update is necessary after a resize.
+     * @since 1.0.0
+     */
     public boolean setIconHeight(int height)
     {
         if(height != this.height) {
@@ -187,6 +216,14 @@ public class ColorIcon implements Icon, Serializable
         return false;
     }
 
+    /**
+     * Changes the color of the icon.
+     *
+     * @param color the new color of the icon.
+     * @return {@code true} if the color changed, {@code false} if the new color is the same as the old. This is done
+     * so that components that display the icon can immediately tell if an update is necessary after a color change.
+     * @since 1.0.0
+     */
     public boolean setIconColor(Color color)
     {
         if(!color.equals(this.color)) {

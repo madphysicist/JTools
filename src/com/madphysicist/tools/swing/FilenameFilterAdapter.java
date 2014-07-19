@@ -1,5 +1,5 @@
 /*
- * FilenameFilterAdapter.java
+ * FilenameFilterAdapter.java (Class: com.madphysicist.tools.swing.FilenameFilterAdapter)
  *
  * Mad Physicist JTools Project (Swing Utilities)
  *

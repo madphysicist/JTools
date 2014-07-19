@@ -1,5 +1,5 @@
 /*
- * package-info.java
+ * package-info.java (Package: com.madphysicist.tools)
  *
  * Mad Physicist JTools Project
  *
@@ -34,14 +34,26 @@
  * </p>
  * <p>
  * This package is an ongoing work. It is not intended to be tied to any single
- * project, but many of the other Mad Physicist projects will depend on this
+ * project, but some of the other Mad Physicist projects will depend on this
  * one.
+ * </p>
+ * <p>
+ * <b>A note on version numbers</b><br />
+ * Packages are labeled with a major and minor version number. The major number is increased when a package becomes
+ * incompatible with previous versions. The minor version is increased when content is added to the package. The {@code
+ * @since} tag of public classes and sub-packages should reflect the version of the parent package into which they were
+ * introduced. Java files have major and minor version numbers as well as a release number. The major number should be
+ * incremented whenever the class API changes in a way that is incompatible with previous versions, or a major rewrite
+ * occurs. The minor version should be incremented when APIs are added, and the release number should be incremented
+ * whenever minor code changes or bug-fixes occur under the hood. The {@code @since} tags of all class elements,
+ * including subclasses should reflect the version of the enclosing class in which they were introduced.  
  * </p>
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0,  4 Mar 2012 - J. Fox-Rabinovitz: Initial coding.
  * @version 1.1, 22 May 2014 - J. Fox-Rabinovitz: Added proc sub-package.
  * @version 1.2, 22 Jun 2014 - J. Fox-Rabinovitz: Added xml sub-package.
+ * @version 1.3, 14 Jul 2014 - J. Fox-Rabinovitz: Added units sub-package.
  * @since 1.0
  */
 package com.madphysicist.tools;

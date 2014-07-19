@@ -1,5 +1,5 @@
 /*
- * package-info.java
+ * package-info.java (Package: com.madphysicist.tools.util)
  *
  * Mad Physicist JTools Project (General Purpose Utilities)
  *

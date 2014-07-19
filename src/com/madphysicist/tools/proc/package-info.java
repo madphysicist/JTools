@@ -1,7 +1,7 @@
 /*
- * package-info.java
+ * package-info.java (Package: com.madphysicist.tools.proc)
  *
- * Mad Physicist JTools Project
+ * Mad Physicist JTools Project (System Process Utilities)
  *
  * The MIT License (MIT)
  *
@@ -28,10 +28,9 @@
 
 /**
  * <p>
- * Contains classes for registering listeners to system processes. The core of this
- * package is the {@code ProcessInputManager} class. It allows users to register listeners
- * for lines of test coming through the standard input and error pipes when a sub-process
- * is started.
+ * Contains classes for registering listeners to system processes. The core of this package is the {@code
+ * ProcessInputManager} class. It allows users to register listeners for lines of test coming through the standard input
+ * and error pipes when a sub-process is started.
  * </p>
  *
  * @author Joseph Fox-Rabinovitz

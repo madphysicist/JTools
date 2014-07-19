@@ -1,5 +1,5 @@
 /*
- * TogglePanel.java
+ * TogglePanel.java (Class: com.madphysicist.tools.swing.TogglePanel)
  *
  * Mad Physicist JTools Project (Swing Utilities)
  *

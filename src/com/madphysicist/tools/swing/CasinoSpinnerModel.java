@@ -1,5 +1,5 @@
 /*
- * CasinoSpinnerModel.java
+ * CasinoSpinnerModel.java (Class: com.madphysicist.tools.swing.CasinoSpinnerModel)
  *
  * Mad Physicist JTools Project (Swing Utilities)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.swing;
 
 import java.beans.PropertyChangeListener;

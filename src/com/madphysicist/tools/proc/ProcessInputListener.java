@@ -1,7 +1,7 @@
 /*
- * ProcessInputListener.java
+ * ProcessInputListener.java (Interface: com.madphysicist.tools.proc.ProcessInputListener)
  *
- * Mad Physicist JTools Project (General Purpose Utilities)
+ * Mad Physicist JTools Project (Sytem Process Utilities)
  *
  * The MIT License (MIT)
  *
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.madphysicist.tools.proc;
 
 import java.util.EventListener;
