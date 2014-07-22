@@ -81,6 +81,7 @@ import java.util.Arrays;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 11 Nov 2012 - J. Fox-Rabinovitz - Created
+ * @version 1.1.0, 21 Jul 2014 - J. Fox-Rabinovitz - Added refEquals method
  * @since 1.0.0
  */
 public class HashUtilities
@@ -125,6 +126,21 @@ public class HashUtilities
      * @since 1.0.0.0
      */
     private HashUtilities() {}
+
+    /**
+     * Checks that two objects are either both {@code null} or equal. The comparison using {@code equals} is done if and
+     * only if {@code ref1} is not {@code null}. The comparison is always done as {@code ref1.equals(ref2)}.
+     *
+     * @param ref1 the first reference to compare.
+     * @param ref2 the second reference to compare.
+     * @return {@code true} if both references are {@code null}, or if they are equal, {@code false} otherwise.
+     * @since 1.1.0
+     */
+    public static boolean refEquals(Object ref1, Object ref2)
+    {
+        return (ref1 == null && ref2 == null) ||
+               (ref1 != null && ref1.equals(ref2));
+    }
 
     /**
      * Computes the MD5 hash of a password string and returns a hexadecimal
