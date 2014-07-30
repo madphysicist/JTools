@@ -36,13 +36,12 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Manages the tasks of path construction and lookup. Lookup is done in a linear
- * fashion according to the order in which items are added. For a concrete
- * implementation pertaining to file system paths, see {@link FilePathManager}.
+ * Manages the tasks of path construction and lookup. Lookup is done in a linear fashion according to the order in which
+ * items are added. For a concrete implementation pertaining to file system paths, see {@link
+ * com.madphysicist.tools.io.FilePathManager}.
  *
  * @param <T> the type of element in the path.
- * @param <U> the type of object obtained when an element is appended to the
- * path.
+ * @param <U> the type of object obtained when an element is appended to the path.
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 03 Dec 2012 - J. Fox-Rabinovitz - Created
  * @since 1.0.1

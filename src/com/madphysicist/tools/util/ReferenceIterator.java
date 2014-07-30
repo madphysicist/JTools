@@ -39,6 +39,7 @@ import java.util.Iterator;
  * This class does not support the {@link #remove()} method.
  * </p>
  *
+ * @param <E> the element type of the iterator. This is just the class of the object that it is initialized with.
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 17 Jul 2014 - J. Fox-Rabinovitz - Initial coding
  * @since 1.0.3

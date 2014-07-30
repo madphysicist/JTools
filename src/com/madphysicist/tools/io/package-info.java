@@ -1,7 +1,7 @@
 /*
- * package-info.java (Package: com.madphysicist.tools.util)
+ * package-info.java (Package: com.madphysicist.tools.io)
  *
- * Mad Physicist JTools Project (General Purpose Utilities)
+ * Mad Physicist JTools Project (I/O Tools)
  *
  * The MIT License (MIT)
  *
@@ -27,17 +27,10 @@
  */
 
 /**
- * Provides utilities for manipulating common objects such as arrays and
- * strings. This package contains two types of classes: static library classes
- * that contain methods for working with different types of data, and utility
- * objects that provide extended functionality.
+ * This package contains useful extensions and wrappers for the elements of the {@code java.io} package.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 04 Mar 2012 - J. Fox-Rabinovitz - Created
- * @version 1.0.1, 03 Dec 2012 - J. Fox-Rabinovitz - Added PathManager and FilePathManager
- * @version 1.0.2, 22 Jun 2014 - J. Fox-Rabinovitz - Added TimeUtilities
- * @version 1.0.3, 17 Jul 2014 - J. Fox-Rabinovitz - Added SelfIterator
- * @version 1.0.4, 24 Jul 2014 - J. Fox-Rabinovitz - Moved FilePathManager to com.madphysicist.tools.io
- * @since 1.0
+ * @version 1.0, 24 Jul 2014 - J. Fox-Rabinovitz: Initial coding.
+ * @since 1.4
  */
-package com.madphysicist.tools.util;
+package com.madphysicist.tools.io;

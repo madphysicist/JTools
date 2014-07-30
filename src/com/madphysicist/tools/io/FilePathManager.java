@@ -1,7 +1,7 @@
 /*
- * FilePathManager.java (Class: com.madphysicist.tools.util.FilePathManager)
+ * FilePathManager.java (Class: com.madphysicist.tools.io.FilePathManager)
  *
- * Mad Physicist JTools Project (General Purpose Utilities)
+ * Mad Physicist JTools Project (I/O Tools)
  *
  * The MIT License (MIT)
  *
@@ -25,7 +25,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.madphysicist.tools.util;
+package com.madphysicist.tools.io;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,15 +34,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.madphysicist.tools.util.PathManager;
+
 /**
- * Manages the a file path and associated lookup tasks. This class is very
- * lenient with input types. Path elements must always be {@code File}s, but
- * checking for any non-{@code File} type is done by converting it to a {@code
- * String} first.
+ * Manages the a file path and associated lookup tasks. This class is very lenient with input types. Path elements must
+ * always be {@code File}s, but checking for any non-{@code File} type is done by converting it to a {@code String}
+ * first.
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 03 Dec 2012 - J. Fox-Rabinovitz - Created
- * @since 1.0.1
+ * @version 1.0.1, 24 Jul 2014 - J. Fox-Rabinovitz - Moved from com.madphysicist.tools.util
+ * @since 1.0.0
  */
 public class FilePathManager extends PathManager<File, File>
 {
