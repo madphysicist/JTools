@@ -49,7 +49,7 @@ import javax.swing.KeyStroke;
  * @version 1.0.0, 2 Nov 2012 - J. Fox-Rabinovitz - Created
  * @version 1.0.1, 10 Dec 2013 - J. Fox-Rabinovitz - Added {@code
  * loadFromFile(File)} method, {@code load*NoEx()} methods, special getters.
- * @since 1.0.0
+ * @since 1.0
  */
 public class ExtendedProperties extends Properties
 {

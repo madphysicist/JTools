@@ -40,7 +40,7 @@ import java.io.Serializable;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 16 Mar 2012
- * @since 1.0.0
+ * @since 1.0
  */
 public abstract class BackgroundThread implements Runnable, Serializable
 {

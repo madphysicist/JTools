@@ -40,15 +40,15 @@ import java.util.NoSuchElementException;
  *
  * @param <T> the type of object to be iterated over.
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 19 Nov 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 19 Nov 2012
+ * @since 1.0
  */
 public class CombinedIterator<T> implements Iterator<T>
 {
     /**
      * The objects to be iterated over. Objects are iterated over in the order
      * that they appear in this array.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private Iterable<T>[] list;
 
@@ -56,13 +56,13 @@ public class CombinedIterator<T> implements Iterator<T>
      * The native iterator of the object currently being iterated over. The
      * {@link #hasNext()}, {@link #next()} and {@link #remove()} methods of this
      * iterator will delegate to the current iterator.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private Iterator<T> currentIterator;
 
     /**
      * The index in {@link #list} of the object currently being iterated over.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private int index;
 
@@ -73,7 +73,7 @@ public class CombinedIterator<T> implements Iterator<T>
      * @param list a list of {@code Iterable} objects. The array iself may be
      * {@code null}. Any {@code null} or empty elements it contains, will be
      * skipped without throwing an exception.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
     public CombinedIterator(Iterable<T>... list)
@@ -93,7 +93,7 @@ public class CombinedIterator<T> implements Iterator<T>
      * iterate over.
      *
      * @return {@inheritDoc}
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Override public boolean hasNext()
     {
@@ -115,7 +115,7 @@ public class CombinedIterator<T> implements Iterator<T>
      * @return {@inheritDoc}
      * @throws NoSuchElementException when all the {@code Iterables} have run
      * out.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Override public T next() throws NoSuchElementException
     {
@@ -135,7 +135,7 @@ public class CombinedIterator<T> implements Iterator<T>
      * {@code Iterator} does not support removal.
      * @throws IllegalStateException if there are no more {@code Iterables} left
      * in the sequence.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Override public void remove() throws UnsupportedOperationException, IllegalStateException
     {
@@ -154,7 +154,7 @@ public class CombinedIterator<T> implements Iterator<T>
      * @return {@code true} if a valid iterator was found, {@code false} if
      * there are no more elements left to iterate over in any of the {@code
      * Iterables}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private boolean setNextIterator()
     {

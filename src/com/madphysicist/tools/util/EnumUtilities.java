@@ -34,7 +34,7 @@ package com.madphysicist.tools.util;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 20 June 2013
- * @since 1.0.0
+ * @since 1.0
  */
 public class EnumUtilities
 {

@@ -44,7 +44,7 @@ import java.util.ListIterator;
  * @param <U> the type of object obtained when an element is appended to the path.
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 03 Dec 2012 - J. Fox-Rabinovitz - Created
- * @since 1.0.1
+ * @since 1.1
  */
 public abstract class PathManager<T, U> implements Serializable, Iterable<T>
 {

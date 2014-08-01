@@ -40,7 +40,7 @@ import java.io.IOException;
  * @see Runtime#addShutdownHook(java.lang.Thread)
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 9 Nov 2012
- * @since 1.0.0
+ * @since 1.0
  */
 public class Closer extends Thread
 {

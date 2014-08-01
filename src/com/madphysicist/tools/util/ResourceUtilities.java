@@ -53,7 +53,7 @@ import javax.swing.ImageIcon;
  * @version 1.0.2, 16 Nov 2013 - J. Fox-Rabinovitz - Added loadLibrary() and loadIcon()
  * @version 1.1.0, 20 Jun 2014 - J. Fox-Rabinovitz - Added support for cursors, updated getResourceAsFile(),
  *                                                   loadFullImage() methods, and added PREFER_TOOLKIT flag.
- * @since 1.0.0
+ * @since 1.0
  */
 public class ResourceUtilities
 {

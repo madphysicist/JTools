@@ -39,7 +39,7 @@ import java.util.Arrays;
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 20 Sep 2012 - J. Fox-Rabinovitz: Created
  * @version 1.0.1, 05 Feb 2014 - J. Fox-Rabinovitz: Added truncate() methods
- * @since 1.0.0
+ * @since 1.0
  */
 public class ArrayUtilities
 {

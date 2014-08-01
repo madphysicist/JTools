@@ -43,7 +43,7 @@ import javax.swing.filechooser.FileFilter;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 16 Nov 2013 - J. Fox-Rabinovitz - Created
- * @since 1.0.0
+ * @since 1.0
  */
 public class FileUtilities
 {

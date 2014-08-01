@@ -61,7 +61,7 @@ import java.util.TreeMap;
  * @version 1.0.1, 04 Feb 2014 - J. Fox-Rabinovitz: Added countOccurences()
  * @version 2.0.0, 22 Jun 2014 - J. Fox-Rabinovitz: Moved nowStr(), simpleNowStr(), timeStr() and simpleTimeStr() into
  *                                                  new class TimeUtilities
- * @since 1.0.0
+ * @since 1.0
  */
 public class TextUtilities
 {

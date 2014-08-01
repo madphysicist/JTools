@@ -40,7 +40,7 @@ import java.util.Map;
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 22 May 2013 - J. Fox-Rabinovitz: Initial coding
  * @version 1.1.0, 22 Jun 2014 - J. Fox-Rabinovitz: Added listFlags() method and flagStatus()
- * @since 1.0.0
+ * @since 1.0
  */
 public class BitUtilities
 {

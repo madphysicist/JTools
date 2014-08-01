@@ -43,7 +43,7 @@ import java.util.TimeZone;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 22 Jun 2014 - J. Fox-Rabinovitz: Created
- * @since 1.0.2
+ * @since 1.2
  */
 public class TimeUtilities
 {

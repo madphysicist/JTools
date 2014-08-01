@@ -33,11 +33,12 @@
  * objects that provide extended functionality.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 04 Mar 2012 - J. Fox-Rabinovitz - Created
- * @version 1.0.1, 03 Dec 2012 - J. Fox-Rabinovitz - Added PathManager and FilePathManager
- * @version 1.0.2, 22 Jun 2014 - J. Fox-Rabinovitz - Added TimeUtilities
- * @version 1.0.3, 17 Jul 2014 - J. Fox-Rabinovitz - Added SelfIterator
- * @version 1.0.4, 24 Jul 2014 - J. Fox-Rabinovitz - Moved FilePathManager to com.madphysicist.tools.io
+ * @version 1.0, 04 Mar 2012 - J. Fox-Rabinovitz - Created
+ * @version 1.1, 03 Dec 2012 - J. Fox-Rabinovitz - Added PathManager and FilePathManager
+ * @version 1.2, 22 Jun 2014 - J. Fox-Rabinovitz - Added TimeUtilities
+ * @version 1.3, 17 Jul 2014 - J. Fox-Rabinovitz - Added ReferenceIterator
+ * @version 1.4, 24 Jul 2014 - J. Fox-Rabinovitz - Moved FilePathManager to com.madphysicist.tools.io
+ * @version 1.5, 01 Aug 2014 - J. Fox-Rabinovitz - Added MathUtilities
  * @since 1.0
  */
 package com.madphysicist.tools.util;

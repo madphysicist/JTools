@@ -43,15 +43,15 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 13 Feb 2013
- * @since 1.0.0.0
+ * @version 1.0.0, 13 Feb 2013
+ * @since 1.0
  */
 public class AudioTools
 {
     /**
      * A private constructor to prevent instantiation.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private AudioTools() {}
 
@@ -66,7 +66,7 @@ public class AudioTools
      * resource restrictions.
      * @throws UnsupportedAudioFileException if the file format is not
      * supported by the audio system.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static void playClip(File file) throws IOException,
                                                   InterruptedException,

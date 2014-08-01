@@ -82,7 +82,7 @@ import java.util.Arrays;
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 11 Nov 2012 - J. Fox-Rabinovitz - Created
  * @version 1.1.0, 21 Jul 2014 - J. Fox-Rabinovitz - Added refEquals method
- * @since 1.0.0
+ * @since 1.0
  */
 public class HashUtilities
 {
