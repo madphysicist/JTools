@@ -55,7 +55,7 @@ public class ReferenceIterator<E> implements Iterator<E>
 
     /**
      * A flag indicating whether or not this iterator has a next element. This flag is set to {@code true} in the
-     * {@linkplain #SelfIterator(Object) constructor} and {@code false} in the {@link #next()} method.
+     * {@linkplain #ReferenceIterator(Object) constructor} and {@code false} in the {@link #next()} method.
      *
      * @since 1.0.0
      */

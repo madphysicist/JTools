@@ -4,6 +4,6 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JDK System Library"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/TestNG6.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/TestNG"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -673,14 +673,14 @@ public class JColorButton extends JButton
                 colorButton.setIconWidth(((Number)widthSpinner.getValue()).intValue());
             }
         });
-        borderCheck.setSelected(((ColorIcon)colorButton.getIcon()).isBorderEnabled());
+        borderCheck.setSelected(colorButton.getIcon().isBorderEnabled());
         borderCheck.addItemListener(new ItemListener() {
             @Override public void itemStateChanged(ItemEvent e) {
                 colorButton.getIcon().setBorderEnabled(e.getStateChange() == ItemEvent.SELECTED);
                 colorButton.repaint();
             }
         });
-        borderSpinner.setValue(((ColorIcon)colorButton.getIcon()).getBorderWidth());
+        borderSpinner.setValue(colorButton.getIcon().getBorderWidth());
         borderSpinner.addChangeListener(new ChangeListener() {
             @Override public void stateChanged(ChangeEvent e) {
                 colorButton.getIcon().setBorderWidth(((Number)borderSpinner.getValue()).intValue());

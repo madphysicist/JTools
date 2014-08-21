@@ -41,12 +41,12 @@
  * <b>A note on version numbers</b><br />
  * Packages are labeled with a major and minor version number. The major number is increased when a package becomes
  * incompatible with previous versions. The minor version is increased when content is added to the package. The {@code
- * @since} tag of public classes and sub-packages should reflect the version of the parent package into which they were
- * introduced. Java files have major and minor version numbers as well as a release number. The major number should be
- * incremented whenever the class API changes in a way that is incompatible with previous versions, or a major rewrite
- * occurs. The minor version should be incremented when APIs are added, and the release number should be incremented
- * whenever minor code changes or bug-fixes occur under the hood. The {@code @since} tags of all class elements,
- * including subclasses should reflect the version of the enclosing class in which they were introduced.  
+ * {@literal @}since} tag of public classes and sub-packages should reflect the version of the parent package into which
+ * they were introduced. Java files have major and minor version numbers as well as a release number. The major number
+ * should be incremented whenever the class API changes in a way that is incompatible with previous versions, or a major
+ * rewrite occurs. The minor version should be incremented when APIs are added, and the release number should be
+ * incremented whenever minor code changes or bug-fixes occur under the hood. The {@code {@literal @}since} tags of all
+ * class elements, including subclasses should reflect the version of the enclosing class in which they were introduced.  
  * </p>
  *
  * @author Joseph Fox-Rabinovitz

@@ -160,8 +160,6 @@ public class FileParseException extends IOException
      * the message.
      * @param line the number of the line on which the exception occurred. The line number is assumed to be one-based,
      * and will not appear in the message if it is zero or negative.
-     * @param column the number of the column on which the exception occurred. The column number is assumed to be
-     * one-based, and will not appear in the message if it is zero or negative.
      * @param cause the cause of the exception. May be {@code null}.
      * @since 1.0.0
      */
