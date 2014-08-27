@@ -46,7 +46,7 @@
 
 <project name="JTools" default="all" basedir=".">
 
-    <description>Builds, documents and demos JTools.</description>
+    <description>Builds, documents, tests and demos JTools.</description>
 
     <property name="DEBUG" value="true" />
     <property name="DEBUG-test" value="${DEBUG}" />
@@ -114,7 +114,6 @@
             <footer><![CDATA[<b>JTools Project<br />Library</b>]]></footer>
             <bottom><![CDATA[Copyright &copy; 2013 by Joseph Fox-Rabinovitz under the MIT License]]></bottom>
             <link href="http://docs.oracle.com/javase/7/docs/api/" offline="false" />
-            <link href="http://testng.org/javadocs/" offline="false" /> <!-- Only for joe.tools.test -->
             <classpath>
                 <path refid="compile-lib" />
                 <path location="${lib.classes.dir}" />

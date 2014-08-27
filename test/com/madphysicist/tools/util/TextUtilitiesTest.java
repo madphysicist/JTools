@@ -1,5 +1,5 @@
 /*
- * TextUtilitiesTest.java
+ * TextUtilitiesTest.java (TestClass: com.madphysicist.tools.util.TextUtilitiesTest)
  *
  * Mad Physicist JTools Project (General Purpose Utilities)
  *
