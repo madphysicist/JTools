@@ -29,12 +29,12 @@
 ##
 
 ##
-## This script is a Linux Mint/Ubuntu pseudo-install script. In its current
+## This script is a Linux Mint/Ubuntu/Arch pseudo-install script. In its current
 ## incarnation it creates symlinks to the key parts of JTools. To copy instead
 ## of symlinking, change PROG from "ln -s" to "cp".
 ##
 ## Author:   Joseph Fox-Rabinovitz
-## Version:  1.0.0, 03 Feb 2014: Joseph Fox-Rabinovitz: Created
+## Version:  1.0.0, 03 Feb 2014: Joseph Fox-Rabinovitz: Created.
 ##
 
 PROG="ln -s"
@@ -84,8 +84,8 @@ then
 elif [ ${#} -ne 0 ]
 then
     echo "Usage: ${0} [-u]"
-    echo "    no argument installs JTools"
-    echo "    -u uninstalls JTools"
+    echo "    no argument installs ${BASE}"
+    echo "    -u uninstalls ${BASE}"
     exit 1
 else
     inst "${ISRC}" "-sources"
