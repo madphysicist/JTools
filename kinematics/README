@@ -14,3 +14,11 @@ CasinoSpinnerKinematics.png
 
 README
     This file.
+
+Some notes on terminology and other things:
+    - A long or full spin is one which is long enough for the spinner to achieve its maximum allowed velocity. In this case, the rotation will have three phases:
+        1) Spin-up, from time t0 to tA, when the velocity undergoes a linear increase to its maximum value.
+        2) Spin, from time tA to tB, when the spinner maintains a constant velocity at the maximum configured value.
+        3) Spin-down, from time tB to tF, when the spinner velocity undergoes a linear decrease from the maximum to zero.
+    - A short or partial spin is one which is too short for the spinner to achieve its maximum allowed velocity. In this case, the maximum attained velocity will be called the top velocity, or top speed. The top speed will always be less than the maximum allowed velocity. A short spin will only have two phases: spin-up and spin-down (see above), with "maximum velocity" replaced by "top speed".
+    - The rotation is idealized, with a non-smooth acceleration, and the acceleration and deceleration phases being symmetrical to each other in time.
