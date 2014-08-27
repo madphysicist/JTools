@@ -3,7 +3,7 @@
 ##
 ## install.sh
 ##
-## JTools Project
+## Mad Physicist JTools Project
 ##
 ## The MIT License (MIT)
 ##
