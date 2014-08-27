@@ -31,8 +31,8 @@
 <!--
   The main build file for the JTools project. Type "ant -projecthelp" for a
   listing of the available targets. The project build and documentation can be
-  run with the "all" target. There are run targets for a number of demos.  The
-  setup for this project relies on the files in the "config" folder.
+  run with the default "all" target. There are run targets for a number of demos. 
+  The setup for this project relies on the files in the "config" folder.
 
   Set the value of the "DEBUG" property near the top of this file to determine
   whether the library will be compiled in debug mode or not. The "DEBUG-test"
@@ -40,8 +40,8 @@
   to the same value as "DEBUG".
 
   Author:   Joseph Fox-Rabinovitz
-  Version:  1.0.0.0, 12 Nov 2013
-  Since:    1.0.0.0
+  Version:  1.0.0, 12 Nov 2013 - J. Fox-Rabinovitz - Created.
+  Since:    1.0.0
 -->
 
 <project name="JTools" default="all" basedir=".">

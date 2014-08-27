@@ -64,7 +64,7 @@ import javax.swing.event.ChangeListener;
  * A swing button for displaying a color label which activates a color chooser.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 12 Jun 2013 - J. Fox-Rabinovitz - Created.
+ * @version 1.0.0, 12 Jun 2013 - J. Fox-Rabinovitz - Initial coding.
  * @version 1.0.1, 16 Nov 2013 - J. Fox-Rabinovitz - Made ColorIcon public main class.
  * @version 1.1.0, 22 Nov 2013 - J. Fox-Rabinovitz - Added square constructors, change updates.
  * @version 1.1.1, 18 Jul 2014 - J. Fox-Rabinovitz - Updated demo with ColorIcon v1.1.0 features.

@@ -55,6 +55,8 @@
  * @version 1.2, 22 Jun 2014 - J. Fox-Rabinovitz: Added xml sub-package.
  * @version 1.3, 14 Jul 2014 - J. Fox-Rabinovitz: Added units sub-package.
  * @version 1.4, 24 Jul 2014 - J. Fox-Rabinovitz: Added io sub-package.
+ * @version 2.0, 22 Aug 2014 - J. Fox-Rabinovitz: Moved test and javadoc packages to separate project. Also units.
+ *                                                These were packages with external (non-Java) dependencies.
  * @since 1.0
  */
 package com.madphysicist.tools;

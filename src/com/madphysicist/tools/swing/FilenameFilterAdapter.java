@@ -35,7 +35,7 @@ import java.io.FilenameFilter;
  * javax.swing.filechooser.FileFilter}.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 28 May 2013
+ * @version 1.0.0, 28 May 2013 - J. Fox-Rabinovitz - Initial coding.
  * @since 1.0.0
  */
 public class FilenameFilterAdapter extends javax.swing.filechooser.FileFilter

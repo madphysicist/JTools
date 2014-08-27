@@ -61,9 +61,9 @@ import java.util.TimerTask;
  * @see CasinoSpinner
  * @see PropertyChangeListener
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 19 Feb 2013
- * @version 1.0.0.1, 8 Apr 2013 - Added spin direction property.
- * @since 1.0.0.0
+ * @version 1.0.0, 19 Feb 2013 - J. Fox-Rabinovitz - Initial coding.
+ * @version 1.1.0, 08 Apr 2013 - J. Fox-Rabinovitz - Added spin direction property.
+ * @since 1.0.0
  */
 public class CasinoSpinnerModel extends AbstractMotion1DModel
 {
@@ -74,7 +74,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * is not compromised by a structural change (e.g. adding a new field with
      * a sensible default value), and the upper digits when the change makes
      * serialized versions of of the class incompatible with previous releases.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final long serialVersionUID = 1000L;
 
@@ -87,7 +87,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #getSpinDirection()
      * @see #setSpinDirection(int)
      * @see #setSpinDirection(int, boolean)
-     * @since 1.0.0.1
+     * @since 1.1.0
      */
     public static final int SPIN_POSITIVE = +1;
 
@@ -100,7 +100,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #getSpinDirection()
      * @see #setSpinDirection(int)
      * @see #setSpinDirection(int, boolean)
-     * @since 1.0.0.1
+     * @since 1.1.0
      */
     public static final int SPIN_NEGATIVE = -1;
 
@@ -113,7 +113,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #getSpinDirection()
      * @see #setSpinDirection(int)
      * @see #setSpinDirection(int, boolean)
-     * @since 1.0.0.1
+     * @since 1.1.0
      */
     public static final int SPIN_BOTH = 0;
 
@@ -126,7 +126,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #getData()
      * @see #setData(List)
      * @see #setData(List, boolean)
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static final String DATA_PROPERTY = "data";
 
@@ -139,7 +139,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #getSpinRate()
      * @see #setSpinRate(double)
      * @see #setSpinRate(double, boolean)
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static final String SPIN_RATE_PROPERTY = "spinRate";
 
@@ -152,7 +152,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #getAcceleration()
      * @see #setAcceleration(double)
      * @see #setAcceleration(double, boolean)
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static final String ACCELERATION_PROPERTY = "acceleration";
 
@@ -170,7 +170,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #setRefreshTime(long)
      * @see #setRefreshRate(int, boolean)
      * @see #setRefreshTime(long, boolean)
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static final String REFRESH_PROPERTY = "refresh";
 
@@ -183,7 +183,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #getSpinSigma()
      * @see #setSpinSigma(double)
      * @see #setSpinSigma(double, boolean)
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public static final String SPIN_SIGMA_PROPERTY = "spinSigma";
 
@@ -196,7 +196,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #getSpinDirection()
      * @see #setSpinDirection(int)
      * @see #setSpinDirection(int, boolean)
-     * @since 1.0.0.1
+     * @since 1.1.0
      */
     public static final String SPIN_DIRECTION_PROPERTY = "spinDirection";
 
@@ -206,7 +206,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * the acceleration. This value is a magnitude and will be applied to spins
      * in either direction.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final double DEFAULT_SPIN_RATE = 20.0;
 
@@ -218,7 +218,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * slows down.  This value is a magnitude and will be applied to spins in
      * either direction.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final double DEFAULT_ACCELERATION = 10.0;
 
@@ -227,7 +227,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * number will be approximated as closely as possible because the actual
      * time between frames must be a whole number of milliseconds.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final int DEFAULT_REFRESH_RATE = 24;
 
@@ -236,7 +236,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * each randomly generated spin. This means that approximately 67% of all
      * random spins will traverse at most this many objects from the list.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final double DEFAULT_SPIN_SIGMA = 50.0;
 
@@ -244,7 +244,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * The default spin direction. The default is for the model to be allowed to
      * spin both ways.
      *
-     * @since 1.0.0.1
+     * @since 1.1.0
      */
     private static final int DEFAULT_SPIN_DIRECTION = SPIN_BOTH;
 
@@ -253,7 +253,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * shared between all instances of {@code CasinoSpinnerModel}. It uses the
      * default seed, which is set when this class is loaded.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final Random RANDOM = new Random();
 
@@ -265,7 +265,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * that it will not interfere with the graceful termination of the Virtual
      * Machine.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final Timer TIMER = new Timer("CasinoSpinnerModelTimer", true);
 
@@ -278,7 +278,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * is set to {@code Double.NaN} if the data is {@code null} or empty.
      *
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private double position;
 
@@ -292,7 +292,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #spin(int)
      * @see #spin()
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private boolean spinning;
 
@@ -309,7 +309,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #DATA_PROPERTY
      * @see Collections#unmodifiableList(List)
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private List<String> data;
 
@@ -320,7 +320,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * to {@code null}, this field is set to {@code Double.NaN}.
      *
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private double dataSize;
 
@@ -336,7 +336,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @see #SPIN_RATE_PROPERTY
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private double spinRate;
 
@@ -347,7 +347,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @see #ACCELERATION_PROPERTY
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private double acceleration;
 
@@ -362,7 +362,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #refreshTime
      * @see #REFRESH_PROPERTY
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private int refreshRate;
 
@@ -375,7 +375,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #refreshRate
      * @see #REFRESH_PROPERTY
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private long refreshTime;
 
@@ -388,7 +388,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @see #SPIN_SIGMA_PROPERTY
      * @serial
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private double spinSigma;
 
@@ -399,7 +399,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * SPIN_BOTH}.
      *
      * @serial
-     * @since 1.0.0.1
+     * @since 1.1.0
      */
     private int spinDirection;
 
@@ -411,7 +411,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * released using either {@link Object#notify() spinLock.notify()} or {@link
      * Object#notifyAll() spinLock.notifyAll()}.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private final transient Object spinLock;
 
@@ -420,7 +420,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * set to their default values. This model will not spin until a non-{@code
      * null} data list is assigned to it.
      *
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public CasinoSpinnerModel()
     {
@@ -433,7 +433,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * instance. All other properties will be set to default values.
      *
      * @param data the data to construct this model with.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public CasinoSpinnerModel(List<String> data)
     {
@@ -455,7 +455,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @throws IllegalMonitorStateException if the intrinsic lock of {@link
      * #spinLock} could not be acquired.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private void setDefaults()
     {
@@ -478,7 +478,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @param increment the number of objects to rotate through. The sign will
      * be ignored unless the spin direction is set to {@link #SPIN_BOTH}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void spin(int increment)
     {
@@ -509,7 +509,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @see #getSpinSigma()
      * @see #setSpinSigma(double)
      * @see #setSpinSigma(double, boolean)
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void spin()
     {
@@ -528,7 +528,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * is the fractional position between elements.
      *
      * @return the position of the spinner, in units of array indices.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Override public double getState()
     {
@@ -541,7 +541,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * {@code null}, {@code null} is returned.
      *
      * @return the element of the data closest to the center of the display.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public String getCurrentElement()
     {
@@ -555,7 +555,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @return the index of the element of the data closest to the center of
      * the display, or {@code -1} if there are no elements.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public int getCurrentIndex()
     {
@@ -570,7 +570,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @return the size of the data list, or {@code -1} if the list is {@code
      * null}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public int getDataSize()
     {
@@ -583,7 +583,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @return an immutable list of this model's elements. This value may be
      * {@code null}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public List<String> getData()
     {
@@ -610,7 +610,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @throws IllegalStateException if the model is spinning when this method
      * is called.
      * @see #getState()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setData(List<String> data) throws IllegalStateException
     {
@@ -643,7 +643,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * without taking any action if the model is spinning. If the model is not
      * spinning, this parameter is ignored.
      * @see #getState()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setData(List<String> data, boolean block)
     {
@@ -677,7 +677,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @throws IllegalMonitorStateException if the intrinsic lock of {@link
      * #spinLock} could not be acquired to notify waiting threads after firing
      * property changes.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private boolean setDataInternal(List<String> data)
     {
@@ -708,7 +708,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * direction.
      *
      * @return the maximum possible spin rate of this model.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public double getSpinRate()
     {
@@ -728,7 +728,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @throws IllegalStateException if the model is spinning when this method
      * is called.
      * @see #getSpinRate()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setSpinRate(double spinRate) throws IllegalStateException
     {
@@ -754,7 +754,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * without taking any action if the model is spinning. If the model is not
      * spinning, this parameter is ignored.
      * @see #getSpinRate()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setSpinRate(double spinRate, boolean block)
     {
@@ -782,7 +782,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * #spinLock} could not be acquired to notify waiting threads after firing
      * property changes.
      * @see #getSpinRate()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private boolean setSpinRateInternal(double spinRate)
     {
@@ -802,7 +802,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * half way through the spin without going to zero at all.
      *
      * @return the acceleration of this model.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public double getAcceleration()
     {
@@ -822,7 +822,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @throws IllegalStateException if the model is spinning when this method
      * is called.
      * @see #getAcceleration()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setAcceleration(double acceleration) throws IllegalStateException
     {
@@ -848,7 +848,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * without taking any action if the model is spinning. If the model is not
      * spinning, this parameter is ignored.
      * @see #getAcceleration()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setAcceleration(double acceleration, boolean block)
     {
@@ -876,7 +876,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * #spinLock} could not be acquired to notify waiting threads after firing
      * property changes.
      * @see #getAcceleration()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private boolean setAccelerationInternal(double acceleration)
     {
@@ -896,7 +896,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * time the model is refreshed.
      *
      * @return the refresh rate of the model when it is spinning.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public int getRefreshRate()
     {
@@ -917,7 +917,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @throws IllegalStateException if the model is spinning when this method
      * is called.
      * @see #getRefreshRate()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setRefreshRate(int refreshRate) throws IllegalStateException
     {
@@ -944,7 +944,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * without taking any action if the model is spinning. If the model is not
      * spinning, this parameter is ignored.
      * @see #getRefreshRate()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setRefreshRate(int refreshRate, boolean block)
     {
@@ -974,7 +974,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * #spinLock} could not be acquired to notify waiting threads after firing
      * property changes.
      * @see #getRefreshRate()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private boolean setRefreshRateInternal(int refreshRate)
     {
@@ -996,7 +996,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @return the number of milliseconds between updates to the state of the
      * model when it is spinning.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public long getRefreshTime()
     {
@@ -1017,7 +1017,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @throws IllegalStateException if the model is spinning when this method
      * is called.
      * @see #getRefreshTime()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setRefreshTime(long refreshTime) throws IllegalStateException
     {
@@ -1044,7 +1044,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * without taking any action if the model is spinning. If the model is not
      * spinning, this parameter is ignored.
      * @see #getRefreshTime()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setRefreshTime(long refreshTime, boolean block)
     {
@@ -1074,7 +1074,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * #spinLock} could not be acquired to notify waiting threads after firing
      * property changes.
      * @see #getRefreshTime()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private boolean setRefreshTimeInternal(long refreshTime)
     {
@@ -1097,7 +1097,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @return the standard deviation of the distribution used to generate
      * random spins.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public double getSpinSigma()
     {
@@ -1117,7 +1117,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @throws IllegalStateException if the model is spinning when this method
      * is called.
      * @see #getSpinSigma()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setSpinSigma(double spinSigma) throws IllegalStateException
     {
@@ -1143,7 +1143,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * without taking any action if the model is spinning. If the model is not
      * spinning, this parameter is ignored.
      * @see #getSpinSigma()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void setSpinSigma(double spinSigma, boolean block)
     {
@@ -1171,7 +1171,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * #spinLock} could not be acquired to notify waiting threads after firing
      * property changes.
      * @see #getSpinSigma()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private boolean setSpinSigmaInternal(double spinSigma)
     {
@@ -1191,7 +1191,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @return one of the {@link #SPIN_POSITIVE}, {@link #SPIN_NEGATIVE} or
      * {@link #SPIN_BOTH} flags that indicates which way the spinner is allowed
      * to spin.
-     * @since 1.0.0.1
+     * @since 1.1.0
      */
     public int getSpinDirection()
     {
@@ -1212,7 +1212,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @throws IllegalStateException if the model is spinning when this method
      * is called.
      * @see #getSpinDirection()
-     * @since 1.0.0.1
+     * @since 1.1.0
      */
     public void setSpinDirection(int spinDirection) throws IllegalStateException
     {
@@ -1240,7 +1240,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * without taking any action if the model is spinning. If the model is not
      * spinning, this parameter is ignored.
      * @see #getSpinDirection()
-     * @since 1.0.0.1
+     * @since 1.1.0
      */
     public void setSpinDirection(int spinDirection, boolean block)
     {
@@ -1271,7 +1271,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * #spinLock} could not be acquired to notify waiting threads after firing
      * property changes.
      * @see #getSpinDirection()
-     * @since 1.0.0.1
+     * @since 1.1.0
      */
     private boolean setSpinDirectionInternal(int spinDirection)
     {
@@ -1296,7 +1296,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * any time.
      *
      * @return a {@code String} representation of this object.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Override public String toString()
     {
@@ -1340,7 +1340,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @param position a position, possibly outside the list.
      * @return a position in [{@code 0}, {@code data.size() - 1}).
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     protected double normalize(double position)
     {
@@ -1357,7 +1357,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      *
      * @param index an index, possibly outside the list.
      * @return an index in [{@code 0}, {@code data.size() - 1}).
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     protected int normalize(int index)
     {
@@ -1377,7 +1377,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @param newValue the new value of the property.
      * @throws IllegalMonitorStateException if the intrinsic lock of {@link
      * #spinLock} could not be acquired.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private void fireSyncedPropertyChange(String propertyName, Object oldValue, Object newValue)
     {
@@ -1396,7 +1396,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * @throws IllegalMonitorStateException if {@code block} is {@code true},
      * the spinner is spinning and the intrinsic lock of {@link #spinLock} can
      * not be acquired.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private void checkSpin(boolean block)
     {
@@ -1420,8 +1420,8 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
      * the size of the data list without throwing off the calculation.
      *
      * @author Joseph Fox-Rabinovitz
-     * @version 1.0.0.0, 13 Feb 2013
-     * @since 1.0.0.0
+     * @version 1.0.0, 13 Feb 2013
+     * @since 1.0.0
      */
     private class SpinTask extends TimerTask implements Serializable
     {
@@ -1433,7 +1433,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * a new field with a sensible default value), and the upper digits when
          * the change makes serialized versions of of the class incompatible
          * with previous releases.
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private static final long serialVersionUID = 1000L;
 
@@ -1443,7 +1443,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * Otherwise, the task has been created but not yet been initialized.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private boolean started;
 
@@ -1454,7 +1454,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * considered valid if the {@link #started} flag is {@code true}.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private double t0;
 
@@ -1469,7 +1469,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * the final position is known.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private final double tA;
 
@@ -1482,7 +1482,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * This value is precomputed as soon as the final position is known.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private final double tB;
 
@@ -1494,7 +1494,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * value is precomputed as soon as the final position is known.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private final double tF;
 
@@ -1504,7 +1504,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * spin.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private final double x0;
 
@@ -1519,7 +1519,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * final position is known.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private final double xA;
 
@@ -1532,7 +1532,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * soon as the final position is known.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private final double xB;
 
@@ -1543,7 +1543,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * by the desired increment.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private final double xF;
 
@@ -1559,7 +1559,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * includes both a direction and a magnitude.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private final double vMax;
 
@@ -1573,7 +1573,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * direction and a magnitude.
          *
          * @serial
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         private final double aMax;
 
@@ -1589,7 +1589,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          *
          * @param increment the number of list elements that this spin should
          * move by.
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         public SpinTask(int increment)
         {
@@ -1657,7 +1657,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * normalized to a value between zero (inclusive) and the number of
          * objects (exclusive).
          *
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         @Override public void run()
         {
@@ -1705,7 +1705,7 @@ public class CasinoSpinnerModel extends AbstractMotion1DModel
          * string may change at any time.
          *
          * @return a {@code String} representation of this object.
-         * @since 1.0.0.0
+         * @since 1.0.0
          */
         @Override public String toString()
         {

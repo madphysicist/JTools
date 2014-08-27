@@ -57,7 +57,7 @@ import javax.swing.border.BevelBorder;
  * as well.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0 21 Nov 2013 - J. Fox-Rabinovitz - Created
+ * @version 1.0.0 21 Nov 2013 - J. Fox-Rabinovitz - Initial coding.
  * @since 1.0.0
  */
 public class ExceptionPanel extends JPanel

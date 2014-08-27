@@ -5,5 +5,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JDK System Library"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/TestNG"/>
-	<classpathentry kind="output" path="build/classes"/>
+	<classpathentry kind="output" path="build/eclipse"/>
 </classpath>

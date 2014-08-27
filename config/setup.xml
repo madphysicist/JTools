@@ -33,29 +33,18 @@
   The locations in this file should all be taken from local.properties.
 
   Author:   Joseph Fox-Rabinovitz
-  Version:  1.0.0.0, 15 Nov 2013
-  Since:    1.0.0.0
+  Version:  1.0.0, 15 Nov 2013 - J. Fox-Rabinovitz - Created.
+  Since:    1.0.0
 -->
 
-<project name="JTools-setup" default="default" basedir=".">
+<project name="JTools-setup" basedir=".">
 
     <property file="config/local.properties" />
     <property file="config/build.properties" />
 
-    <target name="jdk-init">
-        <path id="jdk-jars">
-            <pathelement location="${local.jvm.tools.jar}" />
-        </path>
-    </target>
-
-    <target name="compile-init" depends="jdk-init">
-        <path id="testng-jars">
-            <pathelement location="${local.testng.jar}" />
-            <pathelement location="${local.jcommander.jar}" />
-        </path>
+    <target name="compile-init">
         <path id="compile-lib">
-            <path refid="jdk-jars" />
-            <path refid="testng-jars" />
+            <!-- Intentionally empty -->
         </path>
     </target>
 
@@ -67,8 +56,12 @@
     </target>
 
     <target name="compile-test-init" depends="compile-init">
+        <path id="testng-jars">
+            <pathelement location="${local.testng.jar}" />
+        </path>
         <path id="compile-test-lib">
             <path refid="compile-lib" />
+            <path refid="testng-jars" />
             <pathelement location="${lib.classes.dir}" />
         </path>
     </target>

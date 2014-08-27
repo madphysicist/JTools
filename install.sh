@@ -31,7 +31,7 @@
 ##
 ## This script is a Linux Mint/Ubuntu pseudo-install script. In its current
 ## incarnation it creates symlinks to the key parts of JTools. To copy instead
-## of symlinking, change "ln -s" to "cp".
+## of symlinking, change PROG from "ln -s" to "cp".
 ##
 ## Author:   Joseph Fox-Rabinovitz
 ## Version:  1.0.0, 03 Feb 2014: Joseph Fox-Rabinovitz: Created

@@ -32,8 +32,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 /**
- * Constants for facilitating work with {@link GridBagLayout} and {@link
- * GridBagConstraints}.
+ * Constants for facilitating work with {@link GridBagLayout} and {@link GridBagConstraints}.
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0 18 Nov 2013 - J. Fox-Rabinovitz - Initial Coding.

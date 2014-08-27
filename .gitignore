@@ -30,16 +30,12 @@
 ## List of files and directories to be ignored by git
 ##
 ## Author:   Joseph Fox-Rabinovitz
-## Version:  1.0.0.0, 12 Nov 2013: Joseph Fox-Rabinovitz: Created
+## Version:  1.0.0, 12 Nov 2013: Joseph Fox-Rabinovitz: Created
+## Version:  1.0.1, 22 Aug 2014: Joseph Fox-Rabinovitz: Removed references to NetBeans
 ##
 
 build/
 dist/
 
-.netbeans/build/
-.netbeans/dist/
-.netbeans/nbproject/private/
-
-# A copy of this file should be in the repository, but each platform will need different values
 config/local.properties
- 
+

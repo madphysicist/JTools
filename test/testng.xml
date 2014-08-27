@@ -32,8 +32,9 @@
   Enumerates the suites, packages and classes that are to be used by TestNG.
 
   Author:   Joseph Fox-Rabinovitz
-  Version:  1.0.0.0, 20 Sept 2012
-  Since:    1.0.0.0
+  Version:  1.0.0, 20 Sep 2012 - J. Fox-Rabinovitz - Created.
+  Version:  1.0.1, 26 Aug 2014 - J. Fox-Rabinovitz - Updated packages.
+  Since:    1.0.0
 -->
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
@@ -42,10 +43,11 @@
    <test name="Project Components Test">
       <packages>
          <package name="com.madphysicist.tools" />
-         <package name="com.madphysicist.tools.javadoc" />
-         <package name="com.madphysicist.tools.test" />
+         <package name="com.madphysicist.tools.io" />
+         <package name="com.madphysicist.tools.proc" />
+         <package name="com.madphysicist.tools.swing" />
          <package name="com.madphysicist.tools.util" />
-         <package name="com.madphysicist.ludkartoj" />
+         <package name="com.madphysicist.tools.xml" />
       </packages>
    </test>
 </suite>

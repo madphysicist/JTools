@@ -1,11 +1,11 @@
 /*
- * package-info.java (Package: com.madphysicist.tools.javadoc)
+ * ReferenceIteratorTest.java (TestClass: com.madphysicist.tools.util.ReferenceIteratorTest)
  *
- * Mad Physicist JTools Project (Javadoc Utilities)
+ * Mad Physicist JTools Project (General Purpose Utilities)
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 by Joseph Fox-Rabinovitz
+ * Copyright (c) 2014 by Joseph Fox-Rabinovitz
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +25,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.madphysicist.tools.util;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 /**
- * This package contains tools for using and extending javadoc through taglets
- * that work with the standard HTML Doclet.
+ * Tests each of the methods of {@link com.madphysicist.tools.util.ReferenceIterator}.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 4 Mar 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 22 Aug 2014 - J. Fox-Rabinovitz - Initial coding.
+ * @since 1.0.0
  */
-package com.madphysicist.tools.javadoc;
+public class ReferenceIteratorTest
+{
+    /**
+     * Checks that the {@code remove()} method of an iterator fails when invoked before {@code next()} method.
+     * The expected failure is an {@code IllegalStateException}.
+     *
+     * @since 1.0.0
+     */
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void removeBeforeTest()
+    {
+        ReferenceIterator<ReferenceIteratorTest> iterator = new ReferenceIterator<ReferenceIteratorTest>(this);
+        iterator.remove();
+        iterator.next(); // This operation should not happen
+        Assert.fail();
+    }
+}

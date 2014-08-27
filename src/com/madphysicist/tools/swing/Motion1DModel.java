@@ -44,8 +44,8 @@ import javax.swing.event.ChangeListener;
  * @see ChangeListener
  * @see PropertyChangeListener
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 20 Feb 2013
- * @since 1.0.0.0
+ * @version 1.0.0, 20 Feb 2013 - J. Fox-Rabinovitz - Initial coding.
+ * @since 1.0.0
  */
 public interface Motion1DModel
 {
@@ -53,7 +53,7 @@ public interface Motion1DModel
      * Adds a listener that responds to changes in the state of the model.
      *
      * @param listener the listener to add.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void addChangeListener(ChangeListener listener);
 
@@ -62,7 +62,7 @@ public interface Motion1DModel
      * properties.
      *
      * @param listener the listener to add.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void addPropertyChangeListener(PropertyChangeListener listener);
 
@@ -74,7 +74,7 @@ public interface Motion1DModel
      * @param propertyName the property to listen for changes on.
      * @param listener the listener to add.
      * @throws NullPointerException if {@code propertyName} is {@code null}.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener);
 
@@ -83,7 +83,7 @@ public interface Motion1DModel
      * model.
      *
      * @param listener the listener to remove.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void removeChangeListener(ChangeListener listener);
 
@@ -91,7 +91,7 @@ public interface Motion1DModel
      * Removes a listener that responds to changes in the model's properties.
      *
      * @param listener the listener to remove.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public void removePropertyChangeListener(PropertyChangeListener listener);
 
@@ -100,7 +100,7 @@ public interface Motion1DModel
      * invoke this method to get the state once they have been notified.
      *
      * @return the current state of the model.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public double getState();
 }

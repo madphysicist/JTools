@@ -35,8 +35,8 @@ import javax.swing.SpinnerListModel;
  * around the ends of the model list.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 11 Feb 2013
- * @since 1.0.0.0
+ * @version 1.0.0, 11 Feb 2013 - J. Fox-Rabinovitz - Initial coding.
+ * @since 1.0.0
  */
 public class SpinnerWrapListModel extends SpinnerListModel
 {
@@ -47,7 +47,7 @@ public class SpinnerWrapListModel extends SpinnerListModel
      * is not compromised by a structural change (e.g. adding a new field with
      * a sensible default value), and the upper digits when the change makes
      * serialized versions of of the class incompatible with previous releases.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     private static final long serialVersionUID = 1000L;
 
@@ -57,7 +57,7 @@ public class SpinnerWrapListModel extends SpinnerListModel
      * constructor}.
      *
      * @see SpinnerListModel#SpinnerListModel()
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public SpinnerWrapListModel()
     {
@@ -72,7 +72,7 @@ public class SpinnerWrapListModel extends SpinnerListModel
      *
      * @param values the values on which this model is initialized.
      * @see SpinnerListModel#SpinnerListModel(Object[])
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public SpinnerWrapListModel(Object[] values)
     {
@@ -87,7 +87,7 @@ public class SpinnerWrapListModel extends SpinnerListModel
      *
      * @param values the values on which this model is initialized.
      * @see SpinnerListModel#SpinnerListModel(List)
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     public SpinnerWrapListModel(List<?> values)
     {
@@ -101,7 +101,7 @@ public class SpinnerWrapListModel extends SpinnerListModel
      *
      * @return the next legal value of the underlying sequence, or the first
      * element of the sequence if the current value is already the last element.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Override public Object getNextValue()
     {
@@ -123,7 +123,7 @@ public class SpinnerWrapListModel extends SpinnerListModel
      * @return the previous legal value of the underlying sequence, or the last
      * element of the sequence if the current value is already the first
      * element.
-     * @since 1.0.0.0
+     * @since 1.0.0
      */
     @Override public Object getPreviousValue()
     {

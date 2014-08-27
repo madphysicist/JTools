@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 by Joseph Fox-Rabinovitz
+ * Copyright (c) 2012 by Joseph Fox-Rabinovitz
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,8 +36,8 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 /**
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 11 Dec 2012
- * @since 1.0.0.0
+ * @version 1.0.0, 11 Dec 2012 - J. Fox-Rabinovitz - Initial Coding.
+ * @since 1.0.0
  */
 public class BasicShapedButtonUI extends BasicButtonUI
 {

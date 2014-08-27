@@ -1,21 +1,18 @@
 JTools
 ======
 
-Collection of Java tools and utilities.
+A collection of Java tools and utilities. These tools are written in pure Java. They do not depend on any third party libraries except for test code, which uses TestNG. Additional tools that do have external dependencies are available in the JTools-extras project.
 
-#Usage:
+Usage
+-----
 
 This package is intended as a utility library. Some classes have main methods to demo various components. The Javadocs for the packages are not complete yet, but the main classes are pretty well documented.
 
-#Dependencies
+Dependencies
+------------
 
-This package requires the following to be installed on the local system for the and build and test targets to run:
+Local dependencies (specifically TestNG) can be edited in config/local.properties in the section containing the test.*.jar properties
 
-- tools.jar that comes with your JDK.
-- testng.jar and any dependencies that it may require.
+If testng requires additional dependencies (older versions require qdox.jar and bsh.jar, while some newer versions require jcommander.jar), edit the `testng-jars` path in the `compile-test-init` target in config/setup.xml
 
-Update local paths to these files in config/local.properties in the section containing the test.*.jar properties
-
-If testng requires other dependencies than some version jcommander.jar (older versions require qdox.jar and bsh.jar), edit the testng-init target in config/setup.xml
-
-Note that config/local.properties is in .gitignore, so feel free to modify it in your local repository (hence the file name).
+Versions of config/local.properties suitable for Ubuntu and Arch based systems are present in the repository. They should be renamed to config/local.properties before use.

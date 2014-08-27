@@ -47,7 +47,7 @@ import javax.swing.MutableComboBoxModel;
  *
  * @param <E> The type of data stored in the list or combo box.
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0 18 Nov 2013 - J. Fox-Rabinovitz - Created
+ * @version 1.0.0 18 Nov 2013 - J. Fox-Rabinovitz - Initial coding.
  * @since 1.0.0
  */
 public class SetListModel<E extends Comparable<? super E>>

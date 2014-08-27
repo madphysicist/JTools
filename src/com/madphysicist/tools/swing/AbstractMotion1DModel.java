@@ -46,8 +46,8 @@ import javax.swing.event.ChangeListener;
  * changes.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 20 Feb 2013
- * @since 1.0.0.0
+ * @version 1.0.0, 20 Feb 2013 - J. Fox-Rabinovitz - Initial Coding.
+ * @since 1.0.0
  */
 public abstract class AbstractMotion1DModel implements Motion1DModel, Serializable
 {

@@ -29,14 +29,14 @@
 /**
  * A set of extensions for the {@code javax.swing} classes. This package
  * contains both static library classes and actual swing components. Components
- * are designed to be extensible, following a model-UI design simplar to that of
+ * are designed to be extensible, following a model-UI design similar to that of
  * swing. Some of the classes extend existing Swing components to provide
  * additional functionality.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0, 10 Apr 2013 - J. Fox-Rabinovitz: Initial Coding
- * @version 1.1, 24 May 2014 - J. Fox-Rabinovitz: Added LAFUtilities
- * @version 1.2, 24 Jun 2014 - J. Fox-Rabinovitz: Made StringBounds public
+ * @version 1.0, 10 Apr 2013 - J. Fox-Rabinovitz: Initial Coding.
+ * @version 1.1, 24 May 2014 - J. Fox-Rabinovitz: Added LAFUtilities.
+ * @version 1.2, 24 Jun 2014 - J. Fox-Rabinovitz: Made StringBounds public.
  * @since 1.0
  */
 package com.madphysicist.tools.swing;

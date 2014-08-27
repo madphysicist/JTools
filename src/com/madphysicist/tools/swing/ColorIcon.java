@@ -45,7 +45,7 @@ import javax.swing.Icon;
  * </p>
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 12 Jun 2013 - J. Fox-Rabinovitz - Created.
+ * @version 1.0.0, 12 Jun 2013 - J. Fox-Rabinovitz - Iniaial coding.
  * @version 1.0.1, 16 Nov 2013 - J. Fox-Rabinovitz - Made border display configurable.
  * @version 1.1.0, 18 Jul 2014 - J. Fox-Rabinovitz - Added color and width configuration to border.
  * @since 1.0.0

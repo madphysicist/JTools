@@ -97,7 +97,7 @@ public class ReferenceIterator<E> implements Iterator<E>
             this.on = false;
             return object;
         }
-        throw new IllegalStateException("No more elements in SelfIterator");
+        throw new IllegalStateException("No more elements in " + getClass().getSimpleName());
     }
 
     /**
