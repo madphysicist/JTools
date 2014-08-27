@@ -28,10 +28,13 @@
 package com.madphysicist.tools.util;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Tests each of the methods of {@link com.madphysicist.tools.util.ReferenceIterator}.
+ * Tests each of the methods of {@link com.madphysicist.tools.util.ReferenceIterator}. Because of the simplicity of this
+ * class, some of the tests are overlapping or redundant. This may come in handy for regression testing if more complex
+ * functionality is added in the future.
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 22 Aug 2014 - J. Fox-Rabinovitz - Initial coding.
@@ -40,17 +43,138 @@ import org.testng.annotations.Test;
 public class ReferenceIteratorTest
 {
     /**
-     * Checks that the {@code remove()} method of an iterator fails when invoked before {@code next()} method.
-     * The expected failure is an {@code IllegalStateException}.
+     * The number of times checks are repeated to demonstrate repeatability of certain operations.
+     *
+     * @since 1.0.0
+     */
+    private static int REPEATS = 3;
+
+    /**
+     * An iterator wrapping this test object that is available to all tests. This reference is re-created for each
+     * test method that is run by {@link #testMethodSetup()}. 
+     *
+     * @since 1.0.0
+     */
+    private ReferenceIterator<ReferenceIteratorTest> iterator;
+
+    /**
+     * Performs the common setup for each test method. This includes (re)initializing the {@link #iterator} field.
+     *
+     * @since 1.0.0
+     */
+    @BeforeMethod public void testMethodSetup()
+    {
+        this.iterator = new ReferenceIterator<>(this);
+    }
+
+    /**
+     * Checks that the {@code hasNext()} method of an iterator returns true before {@code next()} is called, {@code
+     * false} after {@code next}, and {@code true} again after {@code reset}. The check is run {@value #REPEATS} times
+     * to demonstrate repeatability.
+     *
+     * @since 1.0.0
+     */
+    @Test
+    public void hasNextTest()
+    {
+        Assert.assertTrue(iterator.hasNext());
+        for(int i = 0; i < REPEATS; i++) {
+            iterator.next();
+            Assert.assertFalse(iterator.hasNext());
+            iterator.reset();
+            Assert.assertTrue(iterator.hasNext());
+        }
+    }
+
+    /**
+     * Checks that the {@code next()} method works when invoked once. The check is run {@value #REPEATS} times with a
+     * call to {@code reset()} in between to demonstrate repeatability.
+     *
+     * @since 1.0.0
+     */
+    @Test
+    public void nextResetTest()
+    {
+        for(int i = 0; i < REPEATS; i++) {
+            Assert.assertSame(iterator.next(), this);
+            iterator.reset();
+        }
+    }
+
+    /**
+     * Checks that the {@code next()} method fails when invoked twice consecutively without a reset in between. The
+     * expected failure is an {@code IllegalStateException}. This method also checks that the failure of {@code next()}
+     * is correlated with the return value of {@code hasNext()}.
+     *
+     * @since 1.0.0
+     */
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void nextTwiceTest()
+    {
+        Assert.assertTrue(iterator.hasNext());
+        iterator.next();
+        Assert.assertFalse(iterator.hasNext());
+        iterator.next(); // should fail here
+        Assert.fail();
+    }
+
+    /**
+     * Checks that the {@code next()} method can be called exactly once before {@code hasNext()} starts returning false.
+     *
+     * @since 1.0.0
+     */
+    @Test
+    public void nextCountTest()
+    {
+        int count;
+        for(count = 0; iterator.hasNext(); count++) {
+            iterator.next();
+        }
+        Assert.assertEquals(count, 1);
+    }
+
+    /**
+     * Checks that the {@code remove()} method of an iterator fails when invoked before the {@code next()} method.
+     * The expected failure is an {@code UnsupportedOperationException}.
      *
      * @since 1.0.0
      */
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void removeBeforeTest()
     {
-        ReferenceIterator<ReferenceIteratorTest> iterator = new ReferenceIterator<ReferenceIteratorTest>(this);
-        iterator.remove();
-        iterator.next(); // This operation should not happen
+        iterator.remove(); // should fail here
+        iterator.next(); // this is just for show
         Assert.fail();
+    }
+
+    /**
+     * Checks that the {@code remove()} method of an iterator fails when invoked after the {@code next()} method.
+     * The expected failure is an {@code UnsupportedOperationException}.
+     *
+     * @since 1.0.0
+     */
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void removeAfterTest()
+    {
+        iterator.next();
+        iterator.remove(); // should fail here
+        Assert.fail();
+    }
+
+    /**
+     * Checks that calling {@code reset()} repeatedly has no effect ({@code hasNext()} keeps returning {@code true}).
+     * The check is done {@value #REPEATS} times.
+     *
+     * @since 1.0.0
+     */
+    @Test
+    public void resetRepeatedTest()
+    {
+        iterator.next();
+        Assert.assertFalse(iterator.hasNext());
+        for(int i = 0; i < REPEATS; i++) {
+            iterator.reset();
+            Assert.assertTrue(iterator.hasNext());
+        }
     }
 }
