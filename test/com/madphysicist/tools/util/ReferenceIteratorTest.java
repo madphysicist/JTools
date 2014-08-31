@@ -106,10 +106,11 @@ public class ReferenceIteratorTest
      * expected failure is an {@code IllegalStateException}. This method also checks that the failure of {@code next()}
      * is correlated with the return value of {@code hasNext()}.
      *
+     * @throws IllegalStateException as expected.
      * @since 1.0.0
      */
     @Test(expectedExceptions = IllegalStateException.class)
-    public void nextTwiceTest()
+    public void nextTwiceTest() throws IllegalStateException
     {
         Assert.assertTrue(iterator.hasNext());
         iterator.next();
@@ -137,10 +138,11 @@ public class ReferenceIteratorTest
      * Checks that the {@code remove()} method of an iterator fails when invoked before the {@code next()} method.
      * The expected failure is an {@code UnsupportedOperationException}.
      *
+     * @throws UnsupportedOperationException as expected.
      * @since 1.0.0
      */
     @Test(expectedExceptions = UnsupportedOperationException.class)
-    public void removeBeforeTest()
+    public void removeBeforeTest() throws UnsupportedOperationException
     {
         iterator.remove(); // should fail here
         iterator.next(); // this is just for show
@@ -151,10 +153,11 @@ public class ReferenceIteratorTest
      * Checks that the {@code remove()} method of an iterator fails when invoked after the {@code next()} method.
      * The expected failure is an {@code UnsupportedOperationException}.
      *
+     * @throws UnsupportedOperationException as expected.
      * @since 1.0.0
      */
     @Test(expectedExceptions = UnsupportedOperationException.class)
-    public void removeAfterTest()
+    public void removeAfterTest() throws UnsupportedOperationException
     {
         iterator.next();
         iterator.remove(); // should fail here
