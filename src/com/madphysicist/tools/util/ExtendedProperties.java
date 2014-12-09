@@ -47,8 +47,8 @@ import javax.swing.KeyStroke;
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 2 Nov 2012 - J. Fox-Rabinovitz - Created
- * @version 1.0.1, 10 Dec 2013 - J. Fox-Rabinovitz - Added {@code
- * loadFromFile(File)} method, {@code load*NoEx()} methods, special getters.
+ * @version 1.0.1, 10 Dec 2013 - J. Fox-Rabinovitz - Added `loadFromFile(File)` method, `load*NoEx()` methods, special getters.
+ * @version 1.0.2, 09 Dec 2014 - J. Fox-Rabinovitz - Removed exceptions erroneously thrown by `load*NoEx()` methods.
  * @since 1.0
  */
 public class ExtendedProperties extends Properties
@@ -148,7 +148,7 @@ public class ExtendedProperties extends Properties
      * unchanged.
      * @since 1.0.1
      */
-    public void loadFromFileNoEx(String fileName) throws IOException
+    public void loadFromFileNoEx(String fileName)
     {
         try(InputStream input = new FileInputStream(fileName)) {
             load(input);
