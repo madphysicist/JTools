@@ -44,7 +44,7 @@ import com.madphysicist.tools.util.PathManager;
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 03 Dec 2012 - J. Fox-Rabinovitz - Created
  * @version 1.0.1, 24 Jul 2014 - J. Fox-Rabinovitz - Moved from com.madphysicist.tools.util
- * @since 1.0.0
+ * @since 1.0
  */
 public class FilePathManager extends PathManager<File, File>
 {

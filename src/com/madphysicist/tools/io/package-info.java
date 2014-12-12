@@ -31,6 +31,7 @@
  *
  * @author Joseph Fox-Rabinovitz
  * @version 1.0, 24 Jul 2014 - J. Fox-Rabinovitz: Initial coding.
+ * @version 1.1, 11 Dec 2014 - J. Fox-Rabinovitz: Added SyntaxException.
  * @since 1.4
  */
 package com.madphysicist.tools.io;

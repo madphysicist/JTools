@@ -53,7 +53,7 @@ import java.util.Arrays;
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 24 Jul 2014 - J. Fox-Rabinovitz - Initial coding.
  * @version 1.1.0, 04 Aug 2014 - J. Fox-Rabinovitz - Added type parameter and renamed from FileFormatException.
- * @since 1.0.0
+ * @since 1.0
  */
 public class FileParseException extends IOException
 {
