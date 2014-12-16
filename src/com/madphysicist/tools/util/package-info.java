@@ -39,6 +39,7 @@
  * @version 1.3, 17 Jul 2014 - J. Fox-Rabinovitz - Added ReferenceIterator
  * @version 1.4, 24 Jul 2014 - J. Fox-Rabinovitz - Moved FilePathManager to com.madphysicist.tools.io
  * @version 1.5, 01 Aug 2014 - J. Fox-Rabinovitz - Added MathUtilities
+ * @version 2.0, 15 Dec 2014 - J. Fox-Rabinovitz - Deleted BackgroundThread: All methods were superfluous.
  * @since 1.0
  */
 package com.madphysicist.tools.util;
