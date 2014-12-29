@@ -46,9 +46,10 @@ import javax.swing.KeyStroke;
  * {@code ExtendedProperties} or not.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 2 Nov 2012 - J. Fox-Rabinovitz - Created
+ * @version 1.0.0, 02 Nov 2012 - J. Fox-Rabinovitz - Created
  * @version 1.0.1, 10 Dec 2013 - J. Fox-Rabinovitz - Added `loadFromFile(File)` method, `load*NoEx()` methods, special getters.
  * @version 1.0.2, 09 Dec 2014 - J. Fox-Rabinovitz - Removed exceptions erroneously thrown by `load*NoEx()` methods.
+ * @version 1.1.0, 29 Dec 2014 - J. Fox-Rabinovitz - Added `getLongProperty()` methods.
  * @since 1.0
  */
 public class ExtendedProperties extends Properties
@@ -128,7 +129,7 @@ public class ExtendedProperties extends Properties
      * Loads a property file into this property set.
      *
      * @param fileName the name of the file to load.
-     * @throws IOException if an error occurrs while searching for, opening or
+     * @throws IOException if an error occurs while searching for, opening or
      * reading the file.
      * @since 1.0.0
      */
@@ -143,7 +144,7 @@ public class ExtendedProperties extends Properties
      * Loads a property file into this property set, ignoring any exceptions
      * that may occur.
      *
-     * @param fileName the name of the file to load. If an error occurrs while
+     * @param fileName the name of the file to load. If an error occurs while
      * searching for, opening or reading the file, this instance remains
      * unchanged.
      * @since 1.0.1
@@ -174,7 +175,7 @@ public class ExtendedProperties extends Properties
      * Loads a property file into this property set, ignoring any exceptions
      * that may occur.
      *
-     * @param file the file to load. If an error occurrs while searching for,
+     * @param file the file to load. If an error occurs while searching for,
      * opening or reading the file, this instance remains unchanged.
      * @since 1.0.1
      */
@@ -186,7 +187,7 @@ public class ExtendedProperties extends Properties
     }
 
     /**
-     * Imports the contents of a property resource bundle into this porperty
+     * Imports the contents of a property resource bundle into this property
      * set. This is similar to {@link #loadFromResource(java.lang.String)},
      * except that the search functionality used with resource bundles is used.
      *
@@ -250,7 +251,7 @@ public class ExtendedProperties extends Properties
     }
 
     /**
-     * Retreives a property as a boolean value. If the property can not be found
+     * Retrieves a property as a boolean value. If the property can not be found
      * or can not be parsed as a boolean, no exception is thrown and the default
      * value is returned.
      *
@@ -269,7 +270,7 @@ public class ExtendedProperties extends Properties
     }
 
     /**
-     * Retreives a property as a boolean value. If the property can not be found
+     * Retrieves a property as a boolean value. If the property can not be found
      * or can not be parsed as a boolean, an exception is thrown.
      *
      * @param key the property to search for.
@@ -287,7 +288,7 @@ public class ExtendedProperties extends Properties
     }
 
     /**
-     * Retreives a property as an integer value. If the property can not be
+     * Retrieves a property as an integer value. If the property can not be
      * found or can not be parsed as an integer, no exception is thrown and the
      * default value is returned.
      *
@@ -313,7 +314,7 @@ public class ExtendedProperties extends Properties
     }
 
     /**
-     * Retreives a property as an integer value. If the property can not be
+     * Retrieves a property as an integer value. If the property can not be
      * found or can not be parsed as an integer, an exception is thrown.
      *
      * @param key the property to search for.
@@ -333,7 +334,53 @@ public class ExtendedProperties extends Properties
     }
 
     /**
-     * Retreives a property as a double value. If the property can not be found
+     * Retrieves a property as a long integer value. If the property can not be
+     * found or can not be parsed as an integer, no exception is thrown and the
+     * default value is returned.
+     *
+     * @param key the property to search for.
+     * @param defaultValue the value to return if the key could not be found or
+     * the value could not be parsed as a long integer.
+     * @return the value for {@code key} as an {@code long}, or {@code
+     * defaultValue}.
+     * @since 1.0.0
+     */
+    public long getLongProperty(String key, long defaultValue)
+    {
+        String property = getProperty(key);
+        if(property == null)
+            return defaultValue;
+        long value;
+        try {
+            value = Long.parseLong(property);
+        } catch(NumberFormatException nfe) {
+            value = defaultValue;
+        }
+        return value;
+    }
+
+    /**
+     * Retrieves a property as a long integer value. If the property can not be
+     * found or can not be parsed as an integer, an exception is thrown.
+     *
+     * @param key the property to search for.
+     * @return the value for {@code key} as a {@code long}.
+     * @throws MissingResourceException if {@code key} can not be found in this
+     * property set or one of its parents.
+     * @throws NumberFormatException if the specified value can not be parsed as
+     * a long integer.
+     * @since 1.0.0
+     */
+    public long getLongProperty(String key) throws MissingResourceException, NumberFormatException
+    {
+        String property = getProperty(key);
+        if(property == null)
+            throw new MissingResourceException("null", getClass().getSimpleName(), key);
+        return Long.parseLong(property);
+    }
+
+    /**
+     * Retrieves a property as a double value. If the property can not be found
      * or can not be parsed as an integer, no exception is thrown and the
      * default value is returned.
      *
@@ -359,7 +406,7 @@ public class ExtendedProperties extends Properties
     }
 
     /**
-     * Retreives a property as a double value. If the property can not be found
+     * Retrieves a property as a double value. If the property can not be found
      * or can not be parsed as a double, an exception is thrown.
      *
      * @param key the property to search for.
@@ -383,9 +430,9 @@ public class ExtendedProperties extends Properties
      * property can not be found or can not be parsed as an {@code enum} of the
      * required type, no exception is thrown and the default value is returned.
      *
-     * @param <T> the type of the {@code enum}.
+     * @param <E> the type of the {@code enum}.
      * @param key the property to search for.
-     * @param clazz the class of the {@code enum}. This will determine the set
+     * @param enumClass the class of the {@code enum}. This will determine the set
      * of permitted values. See {@link Enum#valueOf(Class, String)}.
      * @param defaultValue the value to return if the key could not be found or
      * the value could not be parsed as an {@code enum} of the specified type.
@@ -393,13 +440,13 @@ public class ExtendedProperties extends Properties
      * type, or {@code defaultValue}.
      * @since 1.0.1
      */
-    public <T extends Enum<T>> T getEnumProperty(String key, Class<T> clazz, T defaultValue)
+    public <E extends Enum<E>> E getEnumProperty(String key, Class<E> enumClass, E defaultValue)
     {
         String property = getProperty(key);
         if(property == null)
             return defaultValue;
         try {
-            return Enum.valueOf(clazz, property);
+            return Enum.valueOf(enumClass, property);
         } catch(IllegalArgumentException | NullPointerException ex) {
             return defaultValue;
         }
@@ -513,7 +560,7 @@ public class ExtendedProperties extends Properties
         }
 
         /**
-         * Returns the key of this porperty.
+         * Returns the key of this property.
          *
          * @return the key of this property.
          * @since 1.0.0
@@ -524,7 +571,7 @@ public class ExtendedProperties extends Properties
         }
 
         /**
-         * Returns the value of this porperty.
+         * Returns the value of this property.
          *
          * @return the value of this property.
          * @since 1.0.0
@@ -535,7 +582,7 @@ public class ExtendedProperties extends Properties
         }
 
         /**
-         * Sets the value of this porperty.
+         * Sets the value of this property.
          *
          * @param value the new value to use for this property.
          * @return the previous value of this property.
