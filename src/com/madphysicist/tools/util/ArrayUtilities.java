@@ -37,8 +37,10 @@ import java.util.Arrays;
  * This class can not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 20 Sep 2012 - J. Fox-Rabinovitz: Created
- * @version 1.0.1, 05 Feb 2014 - J. Fox-Rabinovitz: Added truncate() methods
+ * @version 1.0.0, 20 Sep 2012 - J. Fox-Rabinovitz: Initial coding.
+ * @version 1.0.1, 05 Feb 2014 - J. Fox-Rabinovitz: Added `truncate()` methods.
+ * @version 1.0.2, 17 Feb 2015 - J. Fox-Rabinovitz: Added `toStringArray()` and
+ *      `to<Primitive>Array()` methods.
  * @since 1.0
  */
 public class ArrayUtilities
@@ -49,6 +51,298 @@ public class ArrayUtilities
      * @since 1.0.0
      */
     private ArrayUtilities() {}
+
+    /**
+     * @brief Converts an array of bytes into an array of strings representing
+     * the numerical values of corresponding elements.
+     *
+     * The conversion is done in base ten.
+     *
+     * @param anArray The array of bytes to convert.
+     * @return An array of strings of the same length as the input, each one
+     * containing a string representation of each element of the input.
+     * @since 1.0.2
+     */
+    public static String[] toStringArray(byte[] anArray)
+    {
+        String[] output = new String[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = String.valueOf(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of chars into an array of strings representing
+     * the numerical values of corresponding elements.
+     *
+     * The conversion is done in base ten.
+     *
+     * @param anArray The array of chars to convert.
+     * @return An array of strings of the same length as the input, each one
+     * containing a string representation of each element of the input.
+     * @since 1.0.2
+     */
+    public static String[] toStringArray(char[] anArray)
+    {
+        String[] output = new String[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = String.valueOf(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of shorts into an array of strings representing
+     * the numerical values of corresponding elements.
+     *
+     * The conversion is done in base ten.
+     *
+     * @param anArray The array of shorts to convert.
+     * @return An array of strings of the same length as the input, each one
+     * containing a string representation of each element of the input.
+     * @since 1.0.2
+     */
+    public static String[] toStringArray(short[] anArray)
+    {
+        String[] output = new String[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = String.valueOf(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of ints into an array of strings representing
+     * the numerical values of corresponding elements.
+     *
+     * The conversion is done in base ten.
+     *
+     * @param anArray The array of ints to convert.
+     * @return An array of strings of the same length as the input, each one
+     * containing a string representation of each element of the input.
+     * @since 1.0.2
+     */
+    public static String[] toStringArray(int[] anArray)
+    {
+        String[] output = new String[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = String.valueOf(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of longs into an array of strings representing
+     * the numerical values of corresponding elements.
+     *
+     * The conversion is done in base ten.
+     *
+     * @param anArray The array of longs to convert.
+     * @return An array of strings of the same length as the input, each one
+     * containing a string representation of each element of the input.
+     * @since 1.0.2
+     */
+    public static String[] toStringArray(long[] anArray)
+    {
+        String[] output = new String[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = String.valueOf(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of floats into an array of strings representing
+     * the numerical values of corresponding elements.
+     *
+     * The conversion is done in base ten.
+     *
+     * @param anArray The array of floats to convert.
+     * @return An array of strings of the same length as the input, each one
+     * containing a string representation of each element of the input.
+     * @since 1.0.2
+     */
+    public static String[] toStringArray(float[] anArray)
+    {
+        String[] output = new String[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = String.valueOf(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of doubles into an array of strings representing
+     * the numerical values of corresponding elements.
+     *
+     * The conversion is done in base ten.
+     *
+     * @param anArray The array of doubles to convert.
+     * @return An array of strings of the same length as the input, each one
+     * containing a string representation of each element of the input.
+     * @since 1.0.2
+     */
+    public static String[] toStringArray(double[] anArray)
+    {
+        String[] output = new String[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = String.valueOf(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of arbitrary objects into an array of strings
+     * using the `toString()` method of the objects.
+     *
+     * @param anArray The array of objects to convert.
+     * @return An array of strings of the same length as the input, each one
+     * containing the string representation of the corresponding element of the
+     * input.
+     * @since 1.0.2
+     */
+    public static String[] toStringArray(Object[] anArray)
+    {
+        String[] output = new String[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = anArray[index].toString();
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of strings into an array of bytes.
+     *
+     * The strings are expected to be in base ten.
+     *
+     * @param anArray The array to convert.
+     * @return An array of bytes of the same length as the input, each element
+     * of which contains the decoded byte of the corresponding input element.
+     * @throws NumberFormatException if any of the input elements can not be
+     * parsed as a byte.
+     * @since 1.0.2
+     */
+    public static byte[] toByteArray(String[] anArray) throws NumberFormatException
+    {
+        byte[] output = new byte[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = Byte.parseByte(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of strings into an array of chars.
+     *
+     * The strings are expected to be in base ten.
+     *
+     * @param anArray The array to convert.
+     * @return An array of chars of the same length as the input, each element
+     * of which contains the decoded char of the corresponding numerical input
+     * element.
+     * @throws NumberFormatException if any of the input elements can not be
+     * parsed as a char (short).
+     * @since 1.0.2
+     */
+    public static char[] toCharArray(String[] anArray) throws NumberFormatException
+    {
+        char[] output = new char[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = (char)Short.parseShort(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of strings into an array of shorts.
+     *
+     * The strings are expected to be in base ten.
+     *
+     * @param anArray The array to convert.
+     * @return An array of shorts of the same length as the input, each element
+     * of which contains the decoded short of the corresponding input element.
+     * @throws NumberFormatException if any of the input elements can not be
+     * parsed as a short.
+     * @since 1.0.2
+     */
+    public static short[] toShortArray(String[] anArray) throws NumberFormatException
+    {
+        short[] output = new short[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = Short.parseShort(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of strings into an array of ints.
+     *
+     * The strings are expected to be in base ten.
+     *
+     * @param anArray The array to convert.
+     * @return An array of ints of the same length as the input, each element
+     * of which contains the decoded int of the corresponding input element.
+     * @throws NumberFormatException if any of the input elements can not be
+     * parsed as an int.
+     * @since 1.0.2
+     */
+    public static int[] toIntArray(String[] anArray) throws NumberFormatException
+    {
+        int[] output = new int[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = Integer.parseInt(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of strings into an array of longs.
+     *
+     * The strings are expected to be in base ten.
+     *
+     * @param anArray The array to convert.
+     * @return An array of longs of the same length as the input, each element
+     * of which contains the decoded long of the corresponding input element.
+     * @throws NumberFormatException if any of the input elements can not be
+     * parsed as a long.
+     * @since 1.0.2
+     */
+    public static long[] toLongArray(String[] anArray) throws NumberFormatException
+    {
+        long[] output = new long[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = Long.parseLong(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of strings into an array of floats.
+     *
+     * The strings are expected to be in base ten.
+     *
+     * @param anArray The array to convert.
+     * @return An array of floats of the same length as the input, each element
+     * of which contains the decoded float of the corresponding input element.
+     * @throws NumberFormatException if any of the input elements can not be
+     * parsed as a float.
+     * @since 1.0.2
+     */
+    public static float[] toFloatArray(String[] anArray) throws NumberFormatException
+    {
+        float[] output = new float[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = Float.parseFloat(anArray[index]);
+        return output;
+    }
+
+    /**
+     * @brief Converts an array of strings into an array of doubles.
+     *
+     * The strings are expected to be in base ten.
+     *
+     * @param anArray The array to convert.
+     * @return An array of doubles of the same length as the input, each element
+     * of which contains the decoded double of the corresponding input element.
+     * @throws NumberFormatException if any of the input elements can not be
+     * parsed as a double.
+     * @since 1.0.2
+     */
+    public static double[] toDoubleArray(String[] anArray) throws NumberFormatException
+    {
+        double[] output = new double[anArray.length];
+        for(int index = 0; index < anArray.length; index++)
+            output[index] = Double.parseDouble(anArray[index]);
+        return output;
+    }
 
     /**
      * Returns a subset of an array, starting from the beginning. The input

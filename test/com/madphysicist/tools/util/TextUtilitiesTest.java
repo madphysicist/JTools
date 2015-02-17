@@ -284,29 +284,6 @@ public class TextUtilitiesTest
     }
 
     /**
-     * Input test of mapEquals method of class TextUtilities. This test method
-     * is parametrized with values from the {@link #testMapEqualsDataProvider()}
-     * array. It verifies that maps of different types and contents are compared
-     * correctly. Note that every test is run twice, once in the order
-     * {@code mapEquals(map1, map2)} and once in the order {@code
-     * mapEquals(map2, map1)}.
-     *
-     * @param label the label of the current parameter set. This is used for
-     * output to the command line.
-     * @param map1 the first map to compare.
-     * @param map2 the second map to compare.
-     * @param expectedValue the expected result of the comparison.
-     * @since 1.0.0.0
-     */
-    @Test(dataProvider = "testMapEqualsDataProvider")
-    public void testMapEquals(String label, Map<String, String> map1, Map<String, String> map2, boolean expectedValue)
-    {
-        System.out.println("mapEquals (" + label + ")");
-        Assert.assertEquals(TextUtilities.mapEquals(map1, map2), expectedValue);
-        Assert.assertEquals(TextUtilities.mapEquals(map2, map1), expectedValue);
-    }
-
-    /**
      * Input test of keyList method of class TextUtilities. This test method
      * is parametrized with values from the {@link #testKeyListDataProvider()}
      * array. It verifies that key lists for maps of different types and
@@ -1088,97 +1065,6 @@ public class TextUtilitiesTest
             {"repeated key", propertiesToMap, p2mBaseMap, new Object[] {extendedProperties}},
             {"normal", propertiesToMap, p2mBaseMap, new Object[] {p2mBaseProperties}},
             // propertiesToMap - END
-        };
-    }
-
-    /**
-     * A data provider for {@link #testMapEquals}. Returns an array of input
-     * parameters that exercise different scenarios.
-     * <p>
-     * All tests are run twice, with {@code TreeMap} and {@code HashMap}
-     * implementations of the {@code Map} interface except for the "Both Null"
-     * and "Different Type Equals" cases. The tests made available by this data
-     * provider are:
-     * <ul>
-     * <li>Both Null: Two nulls should be considered equal.</li>
-     * <li>One Null One Empty: A null map and an empty map should not be
-     * considered equal.</li>
-     * <li>One Null One Normal: A null map should not be considered equal to a
-     * normal map.</li>
-     * <li>Same Type Different Size: Two maps of the same runtime type should
-     * not be considered equal if they are not the same size, even if all the
-     * mappings in the smaller object are present in the larger one.</li>
-     * <li>Same Type Different Key: Two maps of the same runtime type should not
-     * be considered equal if they are the same type and size but one of the
-     * keys differs between them.</li>
-     * <li>Same Type Different Value: Two maps of the same runtime type should
-     * not be considered equal if they are the same type and size but one of the
-     * values differs between them.</li>
-     * <li>Same Type Equal: Two maps of the same runtime type should be
-     * considered equal if all their keys and corresponding value are
-     * identical.</li>
-     * <li>Different Type Different Size: Two maps of different runtime types
-     * should not be considered equal if they are not the same size, even if all
-     * the mappings in the smaller object are present in the larger one.</li>
-     * <li>Different Type Different Key: Two maps of different runtime types
-     * should not be considered equal if they are the same type and size but one
-     * of the keys differs between them.</li>
-     * <li>Different Type Different Value: Two maps of different runtime types
-     * should not be considered equal if they are the same type and size but one
-     * of the values differs between them.</li>
-     * <li>Different Type Equal: Two maps of different runtime types should be
-     * considered equal if all their keys and corresponding value are
-     * identical.</li>
-     * </ul>
-     *
-     * @return a two-dimensional array of objects. The outer array represents
-     * distinct runs of the test method. The inner Object arrays are parameter
-     * lists representing the scenario label, the two maps, and the expected
-     * result.
-     * @since 1.0.0.0
-     */
-    @DataProvider(name = "testMapEqualsDataProvider")
-    private Object[][] testMapEqualsDataProvider()
-    {
-        TreeMap<String, String> treeMap = new TreeMap<>(basicMap);
-        TreeMap<String, String> diffrentKeyTreeMap = new TreeMap<>(basicMap);
-        TreeMap<String, String> diffrentValueTreeMap = new TreeMap<>(basicMap);
-        TreeMap<String, String> extendedTreeMap = new TreeMap<>(basicMap);
-        diffrentKeyTreeMap.remove("a");
-        diffrentKeyTreeMap.put("A", "A");
-        diffrentValueTreeMap.put("b", "b");
-        extendedTreeMap.put("d", "D");
-
-        HashMap<String, String> hashMap = new HashMap<>(basicMap);
-        HashMap<String, String> diffrentKeyHashMap = new HashMap<>(basicMap);
-        HashMap<String, String> diffrentValueHashMap = new HashMap<>(basicMap);
-        HashMap<String, String> extendedHashMap = new HashMap<>(basicMap);
-        diffrentKeyHashMap.remove("a");
-        diffrentKeyHashMap.put("A", "A");
-        diffrentValueHashMap.put("b", "b");
-        extendedHashMap.put("d", "D");
-        
-        return new Object[][] {
-            {"both null", null, null, true},
-            {"one null one empty [T]", null, new TreeMap<>(), false},
-            {"one null one empty [H]", null, new HashMap<>(), false},
-            {"one null one normal [T]", null, treeMap, false},
-            {"one null one normal [H]", null, hashMap, false},
-            {"same type diff size [T]", treeMap, extendedTreeMap, false},
-            {"same type diff size [H]", hashMap, extendedHashMap, false},
-            {"same type diff key [T]", treeMap, diffrentKeyTreeMap, false},
-            {"same type diff key [H]", hashMap, diffrentKeyHashMap, false},
-            {"same type diff value [T]", treeMap, diffrentValueTreeMap, false},
-            {"same type diff value [H]", hashMap, diffrentValueHashMap, false},
-            {"same type equal [T]", treeMap, new TreeMap<>(hashMap), true},
-            {"same type equal [H]", hashMap, new HashMap<>(treeMap), true},
-            {"diff type diff size [TH]", treeMap, extendedHashMap, false},
-            {"diff type diff size [HT]", hashMap, extendedTreeMap, false},
-            {"diff type diff key [TH]", treeMap, diffrentKeyHashMap, false},
-            {"diff type diff key [HT]", hashMap, diffrentKeyTreeMap, false},
-            {"diff type diff value [TH]", treeMap, diffrentValueHashMap, false},
-            {"diff type diff value [HT]", hashMap, diffrentValueTreeMap, false},
-            {"diff type equal", treeMap, hashMap, true}
         };
     }
 
