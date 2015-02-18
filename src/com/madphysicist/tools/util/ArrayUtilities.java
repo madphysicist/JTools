@@ -72,25 +72,6 @@ public class ArrayUtilities
     }
 
     /**
-     * @brief Converts an array of chars into an array of strings representing
-     * the numerical values of corresponding elements.
-     *
-     * The conversion is done in base ten.
-     *
-     * @param anArray The array of chars to convert.
-     * @return An array of strings of the same length as the input, each one
-     * containing a string representation of each element of the input.
-     * @since 1.0.2
-     */
-    public static String[] toStringArray(char[] anArray)
-    {
-        String[] output = new String[anArray.length];
-        for(int index = 0; index < anArray.length; index++)
-            output[index] = String.valueOf(anArray[index]);
-        return output;
-    }
-
-    /**
      * @brief Converts an array of shorts into an array of strings representing
      * the numerical values of corresponding elements.
      *
@@ -189,6 +170,9 @@ public class ArrayUtilities
      * @brief Converts an array of arbitrary objects into an array of strings
      * using the `toString()` method of the objects.
      *
+     * `null` references in the array are converted to the string `"null"`. This
+     * method does not throw an exception for such references.
+     *
      * @param anArray The array of objects to convert.
      * @return An array of strings of the same length as the input, each one
      * containing the string representation of the corresponding element of the
@@ -199,7 +183,7 @@ public class ArrayUtilities
     {
         String[] output = new String[anArray.length];
         for(int index = 0; index < anArray.length; index++)
-            output[index] = anArray[index].toString();
+            output[index] = String.valueOf(anArray[index]);
         return output;
     }
 
@@ -220,27 +204,6 @@ public class ArrayUtilities
         byte[] output = new byte[anArray.length];
         for(int index = 0; index < anArray.length; index++)
             output[index] = Byte.parseByte(anArray[index]);
-        return output;
-    }
-
-    /**
-     * @brief Converts an array of strings into an array of chars.
-     *
-     * The strings are expected to be in base ten.
-     *
-     * @param anArray The array to convert.
-     * @return An array of chars of the same length as the input, each element
-     * of which contains the decoded char of the corresponding numerical input
-     * element.
-     * @throws NumberFormatException if any of the input elements can not be
-     * parsed as a char (short).
-     * @since 1.0.2
-     */
-    public static char[] toCharArray(String[] anArray) throws NumberFormatException
-    {
-        char[] output = new char[anArray.length];
-        for(int index = 0; index < anArray.length; index++)
-            output[index] = (char)Short.parseShort(anArray[index]);
         return output;
     }
 
