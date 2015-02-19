@@ -30,16 +30,20 @@ package com.madphysicist.tools.util;
 import java.util.Iterator;
 
 /**
- * <p>
- * A single-element iterator over a single object. This class is a much simpler version of doing something like {@code
- * Arrays.asList(new Object[] {object}).iterator()}. This iterator also provides a {@link #reset()} method that allows
- * it to be run multiple times.
- * </p>
- * <p>
- * This class does not support the {@link #remove()} method.
- * </p>
+ * @brief A single-element iterator over a single object.
  *
- * @param <E> the element type of the iterator. This is just the class of the object that it is initialized with.
+ * This class is a much simpler version of doing something like
+ *
+ *     Arrays.asList(new Object[] {object}).iterator()}
+ *
+ * This iterator also provides a `reset()` method that allows it to be run
+ * multiple times without having to be re-created.
+ *
+ * This class does not support the `remove()` method for obvious reasons.
+ * However, because it can be reset, this iterator is not thread safe.
+ *
+ * @param <E> the element type of the iterator. This is just the class of the
+ *            object that it is initialized with.
  * @author Joseph Fox-Rabinovitz
  * @version 1.0.0, 17 Jul 2014 - J. Fox-Rabinovitz - Initial coding
  * @since 1.3
@@ -47,61 +51,67 @@ import java.util.Iterator;
 public class ReferenceIterator<E> implements Iterator<E>
 {
     /**
-     * The object to iterate over.
+     * @brief The object to iterate over.
      *
      * @since 1.0.0
      */
-    private final E object;
+    private final E theObject;
 
     /**
-     * A flag indicating whether or not this iterator has a next element. This flag is set to {@code true} in the
-     * {@linkplain #ReferenceIterator(Object) constructor} and {@code false} in the {@link #next()} method.
+     * @brief A flag indicating whether or not this iterator has a next element.
+     *
+     * This flag is set to `true` in the constructor and `reset()` method, and
+     * `false` in the `next()` method.
      *
      * @since 1.0.0
      */
-    private boolean on;
+    private boolean theNextFlag;
 
     /**
-     * Constructs a new iterator over the specified object.
+     * @brief Constructs a new iterator over the specified object.
      *
-     * @param object the object to iterate over.
+     * @param anObject The object to iterate over.
      * @since 1.0.0
      */
-    public ReferenceIterator(E object)
+    public ReferenceIterator(E anObject)
     {
-        this.object = object;
-        this.on = true;
+        this.theObject = anObject;
+        this.theNextFlag = true;
     }
 
     /**
-     * Checks if the object has been iterated over.
+     * @brief Checks if the object has been iterated over.
      *
-     * @return {@code true} as long as {@link #next()} has not been called.
+     * @return `true` as long as `next()` has not been called.
      * @since 1.0.0
      */
     @Override public boolean hasNext()
     {
-        return on;
+        return theNextFlag;
     }
 
     /**
-     * Returns the object being iterated over if it has not already been returned.
+     * @brief Returns the object being iterated over if it has not already been
+     * returned.
      *
-     * @return the object which this iterator encapsulates.
-     * @throws IllegalStateException if this method was called before and {@link #reset()} was not called.
+     * @return The object which this iterator encapsulates.
+     * @throws IllegalStateException if this method was called a second time
+     * before `reset()`.
      * @since 1.0.0 
      */
     @Override public E next()
     {
-        if(this.on) {
-            this.on = false;
-            return object;
+        if(this.theNextFlag) {
+            this.theNextFlag = false;
+            return theObject;
         }
         throw new IllegalStateException("No more elements in " + getClass().getSimpleName());
     }
 
     /**
-     * An unsupported operation required by the {@code Iterator} interface. This method always throws an exception.
+     * @brief An unsupported operation required by the `Iterator` interface.
+     *
+     * This method always throws an exception.
      *
      * @throws UnsupportedOperationException always.
      * @since 1.0.0
@@ -112,14 +122,16 @@ public class ReferenceIterator<E> implements Iterator<E>
     }
 
     /**
-     * Resets this iterator. Further calls to {@link #hasNext()} will return {@code true} and {@link #next()} can be
-     * invoked after this method without throwing an exception. If the iterator is already active or has been reset,
-     * this method has no effect.
+     * @brief Resets this iterator.
+     *
+     * Further calls to `hasNext()` will return `true` and `next()` can be
+     * invoked after this method without throwing an exception. If the iterator
+     * is already active or has been reset, this method has no effect.
      *
      * @since 1.0.0
      */
     public void reset()
     {
-        this.on = true;
+        this.theNextFlag = true;
     }
 }
