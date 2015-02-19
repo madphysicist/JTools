@@ -212,90 +212,201 @@ public class TextUtilities
     }
 
     /**
-     * Parses a map encoded with {@link #mapToString mapToString()} or
-     * equivalent. Special attention is paid to elements with escape characters
-     * in them. The expected format is
-     *  {@code
-     * <name><prefix><escaped key><keyValueSeparator><escaped value><entrySeparator>
-     * ... <suffix>}.
-     * Note that if keys are repeated, the values will be silently replaced. The
-     * case in which there are no characters between {@code prefix} and {@code
-     * suffix} is treated specially as an empty map.
+     * @brief Parses a map encoded with `mapToString()` or equivalent.
      *
-     * @param string the string to decode. This parameter may not be
-     * {@code null}. It may only be empty is both prefix and suffix are empty.
-     * @param map the map to fill with the decoded values. The map does not have
-     * to be empty, but duplicate keys will be silently replaced. If this
-     * parameter is {@code null}, only the name is extracted and returned.
-     * @param prefix the prefix string. Note that escape characters do
-     * <b>not</b> appear in the prefix. This string may not be {@code null}.
-     * If the prefix is empty, the map will have an empty name string.
-     * @param suffix the suffix string. Note that escape characters do
-     * <b>not</b> appear in the suffix. This string may not be {@code null}.
-     * @param keyValueSeparator the string that separates keys from values.
-     * This string may not be {@code null} or empty.
-     * @param entrySeparator the string that separates successive key-value
-     * entries. This string may not be {@code null} or empty.
-     * @param escapeChars a string containing a list of characters that may be
-     * escaped in the input. This parameter may be {@code null} to indicate that
-     * all characters preceded by an escape symbol are escaped, or empty to
-     * indicate that there are no escape characters.
-     * @param escapeSymbol a symbol used to escape special characters.
-     * @return the name of the map, or an empty String if none is specified.
-     * @throws NullPointerException if any of the arguments except {@code map}
-     * or {@code escapeChars} is {@code null}.
-     * @throws IllegalArgumentException if either {@code string}, {@code
-     * keyValueSeparator} or {@code entrySeparator} is empty.
-     * @throws StringIndexOutOfBoundsException if no valid prefix is found, no
-     * valid suffix is found, or an entry does not have a valid key-value
-     * separator. The message indicates which condition caused the exception.
-     * @see #mapToString
+     * Special attention is paid to elements with escape characters
+     * in them. The expected format of the string is:
+     *
+     *      <aName><aMapPrefix><escaped key><aKeyValueSeparator><escaped value><anEntrySeparator> ... <aMapSuffix>
+     *
+     * Note that if keys are repeated, the values will be silently replaced. The
+     * case in which there are no characters between `aMapPrefix` and
+     * `aMapSuffix` is treated specially as an empty map.
+     *
+     * @param aString The string to decode. This parameter may not be `null`.
+     * It may only be empty is both `mapPrefix` and `mapSuffix` are empty.
+     * @param aMap The map to fill with the decoded values. The map does not
+     * have to be empty, but duplicate keys will be silently replaced. If this
+     * parameter is `null`, only the name is extracted from the string and
+     * returned. This map must be modifiable and will only have `String` and
+     * `String[]` values added to it.
+     * @param aMapPrefix The map prefix string. Note that escape characters do
+     * **not** appear in the prefix. This string may not be `null`. If the
+     * prefix is empty, the map will have an empty name string.
+     * @param aMapSuffix The map suffix string. Note that escape characters do
+     * **not** appear in the suffix. This string may not be `null` but may be
+     * empty. The input string must end with this sequence exactly.
+     * @param aKeyValueSeparator The string that separates keys from values.
+     * This string may be neither `null` nor empty.
+     * @param anEntrySeparator The string that separates successive key-value
+     * pairs. This string may be neither `null` nor empty.
+     * @param anEscapeChars A string containing a list of characters that may be
+     * escaped in the input. This parameter may be `null` to indicate that all
+     * characters preceded by `anEscapeSymbol` are escaped, or empty to indicate
+     * that there are no escape characters.
+     * @param anEscapeSymbol A symbol used to escape special characters, e.g.
+     * the prefix, suffix and separators within the keys and values.
+     * @return The name of the map, or an empty `String` if none is specified.
+     * @throws NullPointerException if any of the arguments except `aMap` or
+     * `anEscapeChars` is `null`.
+     * @throws IllegalArgumentException if either `aString`,
+     * `aKeyValueSeparator` or `anEntrySeparator` is empty.
+     * @throws StringIndexOutOfBoundsException if `aMapPrefix` is not found,
+     * `aString` does not end with `aMapSuffix`, or an entry does not have a
+     * valid key-value separator. The message indicates which condition caused
+     * the exception.
+     * @see mapToString()
      * @since 1.0.0
      */
-    public static String stringToMap(String string, Map<String, String> map,
-                                     String prefix, String suffix,
-                                     String keyValueSeparator,
-                                     String entrySeparator,
-                                     String escapeChars, char escapeSymbol)
+    public static String stringToMap(String aString, Map<String, String> aMap,
+                                     String aMapPrefix, String aMapSuffix,
+                                     String aKeyValueSeparator,
+                                     String anEntrySeparator,
+                                     String anEscapeChars, char anEscapeSymbol)
     {
         // preprocess (calling isEmpty on null will handle throwing the NPEs)
-        if(string.isEmpty()) {
-            if(prefix.isEmpty() && suffix.isEmpty())
+        if(aString.isEmpty()) {
+            if(aMapPrefix.isEmpty() && aMapSuffix.isEmpty())
                 return new String();
-            throw new IllegalArgumentException("string empty");
+            throw new IllegalArgumentException("map string empty");
         }
-        if(entrySeparator.isEmpty()) {
+        if(anEntrySeparator.isEmpty()) {
             throw new IllegalArgumentException("entry separator empty");
         }
-        if(keyValueSeparator.isEmpty()) {
+        if(aKeyValueSeparator.isEmpty()) {
             throw new IllegalArgumentException("key-value separator empty");
         }
         // find prefix
-        int prefixIndex = nextIndexOf(string, prefix, 0, escapeChars, escapeSymbol);
+        int prefixIndex = nextIndexOf(aString, aMapPrefix, 0, anEscapeChars, anEscapeSymbol);
         if(prefixIndex < 0) {
-            throw new StringIndexOutOfBoundsException("prefix missing");
+            throw new StringIndexOutOfBoundsException("map prefix missing");
         }
         // check for suffix
-        int suffixIndex = (suffix.isEmpty()) ? string.length() :
-                          nextIndexOf(string, suffix, string.length() - suffix.length(),
-                                      escapeChars, escapeSymbol);
+        int suffixIndex = (aMapSuffix.isEmpty()) ? aString.length() :
+                          nextIndexOf(aString, aMapSuffix, aString.length() - aMapSuffix.length(),
+                                      anEscapeChars, anEscapeSymbol);
         if(suffixIndex < 0) {
-            throw new StringIndexOutOfBoundsException("suffix missing");
+            throw new StringIndexOutOfBoundsException("map suffix missing");
         }
-        String name = string.substring(0, prefixIndex);
-        if(map != null) {
-            string = string.substring(prefixIndex + prefix.length(), suffixIndex);
+        String name = aString.substring(0, prefixIndex);
+        if(aMap != null) {
+            aString = aString.substring(prefixIndex + aMapPrefix.length(), suffixIndex);
             // only process if the string contains a map between the prefix and suffix
-            if(!string.isEmpty()) {
+            if(!aString.isEmpty()) {
                 int prev = 0;
-                for(int index = 0; (index = nextIndexOf(string, entrySeparator, prev, escapeChars, escapeSymbol)) >= prev;
-                    prev = index + entrySeparator.length()) {
-                    addMapEntry(string.substring(prev, index), map, keyValueSeparator, escapeChars, escapeSymbol);
+                for(int index = 0; (index = nextIndexOf(aString, anEntrySeparator, prev, anEscapeChars, anEscapeSymbol)) >= prev;
+                    prev = index + anEntrySeparator.length()) {
+                    addMapEntry(aString.substring(prev, index), aMap, aKeyValueSeparator, anEscapeChars, anEscapeSymbol);
                 }
-                addMapEntry(string.substring(prev), map, keyValueSeparator, escapeChars, escapeSymbol);
+                addMapEntry(aString.substring(prev), aMap, aKeyValueSeparator, anEscapeChars, anEscapeSymbol);
             }
         }
-        return unescapeString(name, escapeChars, escapeSymbol);
+        return unescapeString(name, anEscapeChars, anEscapeSymbol);
+    }
+
+    /**
+     * @brief Parses a map encoded with `mapToString()` or equivalent.
+     *
+     * Special attention is paid to elements with escape characters
+     * in them. The expected format of the string is:
+     *
+     *      <name><mapPrefix><escaped key><keyValueSeparator><escaped value><entrySeparator> ... <mapSuffix>
+     *
+     * Note that if keys are repeated, the values will be silently replaced. The
+     * case in which there are no characters between `mapPrefix` and `mapSuffix`
+     * is treated specially as an empty map. While keys are always interpreted
+     * as strings, values may be interpreted as either strings or arrays of
+     * strings. Array values must follow the following format:
+     *
+     *      <arrayPrefix><escaped element><arraySeparator> ... <arraySuffix>
+     *
+     * `arraySeparator` does not appear after the last element. Empty arrays
+     * are allowed, as long as they begin with `arrayPrefix`, end with
+     * `arraySuffix`, and contain nothing in between. If `arrayPrefix` and
+     * `arraySuffix` are empty, empty values will not be treated as arrays.
+     *
+     * @param aString The string to decode. This parameter may not be `null`.
+     * It may only be empty is both `mapPrefix` and `mapSuffix` are empty.
+     * @param aMap The map to fill with the decoded values. The map does not
+     * have to be empty, but duplicate keys will be silently replaced. If this
+     * parameter is `null`, only the name is extracted from the string and
+     * returned. This map must be modifiable and will only have `String` and
+     * `String[]` values added to it.
+     * @param aMapPrefix The map prefix string. Note that escape characters do
+     * **not** appear in the prefix. This string may not be `null`. If the
+     * prefix is empty, the map will have an empty name string.
+     * @param aMapSuffix The map suffix string. Note that escape characters do
+     * **not** appear in the suffix. This string may not be `null` but may be
+     * empty. The input string must end with this sequence exactly.
+     * @param aKeyValueSeparator The string that separates keys from values.
+     * This string may be neither `null` nor empty.
+     * @param anEntrySeparator The string that separates successive key-value
+     * pairs. This string may be neither `null` nor empty.
+     * @param anEscapeChars A string containing a list of characters that may be
+     * escaped in the input. This parameter may be `null` to indicate that all
+     * characters preceded by `anEscapeSymbol` are escaped, or empty to indicate
+     * that there are no escape characters.
+     * @param anEscapeSymbol A symbol used to escape special characters, e.g.
+     * the prefix, suffix and separators within the keys and values.
+     * @return The name of the map, or an empty `String` if none is specified.
+     * @throws NullPointerException if any of the arguments except `aMap` or
+     * `anEscapeChars` is `null`.
+     * @throws IllegalArgumentException if either `aString`,
+     * `aKeyValueSeparator` or `anEntrySeparator` is empty. `anArraySeparator`
+     * may not be empty either, but the exception is only thrown if arrays are
+     * actually found in `aString`.
+     * @throws StringIndexOutOfBoundsException if `aMapPrefix` is not found,
+     * `aString` does not end with `aMapSuffix`, or an entry does not have a
+     * valid key-value separator. The message indicates which condition caused
+     * the exception.
+     * @see mapToString()
+     * @since 3.0.0
+     */
+    public static String stringToMap(String aString, Map<String, Object> aMap,
+                                     String aMapPrefix, String aMapSuffix,
+                                     String aKeyValueSeparator, String anEntrySeparator,
+                                     String anArrayPrefix, String anArraySeparator, String anArraySuffix,
+                                     String anEscapeChars, char anEscapeSymbol)
+    {
+        // preprocess (calling isEmpty on null will handle throwing the NPEs)
+        if (aString.isEmpty()) {
+            if (aMapPrefix.isEmpty() && aMapSuffix.isEmpty())
+                return new String();
+            throw new IllegalArgumentException("map string empty");
+        }
+        if (anEntrySeparator.isEmpty()) {
+            throw new IllegalArgumentException("entry separator empty");
+        }
+        if (aKeyValueSeparator.isEmpty()) {
+            throw new IllegalArgumentException("key-value separator empty");
+        }
+
+        // find prefix
+        int prefixIndex = nextIndexOf(aString, aMapPrefix, 0, anEscapeChars, anEscapeSymbol);
+        if (prefixIndex < 0) {
+            throw new StringIndexOutOfBoundsException("map prefix missing");
+        }
+        // check for suffix
+        int suffixIndex = (aMapSuffix.isEmpty()) ? aString.length() : nextIndexOf(aString, aMapSuffix, aString.length()
+                - aMapSuffix.length(), anEscapeChars, anEscapeSymbol);
+        if (suffixIndex < 0) {
+            throw new StringIndexOutOfBoundsException("map suffix missing");
+        }
+        String name = aString.substring(0, prefixIndex);
+        if (aMap != null) {
+            aString = aString.substring(prefixIndex + aMapPrefix.length(), suffixIndex);
+            // only process if the string contains a map between the prefix and
+            // suffix
+            if (!aString.isEmpty()) {
+                int prev = 0;
+                for (int index = 0; (index = nextIndexOf(aString, anEntrySeparator, prev, anEscapeChars, anEscapeSymbol)) >= prev; prev = index
+                        + anEntrySeparator.length()) {
+                    addMapEntry(aString.substring(prev, index), aMap, aKeyValueSeparator, anArrayPrefix, anArraySeparator, anArraySuffix, anEscapeChars, anEscapeSymbol);
+                }
+                addMapEntry(aString.substring(prev), aMap, aKeyValueSeparator, anArrayPrefix, anArraySeparator, anArraySuffix, anEscapeChars, anEscapeSymbol);
+            }
+        }
+        return unescapeString(name, anEscapeChars, anEscapeSymbol);
     }
 
     /**
@@ -411,22 +522,22 @@ public class TextUtilities
         if(aString.isEmpty()) {
             if(aPrefix.isEmpty() && aSuffix.isEmpty())
                 return new String[0];
-            throw new IllegalArgumentException("string empty");
+            throw new IllegalArgumentException("array string empty");
         }
         if(aSeparator.isEmpty()) {
-            throw new IllegalArgumentException("separator empty");
+            throw new IllegalArgumentException("array separator empty");
         }
         // find prefix
         int prefixIndex = nextIndexOf(aString, aPrefix, 0, anEscapeChars, anEscapeSymbol);
         if(prefixIndex != 0) {
-            throw new StringIndexOutOfBoundsException("prefix missing");
+            throw new StringIndexOutOfBoundsException("array prefix missing");
         }
         // check for suffix
         int suffixIndex = (aSuffix.isEmpty()) ? aString.length() :
                           nextIndexOf(aString, aSuffix, aString.length() - aSuffix.length(),
                                       anEscapeChars, anEscapeSymbol);
         if(suffixIndex < 0) {
-            throw new StringIndexOutOfBoundsException("suffix missing");
+            throw new StringIndexOutOfBoundsException("array suffix missing");
         }
         String string = aString.substring(aPrefix.length(), suffixIndex);
 
@@ -867,36 +978,109 @@ public class TextUtilities
     }
 
     /**
-     * Adds an entry to a map by splitting the entry string around the
-     * separator. If an non-escaped separator string is not found, an exception
-     * is thrown. Only the first non-escaped instance of the separator string
-     * will be processed. This means that the value may contain non-escaped
-     * instances of the separator string.
+     * @brief Adds an entry to a map by splitting the entry string around the
+     * separator.
      *
-     * @param entry a string representation of the map entry consisting of a
-     * key-value pair delimited by a separator
-     * @param map the map to add the entry to
-     * @param separator the separator that delimits the boundary between keys
+     * If an non-escaped separator string is not found, an exception
+     * is thrown. Only the first non-escaped instance of the separator string
+     * will be processed. This means that the value may contain multiple
+     * non-escaped instances of the separator string.
+     *
+     * @param anEntry A string representation of the map entry consisting of a
+     * key-value pair delimited by a separator.
+     * @param aMap The map to add the entry to.
+     * @param aSeparator The separator that delimits the boundary between keys
      * and values. At least one non-escaped occurrence of this string must
      * appear in the entry.
-     * @param escapeChars the characters that can be escaped by the escape
-     * symbol. Null indicates that all characters preceded by the symbol are
-     * escaped. Empty indicates that there are no escape sequences present, and
-     * the escape symbol will be ignored.
-     * @param escapeSymbol a symbol that indicates the start of escape sequences
-     * @throws StringIndexOutOfBoundsException if separator does not appear in
-     * entry
+     * @param anEscapeChars The characters that can be escaped by the escape
+     * symbol. A `null` string indicates that all characters preceded by
+     * `anEscapeSymbol` are escaped. An empty string indicates that there are no
+     * escape sequences present, and `anEscapeSymbol` will be ignored.
+     * @param anEscapeSymbol A symbol that indicates the start of escape
+     * sequences.
+     * @throws StringIndexOutOfBoundsException if `aSeparator` does not appear
+     * in `anEntry`.
      * @since 1.0.0
      */
-    private static void addMapEntry(String entry, Map<String, String> map, String separator,
-                                    String escapeChars, char escapeSymbol)
+    private static void addMapEntry(String anEntry, Map<String, String> aMap, String aSeparator,
+                                    String anEscapeChars, char anEscapeSymbol)
     {
-        int separatorIndex = nextIndexOf(entry, separator, 0, escapeChars, escapeSymbol);
+        int separatorIndex = nextIndexOf(anEntry, aSeparator, 0, anEscapeChars, anEscapeSymbol);
         if(separatorIndex < 0) {
             throw new StringIndexOutOfBoundsException("missing key-value separator");
         }
-        map.put(unescapeString(entry.substring(0, separatorIndex), escapeChars, escapeSymbol),
-                unescapeString(entry.substring(separatorIndex + separator.length()), escapeChars, escapeSymbol));
+        aMap.put(unescapeString(anEntry.substring(0, separatorIndex), anEscapeChars, anEscapeSymbol),
+                 unescapeString(anEntry.substring(separatorIndex + aSeparator.length()), anEscapeChars, anEscapeSymbol));
+    }
+
+    /**
+     * @brief Adds an entry to a map by splitting the entry string around the
+     * separator.
+     *
+     * If an non-escaped separator string is not found, an exception
+     * is thrown. Only the first non-escaped instance of the separator string
+     * will be processed. This means that the value may contain multiple
+     * non-escaped instances of the separator string.
+     *
+     * If the value begins with `anArrayPrefix` and ends with `anArraySuffix`,
+     * it will be parsed as an array. If the value is empty, it will be parsed
+     * as an empty string, even if `anArrayPrefix` and `anArraySuffix` are both
+     * empty.
+     *
+     * @param anEntry A string representation of the map entry consisting of a
+     * key-value pair delimited by a separator.
+     * @param aMap The map to add the entry to.
+     * @param aSeparator The separator that delimits the boundary between keys
+     * and values. At least one non-escaped occurrence of this string must
+     * appear in the entry.
+     * @param anArrayPrefix A string that delimits the beginning of an array
+     * value. Values that begin with this sequence (unescaped) and end with
+     * `anArraySuffix` will be parsed as arrays. This string may be empty but
+     * not `null`.
+     * @param anArraySeparator The separator between elements in array values.
+     * This string is only used if the value is determined to be an array. In
+     * that case, it may not be empty or `null`.
+     * @param anArraySuffix A string that delimits the end of an array value.
+     * Values that end with this sequence (unescaped) and begin with
+     * `anArrayPrefix` will be parsed as arrays. This string may be empty but
+     * not `null`.
+     * @param anEscapeChars The characters that can be escaped by the escape
+     * symbol. A `null` string indicates that all characters preceded by
+     * `anEscapeSymbol` are escaped. An empty string indicates that there are no
+     * escape sequences present, and `anEscapeSymbol` will be ignored.
+     * @param anEscapeSymbol A symbol that indicates the start of escape
+     * sequences.
+     * @throws IllegalArgumentException if an array is encountered and
+     * `anArraySeparator` is empty and the value is an array.
+     * @throws StringIndexOutOfBoundsException if `aSeparator` does not appear
+     * in `anEntry`.
+     * @throws NullPointerException if any of the arguments except
+     * `anEscapeChars` are `null`. An exception may not be thrown for
+     * `anArraySuffix` if the entry does not contain an array.
+     * @since 3.0.0
+     */
+    private static void addMapEntry(String anEntry, Map<String, Object> aMap, String aSeparator,
+                                    String anArrayPrefix, String anArraySeparator, String anArraySuffix,
+                                    String anEscapeChars, char anEscapeSymbol)
+    {
+        int separatorIndex = nextIndexOf(anEntry, aSeparator, 0, anEscapeChars, anEscapeSymbol);
+        if(separatorIndex < 0) {
+            throw new StringIndexOutOfBoundsException("missing key-value separator");
+        }
+        String key = unescapeString(anEntry.substring(0, separatorIndex), anEscapeChars, anEscapeSymbol);
+        String valueString = anEntry.substring(separatorIndex + aSeparator.length());
+        Object value;
+        if(!valueString.isEmpty() && valueString.startsWith(anArrayPrefix) &&
+           nextIndexOf(valueString, anArraySuffix, valueString.length() - anArraySuffix.length(),
+                       anEscapeChars, anEscapeSymbol) >= 0)
+        {
+            value = stringToArray(valueString,
+                                  anArrayPrefix, anArraySeparator, anArraySuffix,
+                                  anEscapeChars, anEscapeSymbol);
+        } else {
+            value = unescapeString(valueString, anEscapeChars, anEscapeSymbol);
+        }
+        aMap.put(key, value);
     }
 
     /**
