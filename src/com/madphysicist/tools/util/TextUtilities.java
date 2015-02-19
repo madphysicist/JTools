@@ -28,19 +28,22 @@
 package com.madphysicist.tools.util;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * This class is a utility library for performing and inverting operations on
- * strings, arrays of strings and maps of strings. It contains utilities for
- * converting maps of strings to strings and back, the escaping and un-escaping
- * of characters in a string, creating maps from arrays of string pairs,
- * retrieving all the keys in a map as an array of strings, creating and
- * printing time strings, etc.
- * <p>
+ * @brief A utility library for performing and inverting operations on strings,
+ * arrays of strings and maps of strings.
+ *
+ * This class contains utilities for converting maps of strings to strings and
+ * back, the escaping and un-escaping of characters in a string, creating maps
+ * from arrays of string pairs, retrieving all the keys in a map as an array of
+ * strings, etc.
+ *
  * <a name="Properties"><b>Property Lists.</b></a> This class provides a number
  * of methods for manipulating property lists such as by converting them to maps
  * and back. A property list is a string array with an even number of elements,
@@ -49,158 +52,161 @@ import java.util.TreeMap;
  * contain the corresponding values. This is very similar to the arrangement
  * used in MATLAB to define object properties. Since they represent similar
  * concepts, a property list can be converted to and from a map using the
- * {@link #propertiesToMap} and {@link #mapToProperties} methods. These methods
- * are useful for creating copies of maps that can be safely modified without
- * affecting the original as well as quickly initializing maps from lists of
- * strings.
- * <p>
+ * `propertiesToMap()` and `mapToProperties()` methods. These methods are useful
+ * for creating copies of maps that can be safely modified without affecting the
+ * original as well as quickly initializing maps from lists of strings.
+ *
  * This class can not be instantiated.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0, 04 Mar 2012 - J. Fox-Rabinovitz: Created
- * @version 1.0.1, 04 Feb 2014 - J. Fox-Rabinovitz: Added countOccurences()
- * @version 2.0.0, 22 Jun 2014 - J. Fox-Rabinovitz: Moved nowStr(), simpleNowStr(), timeStr() and simpleTimeStr() into
- *                                                  new class TimeUtilities
+ * @version 1.0.0, 04 Mar 2012 - J. Fox-Rabinovitz: Initial coding.
+ * @version 1.0.1, 04 Feb 2014 - J. Fox-Rabinovitz: Added countOccurences().
+ * @version 2.0.0, 22 Jun 2014 - J. Fox-Rabinovitz: Moved nowStr(),
+ *          simpleNowStr(), timeStr() and simpleTimeStr() into new class
+ *          TimeUtilities.
+ * @version 3.0.0, 11 Jan 2015 - J. Fox-Rabinovitz: Removed mapEquals() and
+ *          added support for maps containing arrays.
  * @since 1.0
  */
 public class TextUtilities
 {
     /**
-     * The default {@link java.nio.Charset Charset} of all the text operations. This charset is intended to be used for
-     * consistence in all I/O operations.
+     * @brief The default `java.nio.Charset` of all the text operations.
+     *
+     * This character set is intended to be used for consistency in all I/O
+     * operations.
      *
      * @since 1.0.0
      */
     public static final Charset CHARSET = Charset.forName("UTF-8");
 
     /**
-     * Private constructor to prevent the class from being instantiated.
+     * @breif Private constructor to prevent the class from being instantiated.
      *
      * @since 1.0.0
      */
     private TextUtilities() {}
 
     /**
-     * Performs a deep equality check of two string maps. To be considered
-     * equal, both maps must either be {@code null} or have the same set of
-     * keys mapping to the same values. The internal arrangement and 
-     * types of the maps need not be the same.
+     * @brief Returns the keys in a string map in an array.
      *
-     * @param map1 the first map to compare.
-     * @param map2 the second map to compare.
-     * @return {@code true} if both maps are {@code null} or all of their keys
-     * and values are equal, {@code false} otherwise.
+     * If the map is `null`, `null` is returned. No guarantee is made about the
+     * order of the returned array.
+     *
+     * @param aMap A map keyed by strings.
+     * @return The keys in the map, or `null` if `aMap` is `null`.
      * @since 1.0.0
      */
-    public static boolean mapEquals(Map<String, String> map1,
-                                    Map<String, String> map2)
+    public static String[] keyList(Map<String, ?> aMap)
     {
-        if(map1 == null && map2 == null)
-            return true;
-        if(map1 == null || map2 == null)
-            return false;
-        if(map1.size() != map2.size())
-            return false;
-        for(Map.Entry<String, String> entry : map1.entrySet()) {
-            if(!map2.containsKey(entry.getKey()) || !entry.getValue().equals(map2.get(entry.getKey())))
-                return false;
-        }
-        return true;
-    }
-
-    /**
-     * Returns the keys in a string map in an array. If the map is {@code null},
-     * {@code null} is returned. No guarantee is made about the order of the
-     * returned array.
-     *
-     * @param map a map keyed by strings.
-     * @return the keys in the map, or {@code null} if {@code map} is {@code
-     * null}.
-     * @since 1.0.0
-     */
-    public static String[] keyList(Map<String, ?> map)
-    {
-        if(map == null)
-            return null;
-        Set<String> keys = map.keySet();
+        if(aMap == null) return null;
+        Set<String> keys = aMap.keySet();
         return keys.toArray(new String[keys.size()]);
     }
 
     /**
-     * Converts a map into a string. The returned string has the format {@code
-     * <name><prefix><escaped key><keyValueSeparator><escaped value><entrySeparator>
-     * ... <suffix>}. The entry separator does not appear after the last
-     * key-value element. The name, keys and values will have all characters
-     * that appear in {@code escapeChars} escaped by preceding them with the
-     * escape symbol. The prefix, suffix, key-value separator and entry
-     * separator will not be escaped. The recommended use of this method is to
-     * add the symbols in the prefix, suffix and separators to the escape
-     * characters so that they can later be easily identified.
+     * @brief Converts a map into a string.
      *
-     * @param name the name of the map. If null, no name is prefixed.
-     * @param map the map to convert. If null or empty, only the name, prefix
+     * The map may contain strings and arrays. All other value types (including
+     * non-string array elements) will be converted to strings using their
+     * `toString()` method. This method does not currently support primitive or
+     * nested arrays.
+     *
+     * The return value has the following format:
+     *
+     *      <name><prefix><escaped key><keyValueSeparator><escaped value><entrySeparator> ... <suffix>
+     *
+     * The entry separator does not appear after the last key-value element.
+     * Array values have the following format:
+     *
+     *      <arrayPrefix><escaped element><arraySeparator> ... <arraySuffix>
+     *
+     * The array separator does not appear after the last element.
+     *
+     * The name, keys and values will have all characters that appear in
+     * `anEscapeChars` escaped by preceding them with the escape symbol. The
+     * prefix, suffix, key-value separator and entry separator will not be
+     * escaped. The recommended use of this method is to add the symbols in the
+     * prefix, suffix, array delimiters and separators to the escape characters
+     * so that they can be identified unambiguously.
+     *
+     * @param aName The name of the map. If `null`, no name is prefixed.
+     * @param aMap The map to convert. If `null` or empty, only the name, prefix
      * and suffix are concatenated.
-     * @param prefix the prefix to insert before listing keys and values.
-     * Omitted entirely if null.
-     * @param suffix the suffix to append to the end of the string. Omitted
-     * entirely if null.
-     * @param keyValueSeparator the character sequence to separate keys from
-     * values in the result. Defaults to a single space (' ') if null.
-     * @param entrySeparator the character sequence to separate key value pairs
-     * from other entries in the result. Defaults to a single space (' ') if
-     * null.
-     * @param escapeChars the characters that need to be escaped in the name,
-     * key and value strings. Note that characters in {@code keyValueSeparator}
-     * and {@code entrySeparator} are not escaped. No escaping is done if null
-     * or empty.
-     * @param escapeSymbol the symbol to be inserted before characters that
-     * need to be escaped.
-     * @return a string representation of the input map. This value is never
-     * {@code null}, although it may be empty if the map, name, prefix and
-     * suffix are all empty or {@code null}.
-     * @see #propertiesToString
-     * @see #stringToMap
+     * @param aPrefix The prefix to insert before listing keys and values.
+     * Omitted entirely if `null`.
+     * @param aSuffix The suffix to append to the end of the string. Omitted
+     * entirely if `null`.
+     * @param aKeyValueSeparator The character sequence to separate keys from
+     * values in the result. Defaults to a single space (' ') if `null`.
+     * @param anEntrySeparator The character sequence to separate key-value
+     * pairs from other entries in the result. Defaults to a single space (' ')
+     * if `null`.
+     * @param anArrayPrefix The character sequence that defines the beginning of
+     * an array value. Omitted entirely if `null`.
+     * @param anArraySuffix The character sequence that defines the end of an
+     * array value. Omitted entirely if `null`.
+     * @param anArraySeparator The character sequence to separate elements in an
+     * array value. Defaults to a single space (' ') if `null`.
+     * @param anEscapeChars A string containing the characters that need to be
+     * escaped in the name, key and value strings. Note that characters in
+     * `aKeyValueSeparator` and `entrySeparator` are not escaped. No escaping is
+     * done if `null` or empty.
+     * @param anEscapeSymbol The symbol to be inserted before characters that
+     * need to be escaped. May be used to escape itself.
+     * @return A string representation of the input map. This value is never
+     * `null`, although it may be empty if the map, name, prefix and suffix are
+     * all empty or `null`.
+     * @see #arrayToString()
+     * @see #propertiesToString()
+     * @see #stringToMap()
      * @since 1.0.0
      */
-    public static String mapToString(String name, Map<String, String> map,
-                                     String prefix, String suffix,
-                                     String keyValueSeparator,
-                                     String entrySeparator,
-                                     String escapeChars, char escapeSymbol)
+    public static String mapToString(String aName, Map<String, Object> aMap,
+                                     String aPrefix, String aSuffix,
+                                     String aKeyValueSeparator,
+                                     String anEntrySeparator,
+                                     String anArrayPrefix, String anArraySuffix,
+                                     String anArraySeparator,
+                                     String anEscapeChars, char anEscapeSymbol)
     {
         StringBuilder sb = new StringBuilder();
-        if(name != null) {
-            sb.append(escapeString(name, escapeChars, escapeSymbol));
+        if(aName != null) {
+            sb.append(escapeString(aName, anEscapeChars, anEscapeSymbol));
         }
-        if(prefix != null) {
-            sb.append(prefix);
+        if(aPrefix != null) {
+            sb.append(aPrefix);
         }
-        if(map != null && !map.isEmpty()) {
-            if(keyValueSeparator == null) {
-                keyValueSeparator = " ";
-            }
-            if(entrySeparator == null) {
-                entrySeparator = " ";
-            }
+        if(aMap != null && !aMap.isEmpty()) {
+            if(aKeyValueSeparator == null)  aKeyValueSeparator = " ";
+            if(anEntrySeparator == null)    anEntrySeparator = " ";
+
             // indicates that the loop is starting
             boolean first = true;
-            for(Map.Entry<String, String> entry : map.entrySet()) {
+            for(Map.Entry<String, Object> entry : aMap.entrySet()) {
                 if(first) {
                     // once the loop has started, the next iteration won't be first
                     first = false;
                 } else {
                     // if not on the first iteration, prepend a separator
-                    sb.append(entrySeparator);
+                    sb.append(anEntrySeparator);
                 }
-                sb.append(escapeString(entry.getKey(), escapeChars,
-                                       escapeSymbol));
-                sb.append(keyValueSeparator);
-                sb.append(escapeString(entry.getValue(), escapeChars,
-                                       escapeSymbol));
+                sb.append(escapeString(entry.getKey(), anEscapeChars,
+                                       anEscapeSymbol));
+                sb.append(aKeyValueSeparator);
+                Object value = entry.getValue();
+                if(value instanceof Object[]) {
+                    sb.append(arrayToString((Object[])value,
+                            anArrayPrefix, anArraySeparator, anArraySuffix,
+                            anEscapeChars, anEscapeSymbol));
+                } else {
+                    sb.append(escapeString(value.toString(),
+                            anEscapeChars, anEscapeSymbol));
+                }
             }
         }
-        if(suffix != null) {
-            sb.append(suffix);
+        if(aSuffix != null) {
+            sb.append(aSuffix);
         }
         return sb.toString();
     }
@@ -290,6 +296,150 @@ public class TextUtilities
             }
         }
         return unescapeString(name, escapeChars, escapeSymbol);
+    }
+
+    /**
+     * @brief Converts an array of objects into a string.
+     *
+     * Non-string elements will be converted to strings using their `toString()`
+     * method. This method does not currently support primitive or nested
+     * arrays.
+     *
+     * The return value has the following format:
+     *
+     *      <arrayPrefix><escaped element><arraySeparator> ... <arraySuffix>
+     *
+     * The array separator does not appear after the last element.
+     *
+     * Elements will have all characters that appear in `anEscapeChars` escaped
+     * by preceding them with the escape symbol. The prefix, suffix and
+     * separator and entry separator will not be escaped. The recommended use of
+     * this method is to add the symbols in the prefix, suffix and separator to
+     * the escape characters so that they can be identified unambiguously.
+     *
+     * To convert primitive arrays to arrays of string objects that can be
+     * processed by this method, use the appropriate methods of the
+     * `ArrayUtilities` class.
+     *
+     * @param anArray The array to convert. If `null` or empty, only the prefix
+     * and suffix are concatenated.
+     * @param aPrefix The prefix to delimit the beginning of the array with.
+     * Omitted entirely if `null`.
+     * @param aSeparator The character sequence to separate elements in the
+     * array with. Defaults to a single space (' ') if `null`.
+     * @param aSuffix The suffix to delimit the end of the array with. Omitted
+     * entirely if `null`.
+     * @param anEscapeChars A string containing the characters that need to be
+     * escaped in the elements. Note that characters in the prefix, suffix and
+     * separator are not escaped. No escaping is done if `null` or empty.
+     * @param anEscapeSymbol The symbol to be inserted before characters that
+     * need to be escaped. May be used to escape itself.
+     * @return A string representation of the array. This value is never `null`,
+     * although it may be empty if the array, prefix and suffix are empty.
+     * @see ArrayUtilities
+     * @since 3.0.0
+     */
+    public static String arrayToString(Object[] anArray,
+            String aPrefix, String aSeparator, String aSuffix,
+            String anEscapeChars, char anEscapeSymbol)
+    {
+        if(aPrefix    == null)    aPrefix = "";
+        if(aSeparator == null) aSeparator = " ";
+        if(aSuffix    == null)    aSuffix = "";
+
+        if(anArray == null || anArray.length == 0) return aPrefix + aSuffix;
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(aPrefix);
+        for(int i = 0; i < anArray.length; i++) {
+            if(i > 0) sb.append(aSeparator);
+            sb.append(escapeString(anArray[i].toString(), anEscapeChars, anEscapeSymbol));
+        }
+        sb.append(aSuffix);
+        return sb.toString();
+    }
+
+    /**
+     * @brief Converts a string containing delimited array elements into an
+     * array of strings.
+     *
+     * This method is the approximate inverse of `arrayToString()`. The expected
+     * string format is
+     *
+     *     <arrayPrefix><escaped element><arraySeparator> ... <arraySuffix>
+     *
+     * Special attention is paid to elements with escape characters in them. The
+     * case in which there are no characters between `arrayPrefix` and
+     * `arraySuffix` is treated specially as an empty array.
+     *
+     * To convert the result into primitive arrays, use the appropriate
+     * methods of the `ArrayUtilities` class.
+     * 
+     * @param aString The string to decode. This parameter may not be `null`. It
+     * may only be empty is both `aPrefix` and `aSuffix` are empty.
+     * @param aPrefix The prefix string. Escape characters do **not** appear in
+     * the prefix. This string may not be `null`, but may be empty.
+     * @param aSuffix The suffix string. Escape characters do **not** appear in
+     * the suffix. This string may not be `null` but may be empty.
+     * @param aSeparator The string that separates successive elements in the
+     * array. This string may not be `null` or empty.
+     * @param anEscapeChars A string containing a list of characters that may be
+     * escaped in the input. This parameter may be `null` to indicate that all
+     * characters preceded by an escape symbol are escaped, or empty to indicate
+     * that there are no escape characters.
+     * @param anEscapeSymbol A symbol used to escape special characters. If
+     * `anEscapeChars` is empty, this parameter is ignored.
+     * @return The input string split into an array of stings with the prefix,
+     * suffix and separators discarded. The return value may be empty, but will
+     * never be `null`.
+     * @throws NullPointerException if any of the arguments except {@code map}
+     * or {@code escapeChars} is {@code null}.
+     * @throws IllegalArgumentException if either `aString` or `aSeparator` is
+     * empty.
+     * @throws StringIndexOutOfBoundsException if no valid prefix is found or no
+     * valid suffix is found. The message indicates which condition caused the
+     * exception.
+     * @see arrayToString()
+     * @since 3.0.0
+     */
+    public static String[] stringToArray(String aString,
+                            String aPrefix, String aSeparator, String aSuffix,
+                            String anEscapeChars, char anEscapeSymbol)
+    {
+        // pre-process (calling isEmpty on null will handle throwing the NPEs)
+        if(aString.isEmpty()) {
+            if(aPrefix.isEmpty() && aSuffix.isEmpty())
+                return new String[0];
+            throw new IllegalArgumentException("string empty");
+        }
+        if(aSeparator.isEmpty()) {
+            throw new IllegalArgumentException("separator empty");
+        }
+        // find prefix
+        int prefixIndex = nextIndexOf(aString, aPrefix, 0, anEscapeChars, anEscapeSymbol);
+        if(prefixIndex != 0) {
+            throw new StringIndexOutOfBoundsException("prefix missing");
+        }
+        // check for suffix
+        int suffixIndex = (aSuffix.isEmpty()) ? aString.length() :
+                          nextIndexOf(aString, aSuffix, aString.length() - aSuffix.length(),
+                                      anEscapeChars, anEscapeSymbol);
+        if(suffixIndex < 0) {
+            throw new StringIndexOutOfBoundsException("suffix missing");
+        }
+        String string = aString.substring(aPrefix.length(), suffixIndex);
+
+        // only process if the string contains a map between the prefix and suffix
+        if(string.isEmpty()) return new String[0];
+        List<String> list = new ArrayList<>();
+        int prev = 0;
+        for(int index = 0; (index = nextIndexOf(string, aSeparator, prev, anEscapeChars, anEscapeSymbol)) >= prev;
+                           prev = index + aSeparator.length()) {
+            list.add(unescapeString(string.substring(prev, index), anEscapeChars, anEscapeSymbol));
+        }
+        list.add(unescapeString(string.substring(prev), anEscapeChars, anEscapeSymbol));
+        return list.toArray(new String[list.size()]);
     }
 
     /**

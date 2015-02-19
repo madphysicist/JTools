@@ -40,7 +40,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.NoInjection;
+//import org.testng.annotations.NoInjection;
 import org.testng.annotations.Test;
 
 /**
@@ -48,7 +48,9 @@ import org.testng.annotations.Test;
  * com.madphysicist.tools.util.TextUtilities}.
  *
  * @author Joseph Fox-Rabinovitz
- * @version 1.0.0.0, 4 Mar 2012
+ * @version 1.0.0.0, 04 Mar 2012
+ * @version 2.0.0.0, 18 Feb 2015 - Added tests for `arrayToString()` and
+ *      `stringToArray()`.
  * @since 1.0.0.0
  */
 public class TextUtilitiesTest
@@ -75,9 +77,9 @@ public class TextUtilitiesTest
     
     /**
      * A sample property list used by the methods of this class. This value
-     * is meant to be used in conjunction with {@link #name}, {@link #prefix},
-     * {@link #suffix}, {@link #keyValueSeparator}, {@link #entrySeparator},
-     * {@link #escapeChars} and {@link #escapeSymbol} fields to create map
+     * is meant to be used in conjunction with {@link #mapName}, {@link #mapPrefix},
+     * {@link #mapSuffix}, {@link #keyValueSeparator}, {@link #entrySeparator},
+     * {@link #mapEscapeChars} and {@link #escapeSymbol} fields to create map
      * strings. It contains at least one escapable character in each key and
      * each value.
      * <p>
@@ -101,7 +103,7 @@ public class TextUtilitiesTest
 
     /**
      * The escaped version of {@link #complexProperties}. The characters
-     * from {@link #escapeChars} are preceded by {@link #escapeSymbol} for all
+     * from {@link #mapEscapeChars} are preceded by {@link #escapeSymbol} for all
      * keys and values.
      * <p>
      * <b>Methods of this class should not modify the contents of this
@@ -113,47 +115,47 @@ public class TextUtilitiesTest
 
     /**
      * A sample name used in map strings by methods of this class. This value
-     * is meant to be used in conjunction with {@link #prefix}, {@link #suffix},
-     * {@link #keyValueSeparator}, {@link #entrySeparator}, {@link #escapeChars}
+     * is meant to be used in conjunction with {@link #mapPrefix}, {@link #mapSuffix},
+     * {@link #keyValueSeparator}, {@link #entrySeparator}, {@link #mapEscapeChars}
      * and {@link #escapeSymbol}. It contains at least one escapable character.
      *
      * @since 1.0.0.0
      */
-    private final String name = "<The~Map>";
+    private final String mapName = "<The~Map>";
 
     /**
-     * The escaped version of {@link #name}. The characters from {@link
-     * #escapeChars} are preceded by {@link #escapeSymbol}.
+     * The escaped version of {@link #mapName}. The characters from {@link
+     * #mapEscapeChars} are preceded by {@link #escapeSymbol}.
      * 
      * @since 1.0.0.0
      */
-    private final String escapedName = "\\<The\\~Map\\>";
+    private final String escapedMapName = "\\<The\\~Map\\>";
 
     /**
      * A sample prefix used in map strings by methods of this class. This value
-     * is meant to be used in conjunction with {@link #name}, {@link #suffix},
-     * {@link #keyValueSeparator}, {@link #entrySeparator}, {@link #escapeChars}
+     * is meant to be used in conjunction with {@link #mapName}, {@link #mapSuffix},
+     * {@link #keyValueSeparator}, {@link #entrySeparator}, {@link #mapEscapeChars}
      * and {@link #escapeSymbol}. It contains at least one escapable character.
      *
      * @since 1.0.0.0
      */
-    private final String prefix = " << \"";
+    private final String mapPrefix = " << \"";
 
     /**
      * A sample suffix used in map strings by methods of this class. This value
-     * is meant to be used in conjunction with {@link #name}, {@link #prefix},
-     * {@link #keyValueSeparator}, {@link #entrySeparator}, {@link #escapeChars}
+     * is meant to be used in conjunction with {@link #mapName}, {@link #mapPrefix},
+     * {@link #keyValueSeparator}, {@link #entrySeparator}, {@link #mapEscapeChars}
      * and {@link #escapeSymbol}. It contains at least one escapable character.
      *
      * @since 1.0.0.0
      */
-    private final String suffix = "\' >>";
+    private final String mapSuffix = "\' >>";
 
     /**
      * A sample key-value separator used in map strings by methods of this
-     * class. This value is meant to be used in conjunction with {@link #name},
-     * {@link #prefix}, {@link #suffix}, {@link #entrySeparator},
-     * {@link #escapeChars} and {@link #escapeSymbol}. It contains at least one
+     * class. This value is meant to be used in conjunction with {@link #mapName},
+     * {@link #mapPrefix}, {@link #mapSuffix}, {@link #entrySeparator},
+     * {@link #mapEscapeChars} and {@link #escapeSymbol}. It contains at least one
      * escapable character.
      *
      * @since 1.0.0.0
@@ -162,9 +164,9 @@ public class TextUtilitiesTest
 
     /**
      * A sample entry separator used in map strings by methods of this
-     * class. This value is meant to be used in conjunction with {@link #name},
-     * {@link #prefix}, {@link #suffix}, {@link #keyValueSeparator},
-     * {@link #escapeChars} and {@link #escapeSymbol}. It contains at least one
+     * class. This value is meant to be used in conjunction with {@link #mapName},
+     * {@link #mapPrefix}, {@link #mapSuffix}, {@link #keyValueSeparator},
+     * {@link #mapEscapeChars} and {@link #escapeSymbol}. It contains at least one
      * escapable character.
      *
      * @since 1.0.0.0
@@ -174,19 +176,64 @@ public class TextUtilitiesTest
     /**
      * A sample sequence of escapeable characters used in map strings by methods of
      * this class. This value is meant to be used in conjunction with
-     * {@link #name}, {@link #prefix}, {@link #suffix},
+     * {@link #mapName}, {@link #mapPrefix}, {@link #mapSuffix},
      * {@link #keyValueSeparator}, {@link #entrySeparator} and
      * {@link #escapeSymbol}. It contains at least one character from each of
      * the keys and values of {@link #complexMap}.
      *
      * @since 1.0.0.0
      */
-    private final String escapeChars = "<\"\'~-\\>";
+    private final String mapEscapeChars = "<\"\'~-\\>";
+
+    /**
+     * @brief A sample suffix used in array strings by methods of this class.
+     *
+     * This value is meant to be used in conjunction with `arraySuffix`,
+     * `arraySeparator`, `arrayEscapeChars` and `escapeSymbol`. It contains at
+     * least one escapable character.
+     *
+     * @since 2.0.0.0
+     */
+    private final String arrayPrefix = "[";
+
+    /**
+     * @brief A sample suffix used in array strings by methods of this class.
+     *
+     * This value is meant to be used in conjunction with `arrayPrefix`,
+     * `arraySeparator`, `arrayEscapeChars` and `escapeSymbol`. It contains at
+     * least one escapable character.
+     *
+     * @since 2.0.0.0
+     */
+    private final String arraySuffix = "]";
+
+    /**
+     * @brief A sample element separator used in array strings by methods of
+     * this class.
+     *
+     * This value is meant to be used in conjunction with `arrayPrefix`,
+     * `arraySuffix`, `arrayEscapeChars` and `escapeSymbol`. It contains at
+     * least one escapable character.
+     *
+     * @since 2.0.0.0
+     */
+    private final String arraySeparator = ", ";
+
+    /**
+     * @brief A sample sequence of escapeable characters used in array strings
+     * by methods of this class.
+     *
+     * This value is meant to be used in conjunction with `arrayPrefix`,
+     * `arraySuffix`, `arraySeparator` and `escapeSymbol`.
+     *
+     * @since 2.0.0.0
+     */
+    private final String arrayEscapeChars = "[,\\]";
 
     /**
      * A sample escape character used in map strings by methods of this class.
-     * This value is meant to be used in conjunction with {@link #name},
-     * {@link #prefix}, {@link #suffix}, {@link #keyValueSeparator},
+     * This value is meant to be used in conjunction with {@link #mapName},
+     * {@link #mapPrefix}, {@link #mapSuffix}, {@link #keyValueSeparator},
      * {@link #entrySeparator} and {@link #escapeSymbol}. It contains at least
      * one escapable character.
      *
@@ -206,8 +253,8 @@ public class TextUtilitiesTest
 
     /**
      * The map string created from (@link #complexMap}. This value is the
-     * assembled and properly escaped combination of {@link #name},
-     * {@link #prefix}, {@link #suffix}, {@link #keyValueSeparator},
+     * assembled and properly escaped combination of {@link #mapName},
+     * {@link #mapPrefix}, {@link #mapSuffix}, {@link #keyValueSeparator},
      * {@link #entrySeparator}, and {@link #escapeSymbol}. This string is
      * guaranteed to be in the same order as both {@code complexMap} and {@code
      * complexProperties}.
@@ -216,10 +263,10 @@ public class TextUtilitiesTest
      * TextUtilities.mapToString()
      * @since 1.0.0.0
      */    
-    private final String complexMapString = escapedName + prefix
+    private final String complexMapString = escapedMapName + mapPrefix
             + escapedProperties[0] + keyValueSeparator + escapedProperties[1] + entrySeparator
             + escapedProperties[2] + keyValueSeparator + escapedProperties[3] + entrySeparator
-            + escapedProperties[4] + keyValueSeparator + escapedProperties[5] + suffix;
+            + escapedProperties[4] + keyValueSeparator + escapedProperties[5] + mapSuffix;
 
     private Method mapToString;
     private Method escapeString;
@@ -237,6 +284,7 @@ public class TextUtilitiesTest
      */
     @BeforeClass public void setUpMethods() throws NoSuchMethodException
     {
+        /*
         Class<TextUtilities> base = TextUtilities.class;
         mapToString = base.getMethod("mapToString", String.class, Map.class,
                 String.class, String.class, String.class, String.class,
@@ -247,6 +295,7 @@ public class TextUtilitiesTest
                 String.class, String[].class, String.class, String.class, String.class,
                 String.class, String.class, Character.TYPE);
         propertiesToMap = base.getMethod("propertiesToMap", String[].class);
+        */
     }
 
     /**
@@ -262,25 +311,6 @@ public class TextUtilitiesTest
     @BeforeMethod public void setUpMethod()
     {
         emptyMap.clear();
-    }
-
-    /**
-     * Runs the simple comparison tests for TextUtilities. These tests all
-     * require a simple assertion based on the comparison of the actual and
-     * expected values.
-     *
-     * @param label the scenario label, used to mark the output.
-     * @param method a reflection of the method that is to be tested.
-     * @param expected the expected result.
-     * @param args the argument list of the method.
-     * @see ParametrizedTests#testMethodValue
-     * @since 1.0.0.0
-     */
-    @Test(dataProvider = "testMethodsByValueDataProvider")
-    public void testMethodsByValue(String label, @NoInjection Method method, Object expected, Object[] args)
-    {
-        // TODO: Make this work again
-        //ParametrizedTests.testMethodValue(label, null, method, expected, args);
     }
 
     /**
@@ -322,9 +352,9 @@ public class TextUtilitiesTest
      * @param keyValueSeparator the string used to separate keys from their
      * values.
      * @param entrySeparator the string used to split map entries.
-     * @param escapeChars the characters in the string that have been escaped.
+     * @param mapEscapeChars the characters in the string that have been escaped.
      * @param escapeSymbol the symbol used to escape elements of {@code
-     * escapeChars} found in the string.
+     * mapEscapeChars} found in the string.
      * @param expectedExceptionClass the class of the exception that must be
      * thrown for this method to succeed. The exception type must be exact, not
      * a generic supertype.
@@ -364,9 +394,9 @@ public class TextUtilitiesTest
      * @param keyValueSeparator the string used to separate keys from their
      * values.
      * @param entrySeparator the string used to split map entries.
-     * @param escapeChars the characters in the string that have been escaped.
+     * @param mapEscapeChars the characters in the string that have been escaped.
      * @param escapeSymbol the symbol used to escape elements of {@code
-     * escapeChars} found in the string.
+     * mapEscapeChars} found in the string.
      * @param expectedName the expected map name.
      * @param expectedMap the expected map.
      * @since 1.0.0.0
@@ -385,6 +415,77 @@ public class TextUtilitiesTest
                                                   escapeChars, escapeSymbol);
         Assert.assertEquals(result, expectedName);
         Assert.assertEquals(testMap, expectedMap);
+    }
+
+    /**
+     * Exception test of the `TextUtilities.stringToArray()` method. This test
+     * method is parametrized with values from the
+     * `testStringToArrayExceptionDataProvider` array. It verifies that an
+     * exception of the expected type is thrown in places where it is expected.
+     * The exact class of the exception must be specified. Specifically,
+     * `IndexOutOfBounds` will not work because `TextUtilities.stringToArray()`
+     * throws the subclass `StringIndexOutOfBounds`.
+     *
+     * @param aLabel the label of the current parameter set. This is used for
+     * output to the command line.
+     * @param aTestString The string to parse.
+     * @param aPrefix The prefix to find before the map keys and values.
+     * @param aSuffix The suffix to find after the map keys and values.
+     * @param aSeparator The string used to separate array elements.
+     * @param anEscapeChars The characters in the string that have been escaped.
+     * @param anEscapeSymbol The symbol used to escape elements of `anEscapeChars`
+     * found in the string.
+     * @param anExpectedExceptionClass The class of the exception that must be
+     * thrown for this method to succeed. The exception type must be exact, not
+     * a generic supertype.
+     * @since 1.0.0
+     */
+    @Test(dataProvider = "testStringToArrayExceptionDataProvider")
+    public void testStringToArrayException(String aLabel, String aTestString,
+                                           String aPrefix, String aSeparator, String aSuffix,
+                                           String anEscapeChars, char anEscapeSymbol,
+                                           Class<? extends Exception> anExpectedExceptionClass)
+    {
+        System.out.println("stringToArray (" + aLabel + ")");
+        try {
+            TextUtilities.stringToArray(aTestString, aPrefix, aSeparator, aSuffix,
+                                        anEscapeChars, anEscapeSymbol);
+            // This should be unreachable due to an exception on the previous line
+            Assert.fail();
+        } catch(Exception exception) {
+            Assert.assertEquals(exception.getClass(), anExpectedExceptionClass);
+        }
+    }
+
+    /**
+     * @brief Input test of the `TextUtilities.stringToArray()` method.
+     *
+     * This test method is parametrized with values from the
+     * `testStringToMapDataProvider()` array. It verifies that strings with
+     * different properties are parsed into the correct maps.
+     *
+     * @param aLabel The label of the current parameter set. This is used for
+     * output to the command line.
+     * @param aTestString The string to parse.
+     * @param aPrefix The prefix to find before the array elements.
+     * @param aSeparator The string used to separate array elements.
+     * @param aSuffix The suffix to find after the array elements.
+     * @param anEscapeChars The characters in the string that have been escaped.
+     * @param anEscapeSymbol The symbol used to escape elements of
+     * `anEscapeChars` found in the string.
+     * @param expectedArray The expected array.
+     * @since 2.0.0.0
+     */
+    @Test(dataProvider = "testStringToArrayDataProvider")
+    public void testStringToArray(String aLabel, String aTestString,
+                                  String aPrefix, String seprator, String aSuffix,
+                                  String anEscapeChars, char anEscapeSymbol,
+                                  String[] expectedArray)
+    {
+        System.out.println("stringToMap (" + aLabel + ")");
+        String[] result = TextUtilities.stringToArray(aTestString, aPrefix, seprator, aSuffix,
+                                                      anEscapeChars, anEscapeSymbol);
+        Assert.assertEquals(result, expectedArray);
     }
 
     /**
@@ -407,8 +508,8 @@ public class TextUtilitiesTest
         System.arraycopy(complexProperties, 0, oddProperties, 0, complexProperties.length);
         oddProperties[complexProperties.length] = missingString;
 
-        TextUtilities.propertiesToString(name, oddProperties, prefix, suffix,
-                keyValueSeparator, entrySeparator, escapeChars, escapeSymbol);
+        TextUtilities.propertiesToString(mapName, oddProperties, mapPrefix, mapSuffix,
+                keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol);
         // This should be unreachable due to an exception on the previous line
         Assert.fail();
     }
@@ -785,7 +886,7 @@ public class TextUtilitiesTest
      * if none of the characters in the escape list are in it.</li>
      * <li>All: Checks that the entire string is escaped properly if it is its
      * own list of escape characters. This verifies that repeated characters
-     * are allowed in {@code escapeChars} because the string has adjacent
+     * are allowed in {@code mapEscapeChars} because the string has adjacent
      * repeated characters in it. It also checks that the escape symbol is
      * escaped properly.</li>
      * </ul></dd>
@@ -876,13 +977,13 @@ public class TextUtilitiesTest
      * @since 1.0.0.0
      */
     @DataProvider(name = "testMethodsByValueDataProvider")
-    public Object[][] testMethodsByValueDataProvider()
+    private Object[][] testMethodsByValueDataProvider()
     {
         // mapToString
         Map<String, String> singleMap = new TreeMap<>();
         singleMap.put(complexProperties[0], complexProperties[1]);
-        String singleMapString = escapedName + prefix + escapedProperties[0]
-                                  + keyValueSeparator + escapedProperties[1] + suffix;
+        String singleMapString = escapedMapName + mapPrefix + escapedProperties[0]
+                                  + keyValueSeparator + escapedProperties[1] + mapSuffix;
 
         // escapeString
         String esTestString = "AaBbbccCC\\DEE\\\\LLaAaAAaa";
@@ -897,8 +998,8 @@ public class TextUtilitiesTest
 
         // propertiesToString
         String[] singleProperties = new String[] {complexProperties[0], complexProperties[1]};
-        String singlePropertyString = escapedName + prefix + escapedProperties[0]
-                                    + keyValueSeparator + escapedProperties[1] + suffix;
+        String singlePropertyString = escapedMapName + mapPrefix + escapedProperties[0]
+                                    + keyValueSeparator + escapedProperties[1] + mapSuffix;
 
         // propertiesToMap
         SortedMap<String, String> p2mBaseMap = new TreeMap<>();
@@ -918,79 +1019,79 @@ public class TextUtilitiesTest
 
         return new Object[][] {
             // mapToString - BEGIN
-            {"null name", mapToString, complexMapString.replace(escapedName, ""),
-                new Object[] {null, complexMap, prefix, suffix, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
-            {"null map", mapToString, escapedName + prefix + suffix,
-                new Object[] {name, null, prefix, suffix, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
-            {"null prefix", mapToString, complexMapString.replace(prefix, ""),
-                new Object[] {name, complexMap, null, suffix, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
-            {"null suffix", mapToString, complexMapString.replace(suffix, ""),
-                new Object[] {name, complexMap, prefix, null, keyValueSeparator,
-                    entrySeparator, escapeChars, escapeSymbol}},
+            {"null name", mapToString, complexMapString.replace(escapedMapName, ""),
+                new Object[] {null, complexMap, mapPrefix, mapSuffix, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"null map", mapToString, escapedMapName + mapPrefix + mapSuffix,
+                new Object[] {mapName, null, mapPrefix, mapSuffix, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"null mapPrefix", mapToString, complexMapString.replace(mapPrefix, ""),
+                new Object[] {mapName, complexMap, null, mapSuffix, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"null mapSuffix", mapToString, complexMapString.replace(mapSuffix, ""),
+                new Object[] {mapName, complexMap, mapPrefix, null, keyValueSeparator,
+                    entrySeparator, mapEscapeChars, escapeSymbol}},
             {"null keyValueSeparator", mapToString, complexMapString.replace(keyValueSeparator, " "),
-                new Object[] {name, complexMap, prefix, suffix, null,
-                    entrySeparator, escapeChars, escapeSymbol}},
+                new Object[] {mapName, complexMap, mapPrefix, mapSuffix, null,
+                    entrySeparator, mapEscapeChars, escapeSymbol}},
             {"null entrySeparator", mapToString, complexMapString.replace(entrySeparator, " "),
-                new Object[] {name, complexMap, prefix, suffix, keyValueSeparator,
-                    null, escapeChars, escapeSymbol}},
-            {"null escapeChars", mapToString,
-                TextUtilities.unescapeString(complexMapString, escapeChars, escapeSymbol),
-                new Object[] {name, complexMap, prefix, suffix, keyValueSeparator,
+                new Object[] {mapName, complexMap, mapPrefix, mapSuffix, keyValueSeparator,
+                    null, mapEscapeChars, escapeSymbol}},
+            {"null mapEscapeChars", mapToString,
+                TextUtilities.unescapeString(complexMapString, mapEscapeChars, escapeSymbol),
+                new Object[] {mapName, complexMap, mapPrefix, mapSuffix, keyValueSeparator,
                     entrySeparator, null, escapeSymbol}},
-            {"empty name", mapToString, complexMapString.replace(escapedName, ""),
-                new Object[] {"", complexMap, prefix, suffix, keyValueSeparator,
-                    entrySeparator, escapeChars, escapeSymbol}},
-            {"empty map", mapToString, escapedName + prefix + suffix,
-                new Object[] {name, emptyMap, prefix, suffix, keyValueSeparator,
-                    entrySeparator, escapeChars, escapeSymbol}},
-            {"empty prefix", mapToString, complexMapString.replace(prefix, ""),
-                new Object[] {name, complexMap, "", suffix, keyValueSeparator,
-                    entrySeparator, escapeChars, escapeSymbol}},
-            {"empty suffix", mapToString, complexMapString.replace(suffix, ""),
-                new Object[] {name, complexMap, prefix, "", keyValueSeparator,
-                    entrySeparator, escapeChars, escapeSymbol}},
+            {"empty mapName", mapToString, complexMapString.replace(escapedMapName, ""),
+                new Object[] {"", complexMap, mapPrefix, mapSuffix, keyValueSeparator,
+                    entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"empty map", mapToString, escapedMapName + mapPrefix + mapSuffix,
+                new Object[] {mapName, emptyMap, mapPrefix, mapSuffix, keyValueSeparator,
+                    entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"empty mapPrefix", mapToString, complexMapString.replace(mapPrefix, ""),
+                new Object[] {mapName, complexMap, "", mapSuffix, keyValueSeparator,
+                    entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"empty mapSuffix", mapToString, complexMapString.replace(mapSuffix, ""),
+                new Object[] {mapName, complexMap, mapPrefix, "", keyValueSeparator,
+                    entrySeparator, mapEscapeChars, escapeSymbol}},
             {"empty keyValueSeparator", mapToString, complexMapString.replace(keyValueSeparator, ""),
-                new Object[] {name, complexMap, prefix, suffix, "",
-                    entrySeparator, escapeChars, escapeSymbol}},
+                new Object[] {mapName, complexMap, mapPrefix, mapSuffix, "",
+                    entrySeparator, mapEscapeChars, escapeSymbol}},
             {"empty entrySeparator", mapToString, complexMapString.replace(entrySeparator, ""),
-                new Object[] {name, complexMap, prefix, suffix, keyValueSeparator,
-                    "", escapeChars, escapeSymbol}},
-            {"empty escapeChars", mapToString,
-                TextUtilities.unescapeString(complexMapString, escapeChars, escapeSymbol),
-                new Object[] {name, complexMap, prefix, suffix, keyValueSeparator,
+                new Object[] {mapName, complexMap, mapPrefix, mapSuffix, keyValueSeparator,
+                    "", mapEscapeChars, escapeSymbol}},
+            {"empty mapEscapeChars", mapToString,
+                TextUtilities.unescapeString(complexMapString, mapEscapeChars, escapeSymbol),
+                new Object[] {mapName, complexMap, mapPrefix, mapSuffix, keyValueSeparator,
                     entrySeparator, "", escapeSymbol}},
             {"single key", mapToString, singleMapString,
-                new Object[] {name, singleMap, prefix, suffix, keyValueSeparator,
-                    entrySeparator, escapeChars, escapeSymbol}},
+                new Object[] {mapName, singleMap, mapPrefix, mapSuffix, keyValueSeparator,
+                    entrySeparator, mapEscapeChars, escapeSymbol}},
             {"normal", mapToString, complexMapString,
-                new Object[] {name, complexMap, prefix, suffix, keyValueSeparator,
-                    entrySeparator, escapeChars, escapeSymbol}},
+                new Object[] {mapName, complexMap, mapPrefix, mapSuffix, keyValueSeparator,
+                    entrySeparator, mapEscapeChars, escapeSymbol}},
             // mapToString - END
 
             // escapeString - BEGIN
             {"null string", escapeString, null, new Object[] {null, esEscapesList, '\\'}},
-            {"null escapeChars", escapeString, esTestString, new Object[] {esTestString, null, '\\'}},
+            {"null mapEscapeChars", escapeString, esTestString, new Object[] {esTestString, null, '\\'}},
             {"empty string", escapeString, "", new Object[] {"", esEscapesList, '\\'}},
-            {"empty escapeChars", escapeString, esTestString, new Object[] {esTestString, "", '\\'}},
-            {"missing escapeChars", escapeString, esTestString, new Object[] {esTestString, "xXyY", '\\'}},
+            {"empty mapEscapeChars", escapeString, esTestString, new Object[] {esTestString, "", '\\'}},
+            {"missing mapEscapeChars", escapeString, esTestString, new Object[] {esTestString, "xXyY", '\\'}},
             {"all", escapeString, esEscapedString, new Object[] {esTestString, esTestString, '\\'}},
             // escapeString - END
 
             //unescapeString - BEGIN
             {"null string", unescapeString, null,
                 new Object[] {null, usEscapesList, escapeSymbol}},
-            {"null escapeChars", unescapeString, usUnescapedString,
+            {"null mapEscapeChars", unescapeString, usUnescapedString,
                 new Object[] {usTestString, null, escapeSymbol}},
             {"empty string", unescapeString, "",
                 new Object[] {"", usEscapesList, escapeSymbol}},
-            {"empty escapeChars", unescapeString, usTestString,
+            {"empty mapEscapeChars", unescapeString, usTestString,
                 new Object[] {usTestString, "", escapeSymbol}},
             {"missing escapeSymbol", unescapeString, usTestString,
                 new Object[] {usTestString, usEscapesList, escapeSymbol2}},
-            {"missing escapeChars", unescapeString, usTestString,
+            {"missing mapEscapeChars", unescapeString, usTestString,
                 new Object[] {usTestString, "xXyYzZ*()pP{>", escapeSymbol}},
             {"ends with escapeSymbol", unescapeString, usUnescapedString + escapeSymbol,
                 new Object[] {usTestString + escapeSymbol, usEscapesList, escapeSymbol}},
@@ -1002,60 +1103,60 @@ public class TextUtilitiesTest
             // unescapeString - END
 
             // propertiesToString - BEGIN
-            {"null name", propertiesToString, complexMapString.replace(escapedName, ""),
-                new Object[] {null, complexProperties, prefix, suffix, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
-            {"null properties", propertiesToString, escapedName + prefix + suffix,
-                new Object[] {name, null, prefix, suffix, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
-            {"null prefix", propertiesToString, complexMapString.replace(prefix, ""),
-                new Object[] {name, complexProperties, null, suffix, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
-            {"null suffix", propertiesToString, complexMapString.replace(suffix, ""),
-                new Object[] {name, complexProperties, prefix, null, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
+            {"null mapName", propertiesToString, complexMapString.replace(escapedMapName, ""),
+                new Object[] {null, complexProperties, mapPrefix, mapSuffix, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"null properties", propertiesToString, escapedMapName + mapPrefix + mapSuffix,
+                new Object[] {mapName, null, mapPrefix, mapSuffix, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"null mapPrefix", propertiesToString, complexMapString.replace(mapPrefix, ""),
+                new Object[] {mapName, complexProperties, null, mapSuffix, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"null mapSuffix", propertiesToString, complexMapString.replace(mapSuffix, ""),
+                new Object[] {mapName, complexProperties, mapPrefix, null, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
             {"null keyValueSeparator", propertiesToString,
                 complexMapString.replace(keyValueSeparator, " "),
-                new Object[] {name, complexProperties, prefix, suffix, null,
-                              entrySeparator, escapeChars, escapeSymbol}},
+                new Object[] {mapName, complexProperties, mapPrefix, mapSuffix, null,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
             {"null entrySeparator", propertiesToString,
                 complexMapString.replace(entrySeparator, " "),
-                new Object[] {name, complexProperties, prefix, suffix,
-                              keyValueSeparator, null, escapeChars, escapeSymbol}},
-            {"null escapeChars", propertiesToString,
-                TextUtilities.unescapeString(complexMapString, escapeChars, escapeSymbol),
-                new Object[] {name, complexProperties, prefix, suffix,
+                new Object[] {mapName, complexProperties, mapPrefix, mapSuffix,
+                              keyValueSeparator, null, mapEscapeChars, escapeSymbol}},
+            {"null mapEscapeChars", propertiesToString,
+                TextUtilities.unescapeString(complexMapString, mapEscapeChars, escapeSymbol),
+                new Object[] {mapName, complexProperties, mapPrefix, mapSuffix,
                               keyValueSeparator, entrySeparator, null, escapeSymbol}},
-            {"empty name", propertiesToString, complexMapString.replace(escapedName, ""),
-                new Object[] {"", complexProperties, prefix, suffix,
-                              keyValueSeparator, entrySeparator, escapeChars, escapeSymbol}},
-            {"empty properties", propertiesToString, escapedName + prefix + suffix,
-                new Object[] {name, new String[0], prefix, suffix, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
-            {"empty prexix", propertiesToString, complexMapString.replace(prefix, ""),
-                new Object[] {name, complexProperties, "", suffix, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
-            {"empty suffix", propertiesToString, complexMapString.replace(suffix, ""),
-                new Object[] {name, complexProperties, prefix, "", keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
+            {"empty mapName", propertiesToString, complexMapString.replace(escapedMapName, ""),
+                new Object[] {"", complexProperties, mapPrefix, mapSuffix,
+                              keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"empty properties", propertiesToString, escapedMapName + mapPrefix + mapSuffix,
+                new Object[] {mapName, new String[0], mapPrefix, mapSuffix, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"empty prexix", propertiesToString, complexMapString.replace(mapPrefix, ""),
+                new Object[] {mapName, complexProperties, "", mapSuffix, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
+            {"empty mapSuffix", propertiesToString, complexMapString.replace(mapSuffix, ""),
+                new Object[] {mapName, complexProperties, mapPrefix, "", keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
             {"empty keyValueSeparator", propertiesToString,
                 complexMapString.replace(keyValueSeparator, ""),
-                new Object[] {name, complexProperties, prefix, suffix,
-                              "", entrySeparator, escapeChars, escapeSymbol}},
+                new Object[] {mapName, complexProperties, mapPrefix, mapSuffix,
+                              "", entrySeparator, mapEscapeChars, escapeSymbol}},
             {"empty entrySeparator", propertiesToString,
                 complexMapString.replace(entrySeparator, ""),
-                new Object[] {name, complexProperties, prefix, suffix,
-                              keyValueSeparator, "", escapeChars, escapeSymbol}},
-            {"empty escapeChars", propertiesToString,
-                TextUtilities.unescapeString(complexMapString, escapeChars, escapeSymbol),
-                new Object[] {name, complexProperties, prefix, suffix,
+                new Object[] {mapName, complexProperties, mapPrefix, mapSuffix,
+                              keyValueSeparator, "", mapEscapeChars, escapeSymbol}},
+            {"empty mapEscapeChars", propertiesToString,
+                TextUtilities.unescapeString(complexMapString, mapEscapeChars, escapeSymbol),
+                new Object[] {mapName, complexProperties, mapPrefix, mapSuffix,
                               keyValueSeparator, entrySeparator, "", escapeSymbol}},
             {"single key", propertiesToString, singlePropertyString,
-                new Object[] {name, singleProperties, prefix, suffix, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
+                new Object[] {mapName, singleProperties, mapPrefix, mapSuffix, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
             {"normal", propertiesToString, complexMapString,
-                new Object[] {name, complexProperties, prefix, suffix, keyValueSeparator,
-                              entrySeparator, escapeChars, escapeSymbol}},
+                new Object[] {mapName, complexProperties, mapPrefix, mapSuffix, keyValueSeparator,
+                              entrySeparator, mapEscapeChars, escapeSymbol}},
             // propertiesToString - END
 
             // propertiesToMap - BEGIN
@@ -1157,66 +1258,66 @@ public class TextUtilitiesTest
      *
      * @return a two-dimensional array of objects. The outer array represents
      * distinct runs of the test method. The inner Object arrays are parameter
-     * lists representing the scenario label, the test string, the string
-     * prefix, suffix, key-value separator, entry separator, list of escape
-     * characters, the escape symbol, and the class of the expected exception.
+     * lists representing the scenario label, the test string, the prefix,
+     * suffix, key-value separator, entry separator, list of escape characters,
+     * the escape symbol, and the class of the expected exception.
      * @since 1.0.0.0
      */
     @DataProvider(name = "testStringToMapExceptionDataProvider")
     private Object[][] testStringToMapExceptionDataProvider()
     {
-        String escapedKeyValueSeparatorMapString = escapedName + prefix
+        String escapedKeyValueSeparatorMapString = escapedMapName + mapPrefix
                 + escapedProperties[0]+ keyValueSeparator + escapedProperties[1] + entrySeparator
                 + escapedProperties[2]+ escape(keyValueSeparator) + escapedProperties[3] + entrySeparator
-                + escapedProperties[4]+ keyValueSeparator + escapedProperties[5] + suffix;
+                + escapedProperties[4]+ keyValueSeparator + escapedProperties[5] + mapSuffix;
 
         return new Object[][] {
             // NullPointerException
-            {"null string", null, prefix, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
+            {"null string", null, mapPrefix, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
                     NullPointerException.class},
-            {"null prefix", complexMapString, null, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
+            {"null mapPrefix", complexMapString, null, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
                     NullPointerException.class},
-            {"null suffix", complexMapString, prefix, null,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
+            {"null mapSuffix", complexMapString, mapPrefix, null,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
                     NullPointerException.class},
-            {"null keyValueSeparator", complexMapString, prefix, suffix,
-                    null, entrySeparator, escapeChars, escapeSymbol,
+            {"null keyValueSeparator", complexMapString, mapPrefix, mapSuffix,
+                    null, entrySeparator, mapEscapeChars, escapeSymbol,
                     NullPointerException.class},
-            {"null entrySeparator", complexMapString, prefix, suffix,
-                    keyValueSeparator, null, escapeChars, escapeSymbol,
+            {"null entrySeparator", complexMapString, mapPrefix, mapSuffix,
+                    keyValueSeparator, null, mapEscapeChars, escapeSymbol,
                     NullPointerException.class},
             // IllegalAgrumentException
-            {"empty string", "", prefix, suffix, keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, IllegalArgumentException.class},
-            {"empty keyValueSeparator", complexMapString, prefix, suffix,
-                    "", entrySeparator, escapeChars, escapeSymbol,
+            {"empty string", "", mapPrefix, mapSuffix, keyValueSeparator, entrySeparator,
+                    mapEscapeChars, escapeSymbol, IllegalArgumentException.class},
+            {"empty keyValueSeparator", complexMapString, mapPrefix, mapSuffix,
+                    "", entrySeparator, mapEscapeChars, escapeSymbol,
                     IllegalArgumentException.class},
-            {"empty entrySeparator", complexMapString, prefix, suffix,
-                    keyValueSeparator, "", escapeChars, escapeSymbol,
+            {"empty entrySeparator", complexMapString, mapPrefix, mapSuffix,
+                    keyValueSeparator, "", mapEscapeChars, escapeSymbol,
                     IllegalArgumentException.class},
             // StringIndexOutOfBoundsException
-            {"missing prefix", complexMapString, missingString, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
+            {"missing mapPrefix", complexMapString, missingString, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
                     StringIndexOutOfBoundsException.class},
-            {"missing suffix", complexMapString, prefix, missingString,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
+            {"missing mapSuffix", complexMapString, mapPrefix, missingString,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
                     StringIndexOutOfBoundsException.class},
-            {"missing keyValueSeparator", complexMapString, prefix, suffix,
-                    missingString, entrySeparator, escapeChars, escapeSymbol,
+            {"missing keyValueSeparator", complexMapString, mapPrefix, mapSuffix,
+                    missingString, entrySeparator, mapEscapeChars, escapeSymbol,
                     StringIndexOutOfBoundsException.class},
-            {"escaped prefix", complexMapString.replace(prefix, escape(prefix)),
-                    prefix, suffix, keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
-            {"escaped suffix", complexMapString.replace(suffix, escape(suffix)),
-                    prefix, suffix, keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
+            {"escaped mapPrefix", complexMapString.replace(mapPrefix, escape(mapPrefix)),
+                    mapPrefix, mapSuffix, keyValueSeparator, entrySeparator,
+                    mapEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
+            {"escaped mapSuffix", complexMapString.replace(mapSuffix, escape(mapSuffix)),
+                    mapPrefix, mapSuffix, keyValueSeparator, entrySeparator,
+                    mapEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
             {"escaped keyValueSeparator", escapedKeyValueSeparatorMapString,
-                    prefix, suffix, keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
-            {"padded suffix", complexMapString + " ", prefix, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
+                    mapPrefix, mapSuffix, keyValueSeparator, entrySeparator,
+                    mapEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
+            {"padded mapSuffix", complexMapString + " ", mapPrefix, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
                     StringIndexOutOfBoundsException.class}
         };
     }
@@ -1235,7 +1336,7 @@ public class TextUtilitiesTest
      * <li>All Empty: The name should be empty if the input string is empty as
      * well as the suffix and the prefix. This is the only case where an empty
      * map string does not cause an exception.</li>
-     * <li>Empty prefix: If the expected prefix is empty, the map name and
+     * <li>Empty mapPrefix: If the expected prefix is empty, the map name and
      * prefix should be treated as part of the first key.</li>
      * <li>Empty Suffix: If the expected suffix is empty, the suffix in the
      * string should be treated as part of the last value.</li>
@@ -1284,21 +1385,21 @@ public class TextUtilitiesTest
         SortedMap<String, String> prefixMap = new TreeMap<>(complexMap);
         // replace the first key with the name and prefix as part of the key
         prefixMap.remove(complexProperties[0]);
-        prefixMap.put(name + prefix + complexProperties[0], complexProperties[1]);
+        prefixMap.put(mapName + mapPrefix + complexProperties[0], complexProperties[1]);
         
         SortedMap<String, String> suffixMap = new TreeMap<>(complexMap);
         // append the fuffix to the last value
-        suffixMap.put(suffixMap.lastKey(), suffixMap.get(suffixMap.lastKey()) + suffix);
+        suffixMap.put(suffixMap.lastKey(), suffixMap.get(suffixMap.lastKey()) + mapSuffix);
 
-        String emptyKeyMapString = escapedName + prefix
+        String emptyKeyMapString = escapedMapName + mapPrefix
                 + keyValueSeparator + escapedProperties[1] + entrySeparator
-                + escapedProperties[2] + keyValueSeparator + escapedProperties[3] + suffix;
+                + escapedProperties[2] + keyValueSeparator + escapedProperties[3] + mapSuffix;
         SortedMap<String, String> emptyKeyMap = TextUtilities.propertiesToMap(
                 "", complexProperties[1], complexProperties[2], complexProperties[3]);
 
-        String emptyValueMapString = escapedName + prefix
+        String emptyValueMapString = escapedMapName + mapPrefix
                 + escapedProperties[0] + keyValueSeparator + escapedProperties[1]
-                + entrySeparator + escapedProperties[2] + keyValueSeparator + suffix;
+                + entrySeparator + escapedProperties[2] + keyValueSeparator + mapSuffix;
         SortedMap<String, String> emptyValueMap = TextUtilities.propertiesToMap(
                 complexProperties[0], complexProperties[1], complexProperties[2], "");
 
@@ -1307,18 +1408,18 @@ public class TextUtilitiesTest
               + complexProperties[2] + keyValueSeparator + complexProperties[3] + entrySeparator
               + complexProperties[4] + keyValueSeparator + complexProperties[5]);
 
-        String escapedEntrySeparatorMapString = escapedName + prefix
+        String escapedEntrySeparatorMapString = escapedMapName + mapPrefix
                 + escapedProperties[0] + keyValueSeparator + escapedProperties[1] + entrySeparator
                 + escapedProperties[2] + keyValueSeparator + escapedProperties[3] + escape(entrySeparator)
-                + escapedProperties[4] + keyValueSeparator + escapedProperties[5] + suffix;
+                + escapedProperties[4] + keyValueSeparator + escapedProperties[5] + mapSuffix;
         SortedMap<String, String> oneEntryMap2 = TextUtilities.propertiesToMap(
                 complexProperties[0], complexProperties[1],
                 complexProperties[2], complexProperties[3] + entrySeparator
                                     + complexProperties[4] + keyValueSeparator + complexProperties[5]);
 
-        String repeatedMapString = escapedName + prefix
+        String repeatedMapString = escapedMapName + mapPrefix
                 + "a" + keyValueSeparator + "B" + entrySeparator
-                + "a" + keyValueSeparator + "A" + suffix;
+                + "a" + keyValueSeparator + "A" + mapSuffix;
         SortedMap<String, String> repeatedMap = TextUtilities.propertiesToMap("a", "A");
 
         SortedMap<String, String> nonEmptyMap = TextUtilities.propertiesToMap(
@@ -1328,57 +1429,212 @@ public class TextUtilitiesTest
         complexNonEmptyMap.putAll(complexMap);
 
         return new Object[][] {
-            {"null map", complexMapString, null, prefix, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
-                    name, null},
-            {"null escapeChars", complexMapString, emptyMap, prefix, suffix,
+            {"null map", complexMapString, null, mapPrefix, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
+                    mapName, null},
+            {"null mapEscapeChars", complexMapString, emptyMap, mapPrefix, mapSuffix,
                     keyValueSeparator, entrySeparator, null, escapeSymbol,
-                    name, complexMap},
+                    mapName, complexMap},
             {"all empty", "", emptyMap, "", "", keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, "", new TreeMap<>()},
-            {"empty prefix", complexMapString, emptyMap, "", suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
+                    mapEscapeChars, escapeSymbol, "", new TreeMap<>()},
+            {"empty mapPrefix", complexMapString, emptyMap, "", mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
                     "", prefixMap},
-            {"empty suffix", complexMapString, emptyMap, prefix, "",
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
-                    name, suffixMap},
-            {"emptyEscapeChars", complexMapString, emptyMap, prefix, suffix,
+            {"empty mapSuffix", complexMapString, emptyMap, mapPrefix, "",
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
+                    mapName, suffixMap},
+            {"emptyEscapeChars", complexMapString, emptyMap, mapPrefix, mapSuffix,
                     keyValueSeparator, entrySeparator, "", escapeSymbol,
-                    escapedName, TextUtilities.propertiesToMap(escapedProperties)},
-            {"empty key", emptyKeyMapString, emptyMap, prefix, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
-                    name, emptyKeyMap},
-            {"empty value", emptyValueMapString, emptyMap, prefix, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
-                    name, emptyValueMap},
-            {"empty entry", escapedName + prefix + keyValueSeparator + suffix,
-                    emptyMap, prefix, suffix, keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol,
-                    name, TextUtilities.propertiesToMap("", "")},
-            {"missing entrySeparator", complexMapString, emptyMap, prefix, suffix,
-                    keyValueSeparator, missingString, escapeChars, escapeSymbol,
-                    name, oneEntryMap1},
+                    escapedMapName, TextUtilities.propertiesToMap(escapedProperties)},
+            {"empty key", emptyKeyMapString, emptyMap, mapPrefix, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
+                    mapName, emptyKeyMap},
+            {"empty value", emptyValueMapString, emptyMap, mapPrefix, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
+                    mapName, emptyValueMap},
+            {"empty entry", escapedMapName + mapPrefix + keyValueSeparator + mapSuffix,
+                    emptyMap, mapPrefix, mapSuffix, keyValueSeparator, entrySeparator,
+                    mapEscapeChars, escapeSymbol,
+                    mapName, TextUtilities.propertiesToMap("", "")},
+            {"missing entrySeparator", complexMapString, emptyMap, mapPrefix, mapSuffix,
+                    keyValueSeparator, missingString, mapEscapeChars, escapeSymbol,
+                    mapName, oneEntryMap1},
             {"escaped entrySeparator", escapedEntrySeparatorMapString, emptyMap,
-                    prefix, suffix, keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, name, oneEntryMap2},
-            {"start prefix", complexMapString, emptyMap, escapedName + prefix, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
+                    mapPrefix, mapSuffix, keyValueSeparator, entrySeparator,
+                    mapEscapeChars, escapeSymbol, mapName, oneEntryMap2},
+            {"start mapPrefix", complexMapString, emptyMap, escapedMapName + mapPrefix, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
                     "", complexMap},
-            {"bare string with name", escapedName + prefix + suffix, emptyMap,
-                    prefix, suffix, keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, name, new TreeMap<>(emptyMap)},
-            {"bare string no name", prefix + suffix, emptyMap,
-                    prefix, suffix, keyValueSeparator, entrySeparator,
-                    escapeChars, escapeSymbol, "", new TreeMap<>(emptyMap)},
-            {"non-empty map", complexMapString, nonEmptyMap, prefix, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
-                    name, complexNonEmptyMap},
-            {"repeated key", repeatedMapString, emptyMap, prefix, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
-                    name, repeatedMap},
-            {"normal", complexMapString, emptyMap, prefix, suffix,
-                    keyValueSeparator, entrySeparator, escapeChars, escapeSymbol,
-                    name, complexMap}
+            {"bare string with mapName", escapedMapName + mapPrefix + mapSuffix, emptyMap,
+                    mapPrefix, mapSuffix, keyValueSeparator, entrySeparator,
+                    mapEscapeChars, escapeSymbol, mapName, new TreeMap<>(emptyMap)},
+            {"bare string no mapName", mapPrefix + mapSuffix, emptyMap,
+                    mapPrefix, mapSuffix, keyValueSeparator, entrySeparator,
+                    mapEscapeChars, escapeSymbol, "", new TreeMap<>(emptyMap)},
+            {"non-empty map", complexMapString, nonEmptyMap, mapPrefix, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
+                    mapName, complexNonEmptyMap},
+            {"repeated key", repeatedMapString, emptyMap, mapPrefix, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
+                    mapName, repeatedMap},
+            {"normal", complexMapString, emptyMap, mapPrefix, mapSuffix,
+                    keyValueSeparator, entrySeparator, mapEscapeChars, escapeSymbol,
+                    mapName, complexMap}
+        };
+    }
+
+    /**
+     * @brief A data provider for `testStringToArrayException()`.
+     *
+     * Returns an array of input parameters that are intended cause exceptions.
+     *
+     * The exceptions and tests made available by this data provider are:
+     * <dl>
+     * <dt>`NullPointerException`</dt>
+     * <dd>
+     *  - Null String: Checks that a null input string causes an exception.
+     *  - Null Prefix: Checks that a null prefix causes an exception.
+     *  - Null Suffix: Checks that a null suffix causes an exception.
+     *  - Null Separator: Checks that null a separator causes an exception.
+     * </dd>
+     * <dt>`IllegalArgumentException`</dt>
+     * <dd>
+     *  - Empty String: Checks that an empty input string causes an exception if
+     *    the prefix and suffix are not both empty.
+     *  - Empty Separator: Checks that an empty separator causes an exception.
+     * </dd>
+     * <dt>`StringIndexOutOfBoundsException`</dt>
+     * <dd>
+     *  - Missing Prefix: Checks that an exception is thrown if the specified
+     *    prefix is not present in the string.
+     *  - Missing Suffix: Checks that an exception is thrown if the string does
+     *    not end with the specified suffix.
+     *  - Escaped Prefix: Checks that an exception is thrown if the specified
+     *    prefix is present in the string, but it is escaped.
+     *  - Escaped Suffix: Checks that an exception is thrown if the string ends
+     *    with the specified suffix, but it is escaped.
+     *  - Padded Suffix: Checks that an exception is thrown if the suffix is
+     *    present, but not as the last character sequence in the string.
+     * </dd>
+     * </dl>
+     *
+     * @return A two-dimensional array of objects. The outer array represents
+     * distinct runs of the test method. The inner Object arrays are parameter
+     * lists representing the scenario label, the test string, the prefix,
+     * separator, suffix, entry separator, list of escape characters, the escape
+     * symbol, and the class of the expected exception.
+     * @since 2.0.0.0
+     */
+    @DataProvider(name = "testStringToArrayExceptionDataProvider")
+    private Object[][] testStringToArrayExceptionDataProvider()
+    {
+        String arrayString = "[a, b,c, d\\, e]";
+
+        return new Object[][] {
+            // NullPointerException
+            {"null string", null, arrayPrefix, arraySeparator, arraySuffix,
+                    arrayEscapeChars, escapeSymbol, NullPointerException.class},
+            {"null prefix", arrayString, null, arraySeparator, arraySuffix,
+                    arrayEscapeChars, escapeSymbol, NullPointerException.class},
+            {"null separator", arrayString, arrayPrefix, null, arraySuffix,
+                    arrayEscapeChars, escapeSymbol, NullPointerException.class},
+            {"null suffix", arrayString, arrayPrefix, arraySeparator, null,
+                    arrayEscapeChars, escapeSymbol, NullPointerException.class},
+            // IllegalAgrumentException
+            {"empty string", "", arrayPrefix, arraySeparator, arraySuffix,
+                    arrayEscapeChars, escapeSymbol, IllegalArgumentException.class},
+            {"empty string-prefix-only", "", arrayPrefix, arraySeparator, "",
+                    arrayEscapeChars, escapeSymbol, IllegalArgumentException.class},
+            {"empty string-suffix-only", "", "", arraySeparator, arraySuffix,
+                    arrayEscapeChars, escapeSymbol, IllegalArgumentException.class},
+            {"empty separator", arrayString, arrayPrefix, "", arraySuffix,
+                    arrayEscapeChars, escapeSymbol, IllegalArgumentException.class},
+            // StringIndexOutOfBoundsException
+            {"missing prefix", arrayString, missingString, arraySeparator,
+                    arraySuffix, arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
+            {"missing suffix", arrayString, arrayPrefix, arraySeparator, missingString,
+                    arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
+            {"escaped prefix", "\\[a, b]", arrayPrefix, arraySeparator, arraySuffix,
+                    arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
+            {"escaped suffix", "[a, b\\]", arrayPrefix, arraySeparator, arraySuffix,
+                    arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
+            {"padded suffix", arrayString + " ", arrayPrefix, arraySeparator, arraySuffix,
+                    arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
+        };
+    }
+
+    /**
+     * @brief A data provider for `testStringToArray`.
+     * 
+     * Returns an array of input parameters that exercise different scenarios.
+     * <p>
+     * The tests made available by this data provider are:
+     *  - Null Escape Characters: All symbols preceded by the escape symbol
+     *    should be treated as escaped if the list of escape characters is
+     *    `null`.
+     *  - All Empty: The array should be empty if the input string is empty as
+     *    well as the suffix and the prefix. This is the only case where an
+     *    empty input string does not cause an exception.
+     *  - Empty Prefix: If the expected prefix is empty, what would normally be
+     *    the prefix should be treated as part of the first key.
+     *  - Empty Suffix: If the expected suffix is empty, what would normally be
+     *    the suffix should be treated as part of the last value.
+     *  - Empty Escape Characters: An empty list of escape characters should be
+     *    interpreted to mean that no characters are escaped by the escape
+     *    symbol.
+     *  - Empty Element: A separator followed by another separator should be
+     *    parsed as an empty element.
+     *  - Empty Last Element: A separator followed by the suffix should be
+     *    parsed as an empty final element.
+     *  - Missing Separator: If the specified entry separator is not found, the
+     *    content of the input string should be broken up into a single element.
+     *  - Bare String: If the string consists only of a prefix and suffix, the
+     *    resulting array should be empty.
+     *  - Same Delimiters: The parser should have no trouble differentiating
+     *    between the prefix, separator and suffix, even when they are
+     *    identical.
+     *  - Similar Delimiters: The parser should have no trouble differentiating
+     *    between the prefix, separator and suffix, even when they contain each
+     *    other.
+     *  - Normal: Normal input should be parsed correctly.
+     *
+     * @return a two-dimensional array of objects. The outer array represents
+     * distinct runs of the test method. The inner Object arrays are parameter
+     * lists representing the scenario label, the test string, the prefix,
+     * separator, suffix, list of escape characters, escape symbol, and the
+     * expected resulting string array.
+     * @since 2.0.0.0
+     */
+    @DataProvider(name = "testStringToArrayDataProvider")
+    private Object[][] testStringToArrayDataProvider()
+    {
+        String arrayString = "[a, \\b,c, d\\, e]";
+
+        return new Object[][] {
+            {"null escapeChars", arrayString, arrayPrefix, arraySeparator, arraySuffix, null, escapeSymbol,
+                    new String[] {"a", "b,c", "d, e" }},
+            {"all empty", "", "", arraySeparator, "", arrayEscapeChars, escapeSymbol,
+                    new String[0]},
+            {"empty prefix", arrayString, "", arraySeparator, arraySuffix, arrayEscapeChars, escapeSymbol,
+                    new String[] {"[a", "\\b,c", "d, e"}},
+            {"empty suffix", arrayString, arrayPrefix, arraySeparator, "", arrayEscapeChars, escapeSymbol,
+                    new String[] {"a", "\\b,c", "d, e]"}},
+            {"emptyEscapeChars", arrayString, arrayPrefix, arraySeparator, arraySuffix, "", escapeSymbol,
+                    new String[] {"a", "\\b,c", "d\\", "e"}},
+            {"empty element", "[a, b, c, , d,]", arrayPrefix, arraySeparator, arraySuffix, "", escapeSymbol,
+                    new String[] {"a", "b", "c", "", "d,"}},
+            {"empty last element", "[a, b, c, d, ]", arrayPrefix, arraySeparator, arraySuffix, "", escapeSymbol,
+                    new String[] {"a", "b", "c", "d", ""}},
+            {"missing separator", "[a b c\\, d]", arrayPrefix, arraySeparator, arraySuffix, arrayEscapeChars, escapeSymbol,
+                    new String[] {"a b c, d"}},
+            {"bare string", "[]", arrayPrefix, arraySeparator, arraySuffix, arrayEscapeChars, escapeSymbol,
+                    new String[0]},
+            {"same delimiters", "xxxxxxxxxaxxx", "xxx", "xxx", "xxx", arrayEscapeChars, escapeSymbol,
+                    new String[] {"", "", "a"}},
+            {"similar delimiters", "xxxxxaxxxxxx", "xx", "xxx", "xx", arrayEscapeChars, escapeSymbol,
+                    new String[] {"", "a", "x"}},
+            {"normal", arrayString, arrayPrefix, arraySeparator, arraySuffix, arrayEscapeChars, escapeSymbol,
+                        new String[] {"a", "\\b,c", "d, e"}}
         };
     }
 
@@ -1577,8 +1833,8 @@ public class TextUtilitiesTest
         char otherSymbol = '~';
 
         return new Object[][] {
-            {"null escapeChars", template, key, 0, null, symbol, 4},
-            {"empty escapeChars", template, key, 0, "", symbol, 1},
+            {"null mapEscapeChars", template, key, 0, null, symbol, 4},
+            {"empty mapEscapeChars", template, key, 0, "", symbol, 1},
             {"empty template", "", key, 0, escapes, symbol, -1},
             {"empty key", template, "", 0, escapes, symbol, 0},
             {"empty template empty key", "", "", 0, escapes, symbol, 0},
@@ -1694,7 +1950,7 @@ public class TextUtilitiesTest
     /**
      * Inserts an escape symbol before the first escapable character of a
      * string. This method can be used to insert the minimum number of escape
-     * characters into strings such as {@link #prefix} and {@link #suffix} to
+     * characters into strings such as {@link #mapPrefix} and {@link #mapSuffix} to
      * make them parse as something they were not intended to be parsed as. The
      * value of the escape symbol is the field {@link #escapeSymbol}.
      *
@@ -1705,7 +1961,7 @@ public class TextUtilitiesTest
     {
         for(int index = 0; index < input.length(); index++) {
             // search for the first escapable character in input
-            if(escapeChars.indexOf(input.charAt(index)) >= 0) {
+            if(mapEscapeChars.indexOf(input.charAt(index)) >= 0) {
                 return input.substring(0, index) + escapeSymbol + input.substring(index);
             }
         }

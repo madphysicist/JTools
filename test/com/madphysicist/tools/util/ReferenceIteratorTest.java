@@ -32,8 +32,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Tests each of the methods of {@link com.madphysicist.tools.util.ReferenceIterator}. Because of the simplicity of this
- * class, some of the tests are overlapping or redundant. This may come in handy for regression testing if more complex
+ * @brief Tests each of the methods of
+ * `com.madphysicist.tools.util.ReferenceIterator`.
+ *
+ * Because of the simplicity of this class, some of the tests are overlapping or
+ * redundant. This may come in handy for regression testing if more complex
  * functionality is added in the future.
  *
  * @author Joseph Fox-Rabinovitz
@@ -74,8 +77,7 @@ public class ReferenceIteratorTest
      *
      * @since 1.0.0
      */
-    @Test
-    public void hasNextTest()
+    @Test public void hasNextTest()
     {
         Assert.assertTrue(iterator.hasNext());
         for(int i = 0; i < REPEATS; i++) {
@@ -92,8 +94,7 @@ public class ReferenceIteratorTest
      *
      * @since 1.0.0
      */
-    @Test
-    public void nextResetTest()
+    @Test public void nextResetTest()
     {
         for(int i = 0; i < REPEATS; i++) {
             Assert.assertSame(iterator.next(), this);
