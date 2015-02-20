@@ -442,7 +442,7 @@ public class TextUtilitiesTest
      */
     @Test(dataProvider = "testStringToArrayExceptionDataProvider")
     public void testStringToArrayException(String aLabel, String aTestString,
-                                           String aPrefix, String aSeparator, String aSuffix,
+                                           String aPrefix, String aSuffix, String aSeparator,
                                            String anEscapeChars, char anEscapeSymbol,
                                            Class<? extends Exception> anExpectedExceptionClass)
     {
@@ -478,7 +478,7 @@ public class TextUtilitiesTest
      */
     @Test(dataProvider = "testStringToArrayDataProvider")
     public void testStringToArray(String aLabel, String aTestString,
-                                  String aPrefix, String seprator, String aSuffix,
+                                  String aPrefix, String aSuffix, String seprator,
                                   String anEscapeChars, char anEscapeSymbol,
                                   String[] expectedArray)
     {
@@ -1521,8 +1521,8 @@ public class TextUtilitiesTest
      * @return A two-dimensional array of objects. The outer array represents
      * distinct runs of the test method. The inner Object arrays are parameter
      * lists representing the scenario label, the test string, the prefix,
-     * separator, suffix, entry separator, list of escape characters, the escape
-     * symbol, and the class of the expected exception.
+     * suffix, separator, list of escape characters, the escape symbol, and the
+     * class of the expected exception.
      * @since 2.0.0.0
      */
     @DataProvider(name = "testStringToArrayExceptionDataProvider")
@@ -1532,33 +1532,33 @@ public class TextUtilitiesTest
 
         return new Object[][] {
             // NullPointerException
-            {"null string", null, arrayPrefix, arraySeparator, arraySuffix,
+            {"null string", null, arrayPrefix, arraySuffix, arraySeparator,
                     arrayEscapeChars, escapeSymbol, NullPointerException.class},
-            {"null prefix", arrayString, null, arraySeparator, arraySuffix,
+            {"null prefix", arrayString, null, arraySuffix, arraySeparator,
                     arrayEscapeChars, escapeSymbol, NullPointerException.class},
-            {"null separator", arrayString, arrayPrefix, null, arraySuffix,
+            {"null separator", arrayString, arrayPrefix, arraySuffix, null,
                     arrayEscapeChars, escapeSymbol, NullPointerException.class},
-            {"null suffix", arrayString, arrayPrefix, arraySeparator, null,
+            {"null suffix", arrayString, arrayPrefix, null, arraySeparator,
                     arrayEscapeChars, escapeSymbol, NullPointerException.class},
             // IllegalAgrumentException
-            {"empty string", "", arrayPrefix, arraySeparator, arraySuffix,
+            {"empty string", "", arrayPrefix, arraySuffix, arraySeparator,
                     arrayEscapeChars, escapeSymbol, IllegalArgumentException.class},
-            {"empty string-prefix-only", "", arrayPrefix, arraySeparator, "",
+            {"empty string-prefix-only", "", arrayPrefix, "", arraySeparator,
                     arrayEscapeChars, escapeSymbol, IllegalArgumentException.class},
-            {"empty string-suffix-only", "", "", arraySeparator, arraySuffix,
+            {"empty string-suffix-only", "", "", arraySuffix, arraySeparator,
                     arrayEscapeChars, escapeSymbol, IllegalArgumentException.class},
-            {"empty separator", arrayString, arrayPrefix, "", arraySuffix,
+            {"empty separator", arrayString, arrayPrefix, arraySuffix, "",
                     arrayEscapeChars, escapeSymbol, IllegalArgumentException.class},
             // StringIndexOutOfBoundsException
-            {"missing prefix", arrayString, missingString, arraySeparator,
-                    arraySuffix, arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
-            {"missing suffix", arrayString, arrayPrefix, arraySeparator, missingString,
+            {"missing prefix", arrayString, missingString, arraySuffix, arraySeparator,
                     arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
-            {"escaped prefix", "\\[a, b]", arrayPrefix, arraySeparator, arraySuffix,
+            {"missing suffix", arrayString, arrayPrefix, missingString, arraySeparator,
                     arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
-            {"escaped suffix", "[a, b\\]", arrayPrefix, arraySeparator, arraySuffix,
+            {"escaped prefix", "\\[a, b]", arrayPrefix, arraySuffix, arraySeparator,
                     arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
-            {"padded suffix", arrayString + " ", arrayPrefix, arraySeparator, arraySuffix,
+            {"escaped suffix", "[a, b\\]", arrayPrefix, arraySuffix, arraySeparator,
+                    arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
+            {"padded suffix", arrayString + " ", arrayPrefix, arraySuffix, arraySeparator,
                     arrayEscapeChars, escapeSymbol, StringIndexOutOfBoundsException.class},
         };
     }
@@ -1601,7 +1601,7 @@ public class TextUtilitiesTest
      * @return a two-dimensional array of objects. The outer array represents
      * distinct runs of the test method. The inner Object arrays are parameter
      * lists representing the scenario label, the test string, the prefix,
-     * separator, suffix, list of escape characters, escape symbol, and the
+     * suffix, separator, list of escape characters, escape symbol, and the
      * expected resulting string array.
      * @since 2.0.0.0
      */
@@ -1611,29 +1611,29 @@ public class TextUtilitiesTest
         String arrayString = "[a, \\b,c, d\\, e]";
 
         return new Object[][] {
-            {"null escapeChars", arrayString, arrayPrefix, arraySeparator, arraySuffix, null, escapeSymbol,
+            {"null escapeChars", arrayString, arrayPrefix, arraySuffix, arraySeparator, null, escapeSymbol,
                     new String[] {"a", "b,c", "d, e" }},
-            {"all empty", "", "", arraySeparator, "", arrayEscapeChars, escapeSymbol,
+            {"all empty", "", "", "", arraySeparator, arrayEscapeChars, escapeSymbol,
                     new String[0]},
-            {"empty prefix", arrayString, "", arraySeparator, arraySuffix, arrayEscapeChars, escapeSymbol,
+            {"empty prefix", arrayString, "", arraySuffix, arraySeparator, arrayEscapeChars, escapeSymbol,
                     new String[] {"[a", "\\b,c", "d, e"}},
-            {"empty suffix", arrayString, arrayPrefix, arraySeparator, "", arrayEscapeChars, escapeSymbol,
+            {"empty suffix", arrayString, arrayPrefix, "", arraySeparator, arrayEscapeChars, escapeSymbol,
                     new String[] {"a", "\\b,c", "d, e]"}},
-            {"emptyEscapeChars", arrayString, arrayPrefix, arraySeparator, arraySuffix, "", escapeSymbol,
+            {"emptyEscapeChars", arrayString, arrayPrefix, arraySuffix, arraySeparator, "", escapeSymbol,
                     new String[] {"a", "\\b,c", "d\\", "e"}},
-            {"empty element", "[a, b, c, , d,]", arrayPrefix, arraySeparator, arraySuffix, "", escapeSymbol,
+            {"empty element", "[a, b, c, , d,]", arrayPrefix, arraySuffix, arraySeparator, "", escapeSymbol,
                     new String[] {"a", "b", "c", "", "d,"}},
-            {"empty last element", "[a, b, c, d, ]", arrayPrefix, arraySeparator, arraySuffix, "", escapeSymbol,
+            {"empty last element", "[a, b, c, d, ]", arrayPrefix, arraySuffix, arraySeparator, "", escapeSymbol,
                     new String[] {"a", "b", "c", "d", ""}},
-            {"missing separator", "[a b c\\, d]", arrayPrefix, arraySeparator, arraySuffix, arrayEscapeChars, escapeSymbol,
+            {"missing separator", "[a b c\\, d]", arrayPrefix, arraySuffix, arraySeparator, arrayEscapeChars, escapeSymbol,
                     new String[] {"a b c, d"}},
-            {"bare string", "[]", arrayPrefix, arraySeparator, arraySuffix, arrayEscapeChars, escapeSymbol,
+            {"bare string", "[]", arrayPrefix, arraySuffix, arraySeparator, arrayEscapeChars, escapeSymbol,
                     new String[0]},
             {"same delimiters", "xxxxxxxxxaxxx", "xxx", "xxx", "xxx", arrayEscapeChars, escapeSymbol,
                     new String[] {"", "", "a"}},
-            {"similar delimiters", "xxxxxaxxxxxx", "xx", "xxx", "xx", arrayEscapeChars, escapeSymbol,
+            {"similar delimiters", "xxxxxaxxxxxx", "xx", "xx", "xxx", arrayEscapeChars, escapeSymbol,
                     new String[] {"", "a", "x"}},
-            {"normal", arrayString, arrayPrefix, arraySeparator, arraySuffix, arrayEscapeChars, escapeSymbol,
+            {"normal", arrayString, arrayPrefix, arraySuffix, arraySeparator, arrayEscapeChars, escapeSymbol,
                         new String[] {"a", "\\b,c", "d, e"}}
         };
     }

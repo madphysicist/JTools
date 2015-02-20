@@ -197,7 +197,7 @@ public class TextUtilities
                 Object value = entry.getValue();
                 if(value instanceof Object[]) {
                     sb.append(arrayToString((Object[])value,
-                            anArrayPrefix, anArraySeparator, anArraySuffix,
+                            anArrayPrefix, anArraySuffix, anArraySeparator,
                             anEscapeChars, anEscapeSymbol));
                 } else {
                     sb.append(escapeString(value.toString(),
@@ -342,6 +342,12 @@ public class TextUtilities
      * This string may be neither `null` nor empty.
      * @param anEntrySeparator The string that separates successive key-value
      * pairs. This string may be neither `null` nor empty.
+     * @param anArrayPrefix The character sequence that defines the beginning of
+     * an array value. May be empty but not `null`.
+     * @param anArraySuffix The character sequence that defines the end of an
+     * array value. May be empty but not `null`.
+     * @param anArraySeparator The character sequence to separate elements in an
+     * array value. May not be `null` or empty.
      * @param anEscapeChars A string containing a list of characters that may be
      * escaped in the input. This parameter may be `null` to indicate that all
      * characters preceded by `anEscapeSymbol` are escaped, or empty to indicate
@@ -365,7 +371,8 @@ public class TextUtilities
     public static String stringToMap(String aString, Map<String, Object> aMap,
                                      String aMapPrefix, String aMapSuffix,
                                      String aKeyValueSeparator, String anEntrySeparator,
-                                     String anArrayPrefix, String anArraySeparator, String anArraySuffix,
+                                     String anArrayPrefix, String anArraySuffix,
+                                     String anArraySeparator,
                                      String anEscapeChars, char anEscapeSymbol)
     {
         // preprocess (calling isEmpty on null will handle throwing the NPEs)
@@ -399,11 +406,17 @@ public class TextUtilities
             // suffix
             if (!aString.isEmpty()) {
                 int prev = 0;
-                for (int index = 0; (index = nextIndexOf(aString, anEntrySeparator, prev, anEscapeChars, anEscapeSymbol)) >= prev; prev = index
-                        + anEntrySeparator.length()) {
-                    addMapEntry(aString.substring(prev, index), aMap, aKeyValueSeparator, anArrayPrefix, anArraySeparator, anArraySuffix, anEscapeChars, anEscapeSymbol);
+                for (int index = 0; (index = nextIndexOf(aString, anEntrySeparator,
+                                                         prev, anEscapeChars, anEscapeSymbol)) >= prev;
+                                    prev = index + anEntrySeparator.length()) {
+                    addMapEntry(aString.substring(prev, index),
+                                aMap, aKeyValueSeparator,
+                                anArrayPrefix, anArraySuffix, anArraySeparator,
+                                anEscapeChars, anEscapeSymbol);
                 }
-                addMapEntry(aString.substring(prev), aMap, aKeyValueSeparator, anArrayPrefix, anArraySeparator, anArraySuffix, anEscapeChars, anEscapeSymbol);
+                addMapEntry(aString.substring(prev), aMap, aKeyValueSeparator,
+                            anArrayPrefix, anArraySuffix, anArraySeparator,
+                            anEscapeChars, anEscapeSymbol);
             }
         }
         return unescapeString(name, anEscapeChars, anEscapeSymbol);
@@ -1010,7 +1023,8 @@ public class TextUtilities
             throw new StringIndexOutOfBoundsException("missing key-value separator");
         }
         aMap.put(unescapeString(anEntry.substring(0, separatorIndex), anEscapeChars, anEscapeSymbol),
-                 unescapeString(anEntry.substring(separatorIndex + aSeparator.length()), anEscapeChars, anEscapeSymbol));
+                 unescapeString(anEntry.substring(separatorIndex + aSeparator.length()),
+                                anEscapeChars, anEscapeSymbol));
     }
 
     /**
@@ -1037,13 +1051,13 @@ public class TextUtilities
      * value. Values that begin with this sequence (unescaped) and end with
      * `anArraySuffix` will be parsed as arrays. This string may be empty but
      * not `null`.
-     * @param anArraySeparator The separator between elements in array values.
-     * This string is only used if the value is determined to be an array. In
-     * that case, it may not be empty or `null`.
      * @param anArraySuffix A string that delimits the end of an array value.
      * Values that end with this sequence (unescaped) and begin with
      * `anArrayPrefix` will be parsed as arrays. This string may be empty but
      * not `null`.
+     * @param anArraySeparator The separator between elements in array values.
+     * This string is only used if the value is determined to be an array. In
+     * that case, it may not be empty or `null`.
      * @param anEscapeChars The characters that can be escaped by the escape
      * symbol. A `null` string indicates that all characters preceded by
      * `anEscapeSymbol` are escaped. An empty string indicates that there are no
@@ -1060,7 +1074,7 @@ public class TextUtilities
      * @since 3.0.0
      */
     private static void addMapEntry(String anEntry, Map<String, Object> aMap, String aSeparator,
-                                    String anArrayPrefix, String anArraySeparator, String anArraySuffix,
+                                    String anArrayPrefix, String anArraySuffix, String anArraySeparator,
                                     String anEscapeChars, char anEscapeSymbol)
     {
         int separatorIndex = nextIndexOf(anEntry, aSeparator, 0, anEscapeChars, anEscapeSymbol);
@@ -1075,7 +1089,7 @@ public class TextUtilities
                        anEscapeChars, anEscapeSymbol) >= 0)
         {
             value = stringToArray(valueString,
-                                  anArrayPrefix, anArraySeparator, anArraySuffix,
+                                  anArrayPrefix, anArraySuffix, anArraySeparator,
                                   anEscapeChars, anEscapeSymbol);
         } else {
             value = unescapeString(valueString, anEscapeChars, anEscapeSymbol);
