@@ -30,11 +30,13 @@ package com.madphysicist.tools.io;
 /**
  * @brief A generic exception class for reporting syntax errors.
  *
- * The purpose of this class is to generate a nice default exception message. There are two types of constructors for
- * this exception: ones that take an explicit message and ones that do not.
+ * The purpose of this class is to generate a nice default exception message.
+ * There are two types of constructors for this exception: ones that take an
+ * explicit message and ones that do not.
  *
- * There are no constructors that accept a cause. Naturally many syntax errors will be caused by other exceptions such
- * as `NumberFormatException`. In this case, the user should invoke `initCause(Throwable)` immediately after
+ * There are no constructors that accept a cause. Naturally many syntax errors
+ * will be caused by other exceptions such as `NumberFormatException`. In this
+ * case, the user should invoke `initCause(Throwable)` immediately after
  * constructing this exception.
  *
  * @author Joseph Fox-Rabinovitz
@@ -57,15 +59,16 @@ public class SyntaxException extends Exception //IOException
     /**
      * @brief The source of the exception.
      *
-     * The contents of this field are entirely user-dependent. However, it may be meaningless if `#sourceSet` is
-     * `false`.
+     * The contents of this field are entirely user-dependent. However, it may
+     * be meaningless if `sourceSet` is `false`.
      *
      * @since 1.0.0
      */
     private String source;
 
     /**
-     * @brief Determines whether or not the `source` string for this exception has been set.
+     * @brief Determines whether or not the `source` string for this exception
+     * has been set.
      *
      * @since 1.0.0
      */
@@ -74,14 +77,16 @@ public class SyntaxException extends Exception //IOException
     /**
      * @brief The line number on which this exception occurred.
      *
-     * The contents of this field are entirely user-dependent. However, it may be meaningless if `#lineSet` is `false`.
+     * The contents of this field are entirely user-dependent. However, it may
+     * be meaningless if `lineSet` is `false`.
      *
      * @since 1.0.0
      */
     private int line;
 
     /**
-     * @brief Determines whether or not the `line` number for this exception has been set.
+     * @brief Determines whether or not the `line` number for this exception has
+     * been set.
      *
      * @since 1.0.0
      */
@@ -90,15 +95,16 @@ public class SyntaxException extends Exception //IOException
     /**
      * @brief The column number at which this exception occurred.
      *
-     * The contents of this field are entirely user-dependent. However, it may be meaningless if `#columnSet` is
-     * `false`.
+     * The contents of this field are entirely user-dependent. However, it may
+     * be meaningless if `columnSet` is `false`.
      *
      * @since 1.0.0
      */
     private int column;
 
     /**
-     * @brief Determines whether or not the `column` number for this exception has been set.
+     * @brief Determines whether or not the `column` number for this exception
+     * has been set.
      *
      * @since 1.0.0
      */
@@ -120,14 +126,18 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Constructs an exception with the specified line or column number and no source.
+     * @brief Constructs an exception with the specified line or column number
+     * and no source.
      *
-     * The default message will read <b>SyntaxException at \<line|column\> {place}</b>.
+     * The default message will read <b>SyntaxException at \<line|column\>
+     * \<place\></b>.
      *
-     * @param place The line or column at which the exception occurred. Which one it is is determined by the `isColumn`
-     * parameter. The place that is not set will be set to zero.
-     * @param isColumn Determines if the `place` is a line or column number. If `true`, it will be interpreted as a
-     * column. If `false`, it will be a line.
+     * @param place The line or column at which the exception occurred. Which
+     * one it is is determined by the `isColumn` parameter. The place that is
+     * not set will be set to zero.
+     * @param isColumn Determines if the `place` is a line or column number. If
+     * `true`, it will be interpreted as a column. If `false`, it will be a
+     * line.
      * @since 1.0.0
      */
     public SyntaxException(int place, boolean isColumn)
@@ -138,9 +148,11 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Constructs an exception with the specified line and column numbers and no source.
+     * @brief Constructs an exception with the specified line and column numbers
+     * and no source.
      *
-     * The default message will read <b>SyntaxException at line {line}, column {column}</b>.
+     * The default message will read <b>SyntaxException at line \<line\>, column
+     * \<column\></b>.
      *
      * @param line The line at which the exception occurred.
      * @param column The column at which the exception occurred.
@@ -157,10 +169,10 @@ public class SyntaxException extends Exception //IOException
     /**
      * @brief Constructs an exception with only the source specified.
      *
-     * The default message will read <b>SyntaxException in {source}</b>.
+     * The default message will read <b>SyntaxException in \<source\></b>.
      *
-     * @param source The source of the exception. This can be a file name, the expression being parsed, or any other
-     * user-determined identifier.
+     * @param source The source of the exception. This can be a file name, the
+     * expression being parsed, or any other user-determined identifier.
      * @since 1.0.0
      */
     public SyntaxException(String source)
@@ -172,16 +184,20 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Constructs an exception with the source and a line or column number specified.
+     * @brief Constructs an exception with the source and a line or column
+     * number specified.
      *
-     * The default message will read <b>SyntaxException in {source} at <line|column> {place}</b>.
+     * The default message will read <b>SyntaxException in \<source\> at
+     * \<line|column\> \<place\></b>.
      *
-     * @param source The source of the exception. This can be a file name, the expression being parsed, or any other
-     * user-determined identifier.
-     * @param place The line or column at which the exception occurred. Which one it is is determined by the `isColumn`
-     * parameter. The place that is not set will be set to zero.
-     * @param isColumn Determines if the `place` is a line or column number. If `true`, it will be interpreted as a
-     * column. If `false`, it will be a line.
+     * @param source The source of the exception. This can be a file name, the
+     * expression being parsed, or any other user-determined identifier.
+     * @param place The line or column at which the exception occurred. Which
+     * one it is is determined by the `isColumn` parameter. The place that is
+     * not set will be set to zero.
+     * @param isColumn Determines if the `place` is a line or column number. If
+     * `true`, it will be interpreted as a column. If `false`, it will be a
+     * line.
      * @since 1.0.0
      */
     public SyntaxException(String source, int place, boolean isColumn)
@@ -192,12 +208,14 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Constructs an exception with the specified source, line and column.
+     * @brief Constructs an exception with the specified source, line and
+     * column.
      *
-     * The default message will read <b>SyntaxException in {source} at line {line}, column {column}</b>.
+     * The default message will read <b>SyntaxException in \<source\> at line
+     * \<line\>, column \<column\></b>.
      *
-     * @param source The source of the exception. This can be a file name, the expression being parsed, or any other
-     * user-determined identifier.
+     * @param source The source of the exception. This can be a file name, the
+     * expression being parsed, or any other user-determined identifier.
      * @param line The line at which the exception occurred.
      * @param column The column at which the exception occurred.
      * @since 1.0.0
@@ -211,11 +229,13 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Constructs an exception with only the source and a non-default message specified.
+     * @brief Constructs an exception with only the source and a non-default
+     * message specified.
      *
-     * @param message The message to set for this exception. A default message will not be generated.
-     * @param source The source of the exception. This can be a file name, the expression being parsed, or any other
-     * user-determined identifier.
+     * @param message The message to set for this exception. A default message
+     * will not be generated.
+     * @param source The source of the exception. This can be a file name, the
+     * expression being parsed, or any other user-determined identifier.
      * @since 1.0.0
      */
     public SyntaxException(String message, String source)
@@ -227,15 +247,19 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Constructs an exception with a non-default message and the source and a line or column number specified.
+     * @brief Constructs an exception with a non-default message and the source
+     * and a line or column number specified.
      *
-     * @param message The message to set for this exception. A default message will not be generated.
-     * @param source The source of the exception. This can be a file name, the expression being parsed, or any other
-     * user-determined identifier.
-     * @param place The line or column at which the exception occurred. Which one it is is determined by the `isColumn`
-     * parameter. The place that is not set will be set to zero.
-     * @param isColumn Determines if the `place` is a line or column number. If `true`, it will be interpreted as a
-     * column. If `false`, it will be a line.
+     * @param message The message to set for this exception. A default message
+     * will not be generated.
+     * @param source The source of the exception. This can be a file name, the
+     * expression being parsed, or any other user-determined identifier.
+     * @param place The line or column at which the exception occurred. Which
+     * one it is is determined by the `isColumn` parameter. The place that is
+     * not set will be set to zero.
+     * @param isColumn Determines if the `place` is a line or column number. If
+     * `true`, it will be interpreted as a column. If `false`, it will be a
+     * line.
      * @since 1.0.0
      */
     public SyntaxException(String message, String source, int place, boolean isColumn)
@@ -246,11 +270,13 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Constructs an exception with a non-default message and the specified source, line and column.
+     * @brief Constructs an exception with a non-default message and the
+     * specified source, line and column.
      *
-     * @param message The message to set for this exception. A default message will not be generated.
-     * @param source The source of the exception. This can be a file name, the expression being parsed, or any other
-     * user-determined identifier.
+     * @param message The message to set for this exception. A default message
+     * will not be generated.
+     * @param source The source of the exception. This can be a file name, the
+     * expression being parsed, or any other user-determined identifier.
      * @param line The line at which the exception occurred.
      * @param column The column at which the exception occurred.
      * @since 1.0.0
@@ -268,17 +294,19 @@ public class SyntaxException extends Exception //IOException
      *
      * The source may be `null`, especially if `isSourceSet()` returns `false`.
      *
-     * @return The source of the exception. This can be a file name, the expression being parsed, or any other
-     * user-determined identifier.
+     * @return The source of the exception. This can be a file name, the
+     * expression being parsed, or any other user-determined identifier.
      * @since 1.0.0
      */
     public String source() { return source; }
 
     /**
-     * @brief Determines if the source of the exception contains meaningful information.
+     * @brief Determines if the source of the exception contains meaningful
+     * information.
      *
-     * @return `true` if the value returned by `source()` has been set explicitly, `false` if it is garbage. The value
-     * of `source()` will be `null` in the latter case.
+     * @return `true` if the value returned by `source()` has been set
+     * explicitly, `false` if it is garbage. The value of `source()` will be
+     * `null` in the latter case.
      * @since 1.0.0
      */
     public boolean isSourceSet() { return sourceSet; }
@@ -294,10 +322,12 @@ public class SyntaxException extends Exception //IOException
     public int lineNumber() { return line; }
 
     /**
-     * @brief Determines if the line number of the exception contains meaningful information.
+     * @brief Determines if the line number of the exception contains meaningful
+     * information.
      *
-     * @return `true` if the value returned by `lineNumber()` has been set explicitly, `false` if it is garbage. The
-     * value of `lineNumber()` will be zero in the latter case.
+     * @return `true` if the value returned by `lineNumber()` has been set
+     * explicitly, `false` if it is garbage. The value of `lineNumber()` will be
+     * zero in the latter case.
      * @since 1.0.0
      */
     public boolean isLineSet() { return lineSet; } 
@@ -305,18 +335,22 @@ public class SyntaxException extends Exception //IOException
     /**
      * @brief Retrieves the column number on which the exception occurred.
      *
-     * The column number may be zero, especially if `isColumnSet()` returns `false`.
+     * The column number may be zero, especially if `isColumnSet()` returns
+     * `false`.
      *
-     * @return The thrower-defined column number at which the exception occurred.
+     * @return The thrower-defined column number at which the exception
+     * occurred.
      * @since 1.0.0
      */
     public int columnNumber() { return column; }
 
     /**
-     * @brief Determines if the column number of the exception contains meaningful information.
+     * @brief Determines if the column number of the exception contains
+     * meaningful information.
      *
-     * @return `true` if the value returned by `columnNumber()` has been set explicitly, `false` if it is garbage. The
-     * value of `columnNumber()` will be zero in the latter case.
+     * @return `true` if the value returned by `columnNumber()` has been set
+     * explicitly, `false` if it is garbage. The value of `columnNumber()` will
+     * be zero in the latter case.
      * @since 1.0.0
      */
     public boolean isColumnSet() { return columnSet; }
@@ -336,7 +370,8 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Ensures that the source is set to a trash value and marked as unset.
+     * @brief Ensures that the source is set to a trash value and marked as
+     * unset.
      *
      * The field `sourceSet` is always marked `false`.
      *
@@ -363,7 +398,8 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Ensures that the line number is set to a trash value and marked as unset.
+     * @brief Ensures that the line number is set to a trash value and marked as
+     * unset.
      *
      * The field `lineSet` is always marked `false`.
      *
@@ -390,7 +426,8 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Ensures that the column number is set to a trash value and marked as unset.
+     * @brief Ensures that the column number is set to a trash value and marked
+     * as unset.
      *
      * The field `columnSet` is always marked `false`.
      *
@@ -403,14 +440,17 @@ public class SyntaxException extends Exception //IOException
     }
 
     /**
-     * @brief Sets either the line or column number based on the specified place.
+     * @brief Sets either the line or column number based on the specified
+     * place.
      *
      * The other element is marked as unset;
      *
-     * @param place The line or column at which the exception occurred. Which one it is is determined by the `isColumn`
-     * parameter. The place that is not set will be set to zero.
-     * @param isColumn Determines if the `place` is a line or column number. If `true`, it will be interpreted as a
-     * column. If `false`, it will be a line.
+     * @param place The line or column at which the exception occurred. Which
+     * one it is is determined by the `isColumn` parameter. The place that is
+     * not set will be set to zero.
+     * @param isColumn Determines if the `place` is a line or column number. If
+     * `true`, it will be interpreted as a column. If `false`, it will be a
+     * line.
      * @since 1.0.0
      */
     private void setPlace(int place, boolean isColumn)
