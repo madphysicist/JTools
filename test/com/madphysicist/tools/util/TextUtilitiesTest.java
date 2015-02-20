@@ -448,7 +448,7 @@ public class TextUtilitiesTest
     {
         System.out.println("stringToArray (" + aLabel + ")");
         try {
-            TextUtilities.stringToArray(aTestString, aPrefix, aSeparator, aSuffix,
+            TextUtilities.stringToArray(aTestString, aPrefix, aSuffix, aSeparator,
                                         anEscapeChars, anEscapeSymbol);
             // This should be unreachable due to an exception on the previous line
             Assert.fail();
@@ -468,8 +468,8 @@ public class TextUtilitiesTest
      * output to the command line.
      * @param aTestString The string to parse.
      * @param aPrefix The prefix to find before the array elements.
-     * @param aSeparator The string used to separate array elements.
      * @param aSuffix The suffix to find after the array elements.
+     * @param aSeparator The string used to separate array elements.
      * @param anEscapeChars The characters in the string that have been escaped.
      * @param anEscapeSymbol The symbol used to escape elements of
      * `anEscapeChars` found in the string.
@@ -478,12 +478,12 @@ public class TextUtilitiesTest
      */
     @Test(dataProvider = "testStringToArrayDataProvider")
     public void testStringToArray(String aLabel, String aTestString,
-                                  String aPrefix, String aSuffix, String seprator,
+                                  String aPrefix, String aSuffix, String aSeprator,
                                   String anEscapeChars, char anEscapeSymbol,
                                   String[] expectedArray)
     {
         System.out.println("stringToMap (" + aLabel + ")");
-        String[] result = TextUtilities.stringToArray(aTestString, aPrefix, seprator, aSuffix,
+        String[] result = TextUtilities.stringToArray(aTestString, aPrefix, aSuffix, aSeprator,
                                                       anEscapeChars, anEscapeSymbol);
         Assert.assertEquals(result, expectedArray);
     }

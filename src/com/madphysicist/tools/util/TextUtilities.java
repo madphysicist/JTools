@@ -449,10 +449,10 @@ public class TextUtilities
      * and suffix are concatenated.
      * @param aPrefix The prefix to delimit the beginning of the array with.
      * Omitted entirely if `null`.
-     * @param aSeparator The character sequence to separate elements in the
-     * array with. Defaults to a single space (' ') if `null`.
      * @param aSuffix The suffix to delimit the end of the array with. Omitted
      * entirely if `null`.
+     * @param aSeparator The character sequence to separate elements in the
+     * array with. Defaults to a single space (' ') if `null`.
      * @param anEscapeChars A string containing the characters that need to be
      * escaped in the elements. Note that characters in the prefix, suffix and
      * separator are not escaped. No escaping is done if `null` or empty.
@@ -464,7 +464,7 @@ public class TextUtilities
      * @since 3.0.0
      */
     public static String arrayToString(Object[] anArray,
-            String aPrefix, String aSeparator, String aSuffix,
+            String aPrefix, String aSuffix, String aSeparator,
             String anEscapeChars, char anEscapeSymbol)
     {
         if(aPrefix    == null)    aPrefix = "";
@@ -528,7 +528,7 @@ public class TextUtilities
      * @since 3.0.0
      */
     public static String[] stringToArray(String aString,
-                            String aPrefix, String aSeparator, String aSuffix,
+                            String aPrefix, String aSuffix, String aSeparator,
                             String anEscapeChars, char anEscapeSymbol)
     {
         // pre-process (calling isEmpty on null will handle throwing the NPEs)
