@@ -255,12 +255,12 @@ public class SyntaxException extends Exception //IOException
      * @param column The column at which the exception occurred.
      * @since 1.0.0
      */
-    public SyntaxException(String message, String source, int line, int cloumn)
+    public SyntaxException(String message, String source, int line, int column)
     {
         super(message);
         setSource(source);
         setLine(line);
-        setColumn(cloumn);
+        setColumn(column);
     }
 
     /**
