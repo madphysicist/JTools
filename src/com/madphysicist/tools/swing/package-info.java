@@ -37,6 +37,7 @@
  * @version 1.0, 10 Apr 2013 - J. Fox-Rabinovitz: Initial Coding.
  * @version 1.1, 24 May 2014 - J. Fox-Rabinovitz: Added LAFUtilities.
  * @version 1.2, 24 Jun 2014 - J. Fox-Rabinovitz: Made StringBounds public.
+ * @version 1.3, 13 Mar 2015 - J. Fox-Rabinovitz: Added SpinnerWrapNumberModel.
  * @since 1.0
  */
 package com.madphysicist.tools.swing;
