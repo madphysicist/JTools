@@ -70,6 +70,8 @@
                destdir="${lib.classes.dir}"
                excludes="**/package-info.java"
                includeantruntime="false"
+               target="1.7"
+               source="1.7"
                debug="${DEBUG}">
             <compilerarg value="-Xlint:all" />
         </javac>

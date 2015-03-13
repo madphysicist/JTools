@@ -31,9 +31,12 @@ import java.io.Serializable;
 import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.Stack;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.madphysicist.tools.util.HashUtilities;
 
 /**
  * A SAX handler that maintains a stack of the current location within the XML file. The elements of the stack define
@@ -173,6 +176,8 @@ public class StackedHandler extends DefaultHandler implements Iterable<StackedHa
      *
      * @author Joseph Fox-Rabinovitz
      * @version 1.0.0, 05 Jun 2013 - J. Fox-Rabinovitz: Initial coding.
+     * @version 1.0.1, 13 Mar 2015 - J. Fox-Rabinovitz: Added `hashCode()` to
+     *          avoid compiler warnings.
      * @since 1.0.0
      */
     public static class Element implements Serializable
@@ -232,10 +237,27 @@ public class StackedHandler extends DefaultHandler implements Iterable<StackedHa
         }
 
         /**
+         * @brief Computes the hash code for this object.
+         *
+         * The hash code of two equal objects is guaranteed to be equal. The
+         * hash is computed based on the `uri`, `localName` and `qualifiedName`
+         * fields. Empty and `null` strings generate the same hash.
+         *
+         * @since 1.0.1
+         */
+        @Override public int hashCode()
+        {
+            int hashCode = HashUtilities.hashCode(this.uri.isEmpty() ? null : this.uri);
+            hashCode = HashUtilities.hashCode(hashCode, this.localName);
+            hashCode = HashUtilities.hashCode(hashCode, this.qualifiedName);
+            return hashCode;
+        }
+
+        /**
          * Determines if this element is equal to the specified object.
          *
-         * @return {@code true} if the other object is also an {@code Element}, and has the same {@code uri}, {@code
-         * localName} and {@code qualifiedName}.
+         * @return {@code true} if the other object is also an {@code Element},
+         * and has the same {@code uri}, {@code localName} and {@code qualifiedName}.
          * @see #equals(String, String, String)
          * @since 1.0.0
          */
